@@ -27,7 +27,6 @@ class RootPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('CitationRex'),
         backgroundColor: Colors.blueAccent,
-        centerTitle: true,
       ),
         body: Stack(
       children: <Widget>[
