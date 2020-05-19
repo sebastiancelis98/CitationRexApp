@@ -24,16 +24,19 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('CitationRex'),
-        backgroundColor: Colors.blueAccent,
-      ),
+        appBar: AppBar(
+          title: Text('CitationRex'),
+          backgroundColor: Colors.blueAccent,
+        ),
         body: Stack(
-      children: <Widget>[
-        Expanded(
-          child: Text('Hello world'),
-        )
-      ],
-    ));
+          children: <Widget>[
+            Expanded(
+              child: Text('Hello world'),
+            ),
+            Container(
+              child: Text('test'),
+            )
+          ],
+        ));
   }
 }
