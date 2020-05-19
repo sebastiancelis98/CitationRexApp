@@ -29,24 +29,22 @@ class RootPage extends StatelessWidget {
           backgroundColor: Colors.blueAccent,
         ),
         body: Stack(
-      children: <Widget>[
-        Expanded(
-          child: Text('welcome to the Citation Recommendation demo'),
-        ),
-        TextField(
-        decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: 'Enter the citation context here'
-        ),
-        ),
-        const SizedBox(height: 30),
-        MyButton(),
-
-      
-      ],
-    ));
+          children: <Widget>[
+            Expanded(
+              child: Text('welcome to the Citation Recommendation demo'),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Enter the citation context here'),
+            ),
+            const SizedBox(height: 30),
+            MyButton(),
+          ],
+        ));
   }
 }
+
 class MyButton extends StatefulWidget {
   @override
   _MyButtonState createState() => _MyButtonState();
@@ -55,26 +53,18 @@ class MyButton extends StatefulWidget {
 class _MyButtonState extends State<MyButton> {
   String buttontext = "GO";
   @override
-
   Widget build(BuildContext context) {
     return RaisedButton(
       child: Text(buttontext),
       onPressed: () {
-        
         print("ohhimarkus");
-        if (buttontext=="GO"){
-          buttontext="HI";
+        if (buttontext == "GO") {
+          buttontext = "HI";
+        } else {
+          buttontext = "GO";
         }
-        else {
-          buttontext="GO";
-        }
-        setState(() {
-          
-        });
-
-        
-        
-        },
+        setState(() {});
+      },
     );
   }
 }
