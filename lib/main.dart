@@ -57,7 +57,6 @@ class _MyButtonState extends State<MyButton> {
     return RaisedButton(
       child: Text(buttontext),
       onPressed: () {
-        print("ohhimarkus");
         if (buttontext == "GO") {
           buttontext = "HI";
         } else {
