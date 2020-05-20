@@ -40,6 +40,8 @@ class RootPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             MyButton(),
+
+            Text('Hallo')
           ],
         ));
   }
@@ -61,6 +63,8 @@ class _MyButtonState extends State<MyButton> {
           buttontext = "HI";
         } else {
           buttontext = "GO";
+
+          //Neue Erinnerung
         }
         setState(() {});
       },
