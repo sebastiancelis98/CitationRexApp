@@ -25,10 +25,10 @@ class RootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('CitationRex'),
+          title: Text('Citation Rex'),
           backgroundColor: Colors.blueAccent,
         ),
-        body: Stack(
+        body: Column(
           children: <Widget>[
             Expanded(
               child: Text('welcome to the Citation Recommendation demo'),
