@@ -50,13 +50,14 @@ class RootPage extends StatelessWidget {
                 print('Sending request...');
                 String url = 'https://jsonplaceholder.typicode.com/posts/1';
                 Map<String, String> headers = {
-                  "Content-type": "application/json"
+                  "Content-type": "application/json",
+                  "Access-Control-Allow-Origin":"*"
                 };
                 String json =
                     '{"title": "Hello", "body": "body text", "userId": 1}';
                 // make PUT request
                 Response response =
-                    await put(url, headers: headers, body: json);
+                    await post(url, headers: headers, body: json);
                 // check the status code for the result
                 int statusCode = response.statusCode;
 
@@ -95,9 +96,10 @@ class _MyButtonState extends State<MyButton> {
         String url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
         Map<String, String> headers = {
           "Content-type": "application/json",
+          "Access-Control-Allow-Origin":"*"
         };
         String json = '{"title": "Hello", "body": "body text", "userId": 1}';
-
+        print("sending request to flask");
         Response response = await post(url, headers: headers, body: json);
 
         int statusCode = response.statusCode;
