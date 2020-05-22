@@ -31,84 +31,98 @@ class RootPage extends StatelessWidget {
           title: Text('Citation Rex'),
           backgroundColor: Colors.blueAccent,
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(30),
-              padding: EdgeInsets.all(10),
-              color: Colors.black12,
-              child: TextField(
-                maxLines: null,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter the citation context here'),
-              ),
-            ),
-            RaisedButton(
-              onPressed: () async {
-                print('Sending request...');
-                String url = 'https://jsonplaceholder.typicode.com/posts/1';
-                Map<String, String> headers = {
-                  "Content-type": "application/json",
-                  "Access-Control-Allow-Origin":"*"
-                };
-                String json =
-                    '{"title": "Hello", "body": "body text", "userId": 1}';
-                // make PUT request
-                Response response =
-                    await post(url, headers: headers, body: json);
-                // check the status code for the result
-                int statusCode = response.statusCode;
-
-                print(statusCode);
-                print(response.body);
-              },
-              child: Text('Search'),
-            ),
-            MyButton(),
-          ],
-        ));
+        body: DynamicBody());
   }
 }
 
-class MyButton extends StatefulWidget {
+class DynamicBody extends StatefulWidget {
   @override
-  _MyButtonState createState() => _MyButtonState();
+  _DynamicBodyState createState() => _DynamicBodyState();
 }
 
-class _MyButtonState extends State<MyButton> {
-  String buttontext = "GO";
+class _DynamicBodyState extends State<DynamicBody> {
+  TextEditingController controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      child: Text(buttontext),
-      onPressed: () async {
-        if (buttontext == "GO") {
-          buttontext = "HI";
-        } else {
-          buttontext = "GO";
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center ,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.all(30),
+          padding: EdgeInsets.all(10),
+          color: Colors.black12,
+          child: TextField(
+            maxLines: null,
+            controller: controller,
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Enter the citation context here'),
+          ),
+        ),
+        RaisedButton(
+          onPressed: () {
+            setState(() {});
+          },
+          child: Text('Search'),
+        ),
+        RecommendationList(query: controller.text)
+      ],
+    );
+  }
+}
 
-          //Neue Erinnerung
+class RecommendationList extends StatelessWidget {
+  final String query;
+
+  RecommendationList({this.query});
+
+  Future<String> getRecommendations() async {
+    String url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
+
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+    };
+    String query = '{"query": "${this.query}"}';
+
+    print("sending request to flask...");
+    try {
+      Response response = await post(url, headers: headers, body: query);
+
+      int statusCode = response.statusCode;
+      if (statusCode != 200) {
+        return 'Error';
+      }
+
+      print(response.body);
+      //TODO convert string data to json map
+      return response.body;
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(query);
+    if (query == null || query == '') {
+      return Text('Enter something in the text field and hit search!');
+    }
+    return FutureBuilder(
+      future: getRecommendations(),
+      builder: (context, AsyncSnapshot<String> snap) {
+        if (!snap.hasData) {
+          //Still fetching the data, return a loading widget
+          return CircularProgressIndicator();
         }
-        setState(() {});
 
-        String url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
-        Map<String, String> headers = {
-          "Content-type": "application/json",
-          "Access-Control-Allow-Origin":"*"
-        };
-        String json = '{"title": "Hello", "body": "body text", "userId": 1}';
-        print("sending request to flask");
-        Response response = await post(url, headers: headers, body: json);
+        String data = snap.data;
 
-        int statusCode = response.statusCode;
-        setState(() {
-          buttontext = 'Code ' + statusCode.toString();
-        });
-
-        print(response.body);
+        return Text(data);
+        //TODO display the data properly...
       },
     );
   }
 }
+
