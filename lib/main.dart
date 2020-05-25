@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -134,22 +135,26 @@ class RecommendationList extends StatelessWidget {
             "{ \"papers\" : [ {\"id\": 1,\"title\": \"Image Classification with CNN\",   \"description\": \"Celis et al 2021 - ACM\" },  {\"id\": 2,  \"title\": \"Neural Citation Recommendation\", \"description\": \"Need to find a good Python tutorial on the web\" }]}";
         Map<String, dynamic> parseddata = json.decode(data);
 
-        return ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, i) {
-              var p = parseddata['papers'][1];
-              return Card(
-                child: ListTile(
-                  title: Text(p["title"]),
-                subtitle: Text(p["description"]),
-                leading: CircleAvatar(
-                  child:
-                      Text((i+1).toString(), style: TextStyle(color: Colors.black)),
-                  backgroundColor: Colors.transparent,
-                ),
-                trailing: Icon(Icons.archive)),
-              );
-            });
+        return Scrollbar(
+            isAlwaysShown: true,
+
+            child: ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, i) {
+                  var p = parseddata['papers'][1];
+                  return Card(
+                    child: ListTile(
+                        onTap: (){},
+                        title: Text(p["title"]),
+                        subtitle: Text(p["description"]),
+                        leading: CircleAvatar(
+                          child: Text((i + 1).toString(),
+                              style: TextStyle(color: Colors.black)),
+                          backgroundColor: Colors.transparent,
+                        ),
+                        trailing: Icon(Icons.archive)),
+                  );
+                }));
       },
     );
   }
