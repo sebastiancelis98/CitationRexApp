@@ -41,22 +41,22 @@ class DynamicBody extends StatefulWidget {
   _DynamicBodyState createState() => _DynamicBodyState();
 }
 
-
 class Paper {
   String name;
-  String alias;  User(Map<String, dynamic> data) {
+  String alias;
+  User(Map<String, dynamic> data) {
     name = data['name'];
     alias = data['alias'];
   }
-
 }
+
 class _DynamicBodyState extends State<DynamicBody> {
   TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center ,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
           margin: EdgeInsets.all(30),
@@ -76,7 +76,9 @@ class _DynamicBodyState extends State<DynamicBody> {
           },
           child: Text('Search'),
         ),
-        Expanded(child: RecommendationList(query: controller.text),)
+        Expanded(
+          child: RecommendationList(query: controller.text),
+        )
       ],
     );
   }
@@ -86,8 +88,6 @@ class RecommendationList extends StatelessWidget {
   final String query;
 
   RecommendationList({this.query});
-
-  
 
   Future<String> getRecommendations() async {
     String url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
@@ -107,7 +107,7 @@ class RecommendationList extends StatelessWidget {
       }
 
       print(response.body);
-      
+
       return response.body;
     } catch (e) {
       print(e);
@@ -126,36 +126,31 @@ class RecommendationList extends StatelessWidget {
       builder: (context, AsyncSnapshot<String> snap) {
         if (!snap.hasData) {
           //Still fetching the data, return a loading widget
-         // return CircularProgressIndicator();
+          // return CircularProgressIndicator();
         }
-        
+
         //String data = snap.data;
-        String data = "{ \"papers\" : [ {\"id\": 1,\"title\": \"Image Classification with CNN\",   \"description\": \"Celis et al 2021 - ACM\" },  {\"id\": 2,  \"title\": \"Neural Citation Recommendation\", \"description\": \"Need to find a good Python tutorial on the web\" }]}";
-          List<Widget> tiles=new List<ListTile>();
-        Map<String, dynamic> parseddata= json.decode(data);
-        
-        for (var p in parseddata['papers']) {
-          tiles.add(new ListTile( 
-              title: Text(p["title"]),
-              subtitle: Text(p["description"]),
-              leading: Text(p["id"].toString()),
-              trailing: Text("//Todo: find Icons")
-          )
-          );
-        }
+        String data =
+            "{ \"papers\" : [ {\"id\": 1,\"title\": \"Image Classification with CNN\",   \"description\": \"Celis et al 2021 - ACM\" },  {\"id\": 2,  \"title\": \"Neural Citation Recommendation\", \"description\": \"Need to find a good Python tutorial on the web\" }]}";
+        Map<String, dynamic> parseddata = json.decode(data);
+
         return ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, i){
-            return Card(child: tiles[0]);
-          }
-          
-        );
-       // return Text(data);
-        //return Text(data);
-        
+            itemCount: 10,
+            itemBuilder: (context, i) {
+              var p = parseddata['papers'][1];
+              return Card(
+                child: ListTile(
+                  title: Text(p["title"]),
+                subtitle: Text(p["description"]),
+                leading: CircleAvatar(
+                  child:
+                      Text((i+1).toString(), style: TextStyle(color: Colors.black)),
+                  backgroundColor: Colors.transparent,
+                ),
+                trailing: Icon(Icons.archive)),
+              );
+            });
       },
     );
   }
-
 }
-
