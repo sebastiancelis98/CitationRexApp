@@ -77,9 +77,7 @@ class _DynamicBodyState extends State<DynamicBody> {
           },
           child: Text('Search'),
         ),
-        Expanded(
-          child: RecommendationList(query: controller.text),
-        )
+        RecommendationList(query: controller.text)
       ],
     );
   }
@@ -98,7 +96,7 @@ class RecommendationList extends StatelessWidget {
     };
     String query = '{"query": "${this.query}"}';
 
-    print("sending request to flask...");
+    print("Sending request to backend server...");
     try {
       Response response = await post(url, headers: headers, body: query);
 
@@ -126,35 +124,36 @@ class RecommendationList extends StatelessWidget {
       future: getRecommendations(),
       builder: (context, AsyncSnapshot<String> snap) {
         if (!snap.hasData) {
-          //Still fetching the data, return a loading widget
-          // return CircularProgressIndicator();
+          //Still fetching the data or data is null, return a loading widget
+          return CircularProgressIndicator();
         }
 
-        //String data = snap.data;
-        String data =
-            "{ \"papers\" : [ {\"id\": 1,\"title\": \"Image Classification with CNN\",   \"description\": \"Celis et al 2021 - ACM\" },  {\"id\": 2,  \"title\": \"Neural Citation Recommendation\", \"description\": \"Need to find a good Python tutorial on the web\" }]}";
+        String data = snap.data;
+        //To test in case backend doesn't currently work
+        //String data =            "{ \"papers\" : [ {\"id\": 1,\"title\": \"Image Classification with CNN\",   \"description\": \"Celis et al 2021 - ACM\" },  {\"id\": 2,  \"title\": \"Neural Citation Recommendation\", \"description\": \"Need to find a good Python tutorial on the web\" }]}";
         Map<String, dynamic> parseddata = json.decode(data);
 
-        return Scrollbar(
-            isAlwaysShown: true,
-
-            child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, i) {
-                  var p = parseddata['papers'][1];
-                  return Card(
-                    child: ListTile(
-                        onTap: (){},
-                        title: Text(p["title"]),
-                        subtitle: Text(p["description"]),
-                        leading: CircleAvatar(
-                          child: Text((i + 1).toString(),
-                              style: TextStyle(color: Colors.black)),
-                          backgroundColor: Colors.transparent,
-                        ),
-                        trailing: Icon(Icons.archive)),
-                  );
-                }));
+        return Expanded(
+          child: Scrollbar(
+              isAlwaysShown: true,
+              child: ListView.builder(
+                  itemCount: parseddata['papers'].length,
+                  itemBuilder: (context, i) {
+                    var p = parseddata['papers'][i];
+                    return Card(
+                      child: ListTile(
+                          onTap: () {},
+                          title: Text(p["title"]),
+                          subtitle: Text(p["description"]),
+                          leading: CircleAvatar(
+                            child: Text((i + 1).toString(),
+                                style: TextStyle(color: Colors.black)),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          trailing: Icon(Icons.archive)),
+                    );
+                  })),
+        );
       },
     );
   }
