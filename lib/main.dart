@@ -182,9 +182,9 @@ class RecommendationList extends StatelessWidget {
         return ListView.builder(
             physics: ClampingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: parseddata['papers'].length,
+            itemCount: 10,//parseddata['papers'].length,
             itemBuilder: (context, i) {
-              var p = parseddata['papers'][i];
+              var p = parseddata['papers'][1];
               return Card(
                 child: ListTile(
                     onTap: () {},
