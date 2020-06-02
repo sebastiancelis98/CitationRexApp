@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class Themes {
   ThemeData lightTheme() {
     return ThemeData.light().copyWith(
-      primaryColor: HexColor.fromHex('B0623D'),
+      primaryColor: HexColor.fromHex('B0403D'),
 
-      secondaryHeaderColor: HexColor.fromHex('2D5072'),
+      secondaryHeaderColor: HexColor.fromHex('25676A'),
       
     );
   }

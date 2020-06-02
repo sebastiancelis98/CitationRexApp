@@ -55,21 +55,27 @@ class _DynamicBodyState extends State<DynamicBody> {
           Container(
             color: Colors.transparent,
             margin: EdgeInsets.all(15),
-            child: Center(
-              child: Text(
-                'Citation Rex',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 45,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'CitationRex',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 55,
+                  ),
                 ),
-              ),
+                Text(' Get useful citation recommendations for your scientific paper')
+              ],
             ),
           ),
+          
           Container(
             margin: EdgeInsets.all(15),
             padding: EdgeInsets.all(4),
             child: TextField(
-              maxLines: null,
+              maxLines: 10,
               controller: _textController,
               decoration: InputDecoration(
                   fillColor: Colors.black12,
