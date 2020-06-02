@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:CitationRexWebsite/utils/color.dart';
+import 'package:CitationRexWebsite/utils/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -17,10 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Citation Rex',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: Themes().lightTheme(),
       home: RootPage(),
     );
   }
@@ -29,12 +27,7 @@ class MyApp extends StatelessWidget {
 class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Citation Rex'),
-          backgroundColor: Colors.blueAccent,
-        ),
-        body: DynamicBody());
+    return Scaffold(body: DynamicBody());
   }
 }
 
@@ -46,40 +39,60 @@ class DynamicBody extends StatefulWidget {
 class Paper {
   String name;
   String alias;
-  User(Map<String, dynamic> data) {
+  Paper(Map<String, dynamic> data) {
     name = data['name'];
     alias = data['alias'];
   }
 }
 
 class _DynamicBodyState extends State<DynamicBody> {
-  TextEditingController controller = TextEditingController();
-
+  TextEditingController _textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.all(30),
-          padding: EdgeInsets.all(10),
-          color: Colors.black12,
-          child: TextField(
-            maxLines: null,
-            controller: controller,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Enter the citation context here...'),
+    return Scrollbar(
+      child: ListView(
+        children: <Widget>[
+          Container(
+            color: Colors.transparent,
+            margin: EdgeInsets.all(15),
+            child: Center(
+              child: Text(
+                'Citation Rex',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 45,
+                ),
+              ),
+            ),
           ),
-        ),
-        RaisedButton(
-          onPressed: () {
-            setState(() {});
-          },
-          child: Text('Search'),
-        ),
-        RecommendationList(query: controller.text)
-      ],
+          Container(
+            margin: EdgeInsets.all(15),
+            padding: EdgeInsets.all(4),
+            child: TextField(
+              maxLines: null,
+              controller: _textController,
+              decoration: InputDecoration(
+                  fillColor: Colors.black12,
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: HexColor.fromHex('4A6B8A')),
+                      borderRadius: BorderRadius.circular(20)),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).secondaryHeaderColor),
+                      borderRadius: BorderRadius.circular(20)),
+                  hintText: 'Enter the citation context here...'),
+            ),
+          ),
+          Center(
+            child: RaisedButton(
+              onPressed: () {
+                setState(() {});
+              },
+              child: Text('Search'),
+            ),
+          ),
+          Center(child: RecommendationList(query: _textController.text))
+        ],
+      ),
     );
   }
 }
@@ -119,7 +132,7 @@ class RecommendationList extends StatelessWidget {
   Widget build(BuildContext context) {
     print(query);
     if (query == null || query == '') {
-      return Text('Enter something in the text field and hit search!');
+      return Text('Enter your citation context and hit search!');
     }
     return FutureBuilder(
       future: getRecommendations(),
@@ -128,36 +141,34 @@ class RecommendationList extends StatelessWidget {
           //Still fetching the data or data is null, return a loading widget
           return CircularProgressIndicator();
         }
-        
+
         String data = snap.data;
-        if(data == 'Error'){
+        if (data == 'Error') {
           return Text('Error connecting to the server...');
         }
         //To test in case backend doesn't currently work
         //String data =            "{ \"papers\" : [ {\"id\": 1,\"title\": \"Image Classification with CNN\",   \"description\": \"Celis et al 2021 - ACM\" },  {\"id\": 2,  \"title\": \"Neural Citation Recommendation\", \"description\": \"Need to find a good Python tutorial on the web\" }]}";
         Map<String, dynamic> parseddata = json.decode(data);
 
-        return Expanded(
-          child: Scrollbar(
-              isAlwaysShown: true,
-              child: ListView.builder(
-                  itemCount: parseddata['papers'].length,
-                  itemBuilder: (context, i) {
-                    var p = parseddata['papers'][i];
-                    return Card(
-                      child: ListTile(
-                          onTap: () {},
-                          title: Text(p["title"]),
-                          subtitle: Text(p["description"]),
-                          leading: CircleAvatar(
-                            child: Text((i + 1).toString(),
-                                style: TextStyle(color: Colors.black)),
-                            backgroundColor: Colors.transparent,
-                          ),
-                          trailing: Icon(Icons.archive)),
-                    );
-                  })),
-        );
+        return ListView.builder(
+            physics: ClampingScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: parseddata['papers'].length,
+            itemBuilder: (context, i) {
+              var p = parseddata['papers'][i];
+              return Card(
+                child: ListTile(
+                    onTap: () {},
+                    title: Text(p["title"]),
+                    subtitle: Text(p["description"]),
+                    leading: CircleAvatar(
+                      child: Text((i + 1).toString(),
+                          style: TextStyle(color: Colors.black)),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    trailing: Icon(Icons.archive)),
+              );
+            });
       },
     );
   }
