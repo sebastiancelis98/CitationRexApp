@@ -66,11 +66,15 @@ class _DynamicBodyState extends State<DynamicBody> {
                     fontSize: 55,
                   ),
                 ),
-                Text(' Get useful citation recommendations for your scientific paper')
+                Text(
+                  ' Get useful citation recommendations for your scientific paper.',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                  ),
+                )
               ],
             ),
           ),
-          
           Container(
             margin: EdgeInsets.all(15),
             padding: EdgeInsets.all(4),
@@ -83,19 +87,37 @@ class _DynamicBodyState extends State<DynamicBody> {
                       borderSide: BorderSide(color: HexColor.fromHex('4A6B8A')),
                       borderRadius: BorderRadius.circular(20)),
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Theme.of(context).secondaryHeaderColor),
+                      borderSide: BorderSide(
+                          color: Theme.of(context).secondaryHeaderColor),
                       borderRadius: BorderRadius.circular(20)),
                   hintText: 'Enter the citation context here...'),
             ),
           ),
           Center(
-            child: RaisedButton(
+            child: RaisedButton.icon(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
+              color: HexColor.fromHex('54A759'),
+              elevation: 1,
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
               onPressed: () {
                 setState(() {});
               },
-              child: Text('Search'),
+              label: Text(
+                'Search ',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'Montserrat'),
+              ),
+
+              icon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
             ),
           ),
+          SizedBox(height: 15,),
           Center(child: RecommendationList(query: _textController.text))
         ],
       ),
@@ -138,7 +160,8 @@ class RecommendationList extends StatelessWidget {
   Widget build(BuildContext context) {
     print(query);
     if (query == null || query == '') {
-      return Text('Enter your citation context and hit search!');
+      //return Text('Enter your citation context and hit search!');
+      return Container();
     }
     return FutureBuilder(
       future: getRecommendations(),

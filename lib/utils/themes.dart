@@ -6,7 +6,7 @@ class Themes {
     return ThemeData.light().copyWith(
       primaryColor: HexColor.fromHex('B0403D'),
 
-      secondaryHeaderColor: HexColor.fromHex('25676A'),
+      secondaryHeaderColor: HexColor.fromHex('417E80'),
       
     );
   }
