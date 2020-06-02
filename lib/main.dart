@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:CitationRexWebsite/utils/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -68,7 +69,7 @@ class _DynamicBodyState extends State<DynamicBody> {
             controller: controller,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: 'Enter the citation context here'),
+                hintText: 'Enter the citation context here...'),
           ),
         ),
         RaisedButton(
@@ -110,8 +111,8 @@ class RecommendationList extends StatelessWidget {
       return response.body;
     } catch (e) {
       print(e);
+      return 'Error';
     }
-    return null;
   }
 
   @override
@@ -127,8 +128,11 @@ class RecommendationList extends StatelessWidget {
           //Still fetching the data or data is null, return a loading widget
           return CircularProgressIndicator();
         }
-
+        
         String data = snap.data;
+        if(data == 'Error'){
+          return Text('Error connecting to the server...');
+        }
         //To test in case backend doesn't currently work
         //String data =            "{ \"papers\" : [ {\"id\": 1,\"title\": \"Image Classification with CNN\",   \"description\": \"Celis et al 2021 - ACM\" },  {\"id\": 2,  \"title\": \"Neural Citation Recommendation\", \"description\": \"Need to find a good Python tutorial on the web\" }]}";
         Map<String, dynamic> parseddata = json.decode(data);
