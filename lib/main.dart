@@ -136,11 +136,11 @@ class RecommendationList extends StatelessWidget {
     Map<String, String> headers = {
       "Content-type": "application/json",
     };
-    String query = '{"query": "${this.query}"}';
+    String json = '{"query": "${this.query}"}';
 
     print("Sending request to backend server...");
     try {
-      Response response = await post(url, headers: headers, body: query);
+      Response response = await post(url, headers: headers, body: json);
 
       int statusCode = response.statusCode;
       if (statusCode != 200) {
@@ -163,6 +163,7 @@ class RecommendationList extends StatelessWidget {
       //return Text('Enter your citation context and hit search!');
       return Container();
     }
+    
     return FutureBuilder(
       future: getRecommendations(),
       builder: (context, AsyncSnapshot<String> snap) {
@@ -177,7 +178,10 @@ class RecommendationList extends StatelessWidget {
         }
         //To test in case backend doesn't currently work
         //String data =            "{ \"papers\" : [ {\"id\": 1,\"title\": \"Image Classification with CNN\",   \"description\": \"Celis et al 2021 - ACM\" },  {\"id\": 2,  \"title\": \"Neural Citation Recommendation\", \"description\": \"Need to find a good Python tutorial on the web\" }]}";
-        Map<String, dynamic> parseddata = json.decode(data);
+        dynamic parseddata = json.decode(data);
+
+        print(parseddata);
+        return Container();
 
         return ListView.builder(
             physics: ClampingScrollPhysics(),
