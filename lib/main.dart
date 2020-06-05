@@ -49,11 +49,9 @@ class _DynamicBodyState extends State<DynamicBody> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              color: Colors.transparent,
-              margin: EdgeInsets.all(15),
+              margin: EdgeInsets.symmetric(vertical: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +74,6 @@ class _DynamicBodyState extends State<DynamicBody> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(right: 30),
               width: MediaQuery.of(context).size.width * 45 / 100,
               decoration: BoxDecoration(
                 color: Colors.grey[100],
@@ -89,13 +86,9 @@ class _DynamicBodyState extends State<DynamicBody> {
               child: TextField(
                 maxLines: 20,
                 controller: _textController,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontFamily: 'Montserrat'
-                ),
                 
+                style: TextStyle(fontSize: 13, fontFamily: 'Montserrat'),
                 decoration: InputDecoration(
-                  
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.transparent)),
                     border: OutlineInputBorder(
@@ -189,7 +182,6 @@ class _QuerySelectorState extends State<QuerySelector> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             FloatingActionButton(
-              
               onPressed: () {
                 if (currentIndex != 0) {
                   setState(() {
