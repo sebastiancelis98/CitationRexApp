@@ -1,11 +1,11 @@
-import 'dart:convert';
-import 'dart:io';
-
+import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:CitationRexWebsite/utils/color.dart';
+import 'package:CitationRexWebsite/utils/customwidgets.dart';
 import 'package:CitationRexWebsite/utils/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+
+import 'controller/recommender.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,17 +36,12 @@ class DynamicBody extends StatefulWidget {
   _DynamicBodyState createState() => _DynamicBodyState();
 }
 
-class Paper {
-  String name;
-  String alias;
-  Paper(Map<String, dynamic> data) {
-    name = data['name'];
-    alias = data['alias'];
-  }
-}
-
 class _DynamicBodyState extends State<DynamicBody> {
   TextEditingController _textController = TextEditingController();
+
+  String _query;
+  bool _newSearch;
+
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
@@ -101,7 +96,10 @@ class _DynamicBodyState extends State<DynamicBody> {
               elevation: 1,
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
               onPressed: () {
-                setState(() {});
+                setState(() {
+                  _newSearch = _query != _textController.text;
+                  _query = _textController.text;
+                });
               },
               label: Text(
                 'Search ',
@@ -110,97 +108,84 @@ class _DynamicBodyState extends State<DynamicBody> {
                     fontSize: 20,
                     fontFamily: 'Montserrat'),
               ),
-
               icon: Icon(
                 Icons.search,
                 color: Colors.white,
               ),
             ),
           ),
-          SizedBox(height: 15,),
-          Center(child: RecommendationList(query: _textController.text))
+          SizedBox(
+            height: 25,
+          ),
+          Center(
+            child: RecommendationList(
+              query: _query,
+              newSearch: _newSearch,
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-class RecommendationList extends StatelessWidget {
+class RecommendationList extends StatefulWidget {
   final String query;
+  final bool newSearch;
 
-  RecommendationList({this.query});
+  RecommendationList({this.query, this.newSearch});
 
-  Future<String> getRecommendations() async {
-    String url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
+  @override
+  _RecommendationListState createState() => _RecommendationListState();
+}
 
-    Map<String, String> headers = {
-      "Content-type": "application/json",
-    };
-    String json = '{"query": "${this.query}"}';
-
-    print("Sending request to backend server...");
-    try {
-      Response response = await post(url, headers: headers, body: json);
-
-      int statusCode = response.statusCode;
-      if (statusCode != 200) {
-        return 'Error';
-      }
-
-      print(response.body);
-
-      return response.body;
-    } catch (e) {
-      print(e);
-      return 'Error';
-    }
-  }
+class _RecommendationListState extends State<RecommendationList> {
+  Map<String, Set<Recommendation>> recsMap = Map();
 
   @override
   Widget build(BuildContext context) {
-    print(query);
-    if (query == null || query == '') {
+    if (widget.query == null || widget.query == '') {
       //return Text('Enter your citation context and hit search!');
       return Container();
     }
-    
+    if (!recsMap.containsKey(widget.query)) {
+      getRecommendations(this.widget.query).then((value) => {
+            setState(() {
+              recsMap.putIfAbsent(widget.query, () => value);
+            })
+          });
+      return Loading();
+    }
+    Set recs = recsMap[widget.query];
+    return ListView.builder(
+      physics: ClampingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: recs.length,
+      itemBuilder: (context, i) {
+        return RecommendationTile(
+          recommendation: recs.elementAt(i),
+        );
+      },
+    );
+
     return FutureBuilder(
-      future: getRecommendations(),
-      builder: (context, AsyncSnapshot<String> snap) {
+      future: getRecommendations(this.widget.query),
+      initialData: null,
+      builder: (context, AsyncSnapshot<Set<Recommendation>> snap) {
+        print(snap.data);
         if (!snap.hasData) {
           //Still fetching the data or data is null, return a loading widget
-          return CircularProgressIndicator();
+          return Loading();
         }
 
-        String data = snap.data;
-        if (data == 'Error') {
-          return Text('Error connecting to the server...');
-        }
-        //To test in case backend doesn't currently work
-        //String data =            "{ \"papers\" : [ {\"id\": 1,\"title\": \"Image Classification with CNN\",   \"description\": \"Celis et al 2021 - ACM\" },  {\"id\": 2,  \"title\": \"Neural Citation Recommendation\", \"description\": \"Need to find a good Python tutorial on the web\" }]}";
-        dynamic parseddata = json.decode(data);
-
-        print(parseddata);
-        return Container();
+        Set<Recommendation> recs = snap.data;
 
         return ListView.builder(
             physics: ClampingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: 10,//parseddata['papers'].length,
+            itemCount: recs.length,
             itemBuilder: (context, i) {
-              var p = parseddata['papers'][1];
-              return Card(
-                child: ListTile(
-                    onTap: () {},
-                    title: Text(p["title"]),
-                    subtitle: Text(p["description"]),
-                    leading: CircleAvatar(
-                      child: Text((i + 1).toString(),
-                          style: TextStyle(color: Colors.black)),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    trailing: Icon(Icons.archive)),
-              );
+              return RecommendationTile(recommendation: recs.elementAt(i));
             });
       },
     );
