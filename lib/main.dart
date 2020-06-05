@@ -86,7 +86,6 @@ class _DynamicBodyState extends State<DynamicBody> {
               child: TextField(
                 maxLines: 20,
                 controller: _textController,
-                
                 style: TextStyle(fontSize: 13, fontFamily: 'Montserrat'),
                 decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
@@ -230,14 +229,19 @@ class RecList extends StatelessWidget {
     }
     Set recs = queryData.recommendations[query];
     return Expanded(
-      child: Scrollbar(
-        child: ListView.builder(
-          itemCount: recs.length,
-          itemBuilder: (context, i) {
-            return RecommendationTile(
-              recommendation: recs.elementAt(i),
-            );
-          },
+      child: Container(
+        child: Scrollbar(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 30),
+            child: ListView.builder(
+              itemCount: recs.length,
+              itemBuilder: (context, i) {
+                return RecommendationTile(
+                  recommendation: recs.elementAt(i),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
