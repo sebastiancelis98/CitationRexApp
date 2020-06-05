@@ -1,13 +1,31 @@
 import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:flutter/material.dart';
+import 'package:CitationRexWebsite/controller/recommender.dart';
 
-class UserQuery{ //TODO Add Changenotifier
-
+class UserQuery with ChangeNotifier {
   List<String> queries;
-  Map<String, Set<Recommendation>> recommendations;
+  Map<String, Set<Recommendation>> recommendations = Map();
 
+  UserQuery({@required this.queries}){
+    fetchRecommendations();
+  }
 
-  UserQuery({@required this.queries});
+  void updateQueries(List<String> queries) {
+    this.queries = queries;
+    fetchRecommendations();
+    notifyListeners();
+  }
 
-  
+  void fetchRecommendations(){
+    print('Fetching recommendations...');
+    for (String query in queries) {
+      if (recommendations.containsKey(query)) {
+        continue;
+      }
+      getRecommendations(query).then((value) {
+        recommendations.putIfAbsent(query, () => value);
+        notifyListeners();
+      });
+    }
+  }
 }
