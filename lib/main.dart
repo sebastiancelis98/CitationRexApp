@@ -40,7 +40,6 @@ class _DynamicBodyState extends State<DynamicBody> {
   TextEditingController _textController = TextEditingController();
 
   String _query;
-  bool _newSearch;
 
   @override
   Widget build(BuildContext context) {
@@ -71,23 +70,31 @@ class _DynamicBodyState extends State<DynamicBody> {
             ),
           ),
           Container(
-            margin: EdgeInsets.all(15),
-            padding: EdgeInsets.all(4),
+            margin: EdgeInsets.only(right: 150),
+            padding: EdgeInsets.all(0),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              border: Border.all(color: HexColor.fromHex('4A6B8A')),
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(50),
+                  bottomRight: Radius.circular(50)),
+            ),
             child: TextField(
               maxLines: 10,
               controller: _textController,
               decoration: InputDecoration(
-                  fillColor: Colors.black12,
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: HexColor.fromHex('4A6B8A')),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderSide: BorderSide(color: Colors.transparent)),
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).secondaryHeaderColor),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderSide: BorderSide(color: Colors.transparent)),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent)),
+                  errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent)),
                   hintText: 'Enter the citation context here...'),
             ),
           ),
+          SizedBox(height: 25),
           Center(
             child: RaisedButton.icon(
               shape: RoundedRectangleBorder(
@@ -97,7 +104,6 @@ class _DynamicBodyState extends State<DynamicBody> {
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
               onPressed: () {
                 setState(() {
-                  _newSearch = _query != _textController.text;
                   _query = _textController.text;
                 });
               },
@@ -117,46 +123,117 @@ class _DynamicBodyState extends State<DynamicBody> {
           SizedBox(
             height: 25,
           ),
-          Center(
-            child: RecommendationList(
-              query: _query,
-              newSearch: _newSearch,
-            ),
+          Center(child: RecommendationList(query: _query),),
+          SizedBox(
+            height: 25,
           ),
+          
         ],
       ),
     );
   }
 }
 
+Map<String, Set<Recommendation>> _recsMap = Map();
+
+class QuerySelector extends StatefulWidget {
+  final List<String> queries;
+
+  QuerySelector({this.queries});
+
+  @override
+  _QuerySelectorState createState() => _QuerySelectorState();
+}
+
+class _QuerySelectorState extends State<QuerySelector> {
+  String selectedQuery;
+
+  @mustCallSuper
+  void initState(){
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if(widget.queries == null || widget.queries.isEmpty){
+      return Text('queries empty');
+    }
+    selectedQuery = widget.queries.first;
+
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            FloatingActionButton(onPressed: (){}, child: Icon(Icons.keyboard_arrow_left),),
+            Text(selectedQuery ?? 'Some query...'),
+            FloatingActionButton(onPressed: (){}, child: Icon(Icons.keyboard_arrow_right),),
+            
+          ],
+        ),
+        Center(
+          child: RecList(recs: _recsMap.containsKey(selectedQuery) ? _recsMap[selectedQuery]:null),
+        )
+      ],
+    );
+  }
+}
+
+class RecList extends StatefulWidget {
+
+  final Set<Recommendation> recs;
+
+  RecList({this.recs});
+
+  @override
+  _RecListState createState() => _RecListState();
+}
+
+class _RecListState extends State<RecList> {
+  @override
+  Widget build(BuildContext context) {
+    if(widget.recs == null || widget.recs.isEmpty){
+      return Loading();
+    }
+    return ListView.builder(
+      physics: ClampingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: widget.recs.length,
+      itemBuilder: (context, i) {
+        return RecommendationTile(
+          recommendation: widget.recs.elementAt(i),
+        );
+      },
+    );
+  }
+}
+
 class RecommendationList extends StatefulWidget {
   final String query;
-  final bool newSearch;
 
-  RecommendationList({this.query, this.newSearch});
+  RecommendationList({@required this.query});
 
   @override
   _RecommendationListState createState() => _RecommendationListState();
 }
 
 class _RecommendationListState extends State<RecommendationList> {
-  Map<String, Set<Recommendation>> recsMap = Map();
-
   @override
   Widget build(BuildContext context) {
     if (widget.query == null || widget.query == '') {
       //return Text('Enter your citation context and hit search!');
       return Container();
     }
-    if (!recsMap.containsKey(widget.query)) {
+    if (!_recsMap.containsKey(widget.query)) {
       getRecommendations(this.widget.query).then((value) => {
             setState(() {
-              recsMap.putIfAbsent(widget.query, () => value);
+              _recsMap.putIfAbsent(widget.query, () => value);
             })
           });
       return Loading();
     }
-    Set recs = recsMap[widget.query];
+
+    Set recs = _recsMap[widget.query];
     return ListView.builder(
       physics: ClampingScrollPhysics(),
       shrinkWrap: true,
@@ -165,28 +242,6 @@ class _RecommendationListState extends State<RecommendationList> {
         return RecommendationTile(
           recommendation: recs.elementAt(i),
         );
-      },
-    );
-
-    return FutureBuilder(
-      future: getRecommendations(this.widget.query),
-      initialData: null,
-      builder: (context, AsyncSnapshot<Set<Recommendation>> snap) {
-        print(snap.data);
-        if (!snap.hasData) {
-          //Still fetching the data or data is null, return a loading widget
-          return Loading();
-        }
-
-        Set<Recommendation> recs = snap.data;
-
-        return ListView.builder(
-            physics: ClampingScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: recs.length,
-            itemBuilder: (context, i) {
-              return RecommendationTile(recommendation: recs.elementAt(i));
-            });
       },
     );
   }
