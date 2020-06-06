@@ -1,7 +1,13 @@
-import 'dart:io';
-
+import 'package:CitationRexWebsite/model/recommendation.dart';
+import 'package:CitationRexWebsite/model/userquery.dart';
+import 'package:CitationRexWebsite/utils/color.dart';
+import 'package:CitationRexWebsite/utils/customwidgets.dart';
+import 'package:CitationRexWebsite/utils/themes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:provider/provider.dart';
+
+import 'controller/recommender.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,14 +17,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Citation Rex',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return ChangeNotifierProvider<UserQuery>.value(
+      value: UserQuery(),
+      child: MaterialApp(
+        title: 'Citation Rex',
+        debugShowCheckedModeBanner: false,
+        theme: Themes().lightTheme(),
+        home: RootPage(),
       ),
-      home: RootPage(),
     );
   }
 }
@@ -26,12 +32,7 @@ class MyApp extends StatelessWidget {
 class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Citation Rex'),
-          backgroundColor: Colors.blueAccent,
-        ),
-        body: DynamicBody());
+    return Scaffold(body: DynamicBody());
   }
 }
 
@@ -41,88 +42,256 @@ class DynamicBody extends StatefulWidget {
 }
 
 class _DynamicBodyState extends State<DynamicBody> {
-  TextEditingController controller = TextEditingController();
+  TextEditingController _textController = TextEditingController();
+
+  String _query;
+  String _errorText;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center ,
+    UserQuery queryData = Provider.of<UserQuery>(context, listen: false);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.all(30),
-          padding: EdgeInsets.all(10),
-          color: Colors.black12,
-          child: TextField(
-            maxLines: null,
-            controller: controller,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Enter the citation context here'),
+        Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'CitationRex',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 55,
+                    ),
+                  ),
+                  Text(
+                    ' Get useful citation recommendations for your scientific paper.',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 45 / 100,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                border: Border.all(color: HexColor.fromHex('4A6B8A')),
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              child: TextField(
+                maxLines: 20,
+                controller: _textController,
+                style: TextStyle(fontSize: 13, fontFamily: 'Montserrat'),
+                decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent)),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent)),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent)),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    errorText: _errorText,
+                    hintText: 'Enter the citation context here...'),
+              ),
+            ),
+            SizedBox(height: 25),
+            Center(
+              child: RaisedButton.icon(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
+                color: HexColor.fromHex('54A759'),
+                elevation: 1,
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                onPressed: () {
+                  if (_textController.text.length < 10) {
+                    //Temporary break condition TODO 15 words min.
+                    setState(() {
+                      _errorText =
+                          'Please enter a sentence with 10 or more characters!';
+                    });
+                    return;
+                  }
+                  setState(() {
+                    
+                    //Get the list of current queries or an empty list if null
+                    List<String> queries = queryData.queries ?? List();
+
+                    _query = _textController.text;
+                    
+                    //Splits the input texts where new lines have been started
+                    
+                    queries.addAll(_query.split("\n"));
+                    queryData.updateQueries(queries);
+
+                    /*
+                    queryData.updateQueries([
+                      _query,
+                      'Neural networks are really cool, especially if they are convolutional'
+                    ]);
+                    */
+                  });
+                },
+                label: Text(
+                  'Search ',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: 'Montserrat'),
+                ),
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(top: 25),
+            color: Colors.transparent,
+            child: Center(
+              child: QuerySelector(),
+            ),
           ),
-        ),
-        RaisedButton(
-          onPressed: () {
-            setState(() {});
-          },
-          child: Text('Search'),
-        ),
-        RecommendationList(query: controller.text)
+        )
       ],
     );
   }
 }
 
-class RecommendationList extends StatelessWidget {
-  final String query;
+class QuerySelector extends StatefulWidget {
+  @override
+  _QuerySelectorState createState() => _QuerySelectorState();
+}
 
-  RecommendationList({this.query});
+class _QuerySelectorState extends State<QuerySelector> {
+  String selectedQuery;
+  int currentIndex = 0;
 
-  Future<String> getRecommendations() async {
-    String url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
-
-    Map<String, String> headers = {
-      "Content-type": "application/json",
-    };
-    String query = '{"query": "${this.query}"}';
-
-    print("sending request to flask...");
-    try {
-      Response response = await post(url, headers: headers, body: query);
-
-      int statusCode = response.statusCode;
-      if (statusCode != 200) {
-        return 'Error';
-      }
-
-      print(response.body);
-      //TODO convert string data to json map
-      return response.body;
-    } catch (e) {
-      print(e);
-    }
-    return null;
+  @mustCallSuper
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(query);
-    if (query == null || query == '') {
-      return Text('Enter something in the text field and hit search!');
+    UserQuery queryData = Provider.of<UserQuery>(context);
+    if (queryData == null) {
+      print('Error');
     }
-    return FutureBuilder(
-      future: getRecommendations(),
-      builder: (context, AsyncSnapshot<String> snap) {
-        if (!snap.hasData) {
-          //Still fetching the data, return a loading widget
-          return CircularProgressIndicator();
-        }
+    List queries = queryData.queries;
 
-        String data = snap.data;
+    if (queries == null) {
+      return Container();
+    }
+    String selectedQuery = queries.elementAt(currentIndex);
 
-        return Text(data);
-        //TODO display the data properly...
-      },
+    return Column(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Opacity(
+                opacity: currentIndex != 0 ? 1 : 0.5,
+                child: CircleAvatar(
+                  backgroundColor: Theme.of(context).buttonColor,
+                  child: IconButton(
+                    icon: Icon(Icons.keyboard_arrow_left, color: Colors.white),
+                    onPressed: () {
+                      if (currentIndex != 0) {
+                        setState(() {
+                          currentIndex--;
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 25),
+                      child: Text(selectedQuery)),
+                ),
+              ),
+              Opacity(
+                opacity: currentIndex < queries.length -1 ? 1 : 0.5,
+                child: CircleAvatar(
+                  backgroundColor: Theme.of(context).buttonColor,
+                  child: IconButton(
+                    icon: Icon(Icons.keyboard_arrow_right, color: Colors.white),
+                    onPressed: () {
+                      if (currentIndex < queries.length - 1) {
+                        setState(() {
+                          currentIndex++;
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 25,
+        ),
+        RecList(query: selectedQuery)
+      ],
     );
   }
 }
 
+class RecList extends StatelessWidget {
+  final String query;
+
+  RecList({this.query});
+
+  @override
+  Widget build(BuildContext context) {
+    UserQuery queryData = Provider.of<UserQuery>(context, listen: false);
+    if (query == null || query == '') {
+      return Container();
+    }
+    if (!queryData.recommendations.containsKey(query)) {
+      return Loading();
+    }
+    Set recs = queryData.recommendations[query];
+    return Expanded(
+      child: Container(
+        child: Scrollbar(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 30),
+            child: ListView.builder(
+              itemCount: recs.length,
+              itemBuilder: (context, i) {
+                return RecommendationTile(
+                  recommendation: recs.elementAt(i),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
