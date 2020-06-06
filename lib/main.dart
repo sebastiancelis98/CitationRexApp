@@ -50,6 +50,7 @@ class _DynamicBodyState extends State<DynamicBody> {
   @override
   Widget build(BuildContext context) {
     UserQuery queryData = Provider.of<UserQuery>(context, listen: false);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -127,11 +128,23 @@ class _DynamicBodyState extends State<DynamicBody> {
                     return;
                   }
                   setState(() {
+                    
+                    //Get the list of current queries or an empty list if null
+                    List<String> queries = queryData.queries ?? List();
+
                     _query = _textController.text;
+                    
+                    //Splits the input texts where new lines have been started
+                    
+                    queries.addAll(_query.split("\n"));
+                    queryData.updateQueries(queries);
+
+                    /*
                     queryData.updateQueries([
                       _query,
                       'Neural networks are really cool, especially if they are convolutional'
                     ]);
+                    */
                   });
                 },
                 label: Text(
