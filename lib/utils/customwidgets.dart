@@ -12,9 +12,9 @@ class RecommendationTile extends StatelessWidget {
       child: ListTile(
           onTap: () {},
           title: Text(recommendation.title),
-          subtitle: Text('Albert Einstein'),
+          subtitle: Text('Albert Einstein, Marie Curie, Thomas Jefferson'),
           leading: CircleAvatar(
-            child: Text((recommendation.id).toString(),
+            child: Text((recommendation.id+1).toString(),
                 style: TextStyle(color: Colors.black)),
             backgroundColor: Colors.transparent,
           ),

@@ -7,7 +7,7 @@ class Themes {
       primaryColor: HexColor.fromHex('B0403D'),
 
       secondaryHeaderColor: HexColor.fromHex('417E80'),
-      
+      buttonColor: HexColor.fromHex('4A6B8A'),
     );
   }
 

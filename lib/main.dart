@@ -17,11 +17,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Citation Rex',
-      debugShowCheckedModeBanner: false,
-      theme: Themes().lightTheme(),
-      home: RootPage(),
+    return ChangeNotifierProvider<UserQuery>.value(
+      value: UserQuery(),
+      child: MaterialApp(
+        title: 'Citation Rex',
+        debugShowCheckedModeBanner: false,
+        theme: Themes().lightTheme(),
+        home: RootPage(),
+      ),
     );
   }
 }
@@ -42,9 +45,11 @@ class _DynamicBodyState extends State<DynamicBody> {
   TextEditingController _textController = TextEditingController();
 
   String _query;
+  String _errorText;
 
   @override
   Widget build(BuildContext context) {
+    UserQuery queryData = Provider.of<UserQuery>(context, listen: false);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -94,9 +99,13 @@ class _DynamicBodyState extends State<DynamicBody> {
                         borderSide: BorderSide(color: Colors.transparent)),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.transparent)),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
                     errorBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent),
                     ),
+                    errorText: _errorText,
                     hintText: 'Enter the citation context here...'),
               ),
             ),
@@ -109,8 +118,20 @@ class _DynamicBodyState extends State<DynamicBody> {
                 elevation: 1,
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                 onPressed: () {
+                  if (_textController.text.length < 10) {
+                    //Temporary break condition TODO 15 words min.
+                    setState(() {
+                      _errorText =
+                          'Please enter a sentence with 10 or more characters!';
+                    });
+                    return;
+                  }
                   setState(() {
                     _query = _textController.text;
+                    queryData.updateQueries([
+                      _query,
+                      'Neural networks are really cool, especially if they are convolutional'
+                    ]);
                   });
                 },
                 label: Text(
@@ -133,12 +154,7 @@ class _DynamicBodyState extends State<DynamicBody> {
             margin: EdgeInsets.only(top: 25),
             color: Colors.transparent,
             child: Center(
-              child: ChangeNotifierProvider<UserQuery>.value(
-                  value: UserQuery(queries: [
-                    _query,
-                    //'Neural Networks are really cool, especially if they are convolutional' //to test this feature out
-                  ]),
-                  child: QuerySelector()),
+              child: QuerySelector(),
             ),
           ),
         )
@@ -164,7 +180,6 @@ class _QuerySelectorState extends State<QuerySelector> {
   @override
   Widget build(BuildContext context) {
     UserQuery queryData = Provider.of<UserQuery>(context);
-    print('Rebuilding queryselector...');
     if (queryData == null) {
       print('Error');
     }
@@ -177,32 +192,52 @@ class _QuerySelectorState extends State<QuerySelector> {
 
     return Column(
       children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            FloatingActionButton(
-              onPressed: () {
-                if (currentIndex != 0) {
-                  setState(() {
-                    currentIndex--;
-                  });
-                }
-              },
-              child: Icon(Icons.keyboard_arrow_left),
-            ),
-            Text(selectedQuery ??
-                'Enter a sentence in the text field and hit search...'),
-            FloatingActionButton(
-              onPressed: () {
-                if (currentIndex < queries.length - 1) {
-                  setState(() {
-                    currentIndex++;
-                  });
-                }
-              },
-              child: Icon(Icons.keyboard_arrow_right),
-            ),
-          ],
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Opacity(
+                opacity: currentIndex != 0 ? 1 : 0.5,
+                child: CircleAvatar(
+                  backgroundColor: Theme.of(context).buttonColor,
+                  child: IconButton(
+                    icon: Icon(Icons.keyboard_arrow_left, color: Colors.white),
+                    onPressed: () {
+                      if (currentIndex != 0) {
+                        setState(() {
+                          currentIndex--;
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 25),
+                      child: Text(selectedQuery)),
+                ),
+              ),
+              Opacity(
+                opacity: currentIndex < queries.length -1 ? 1 : 0.5,
+                child: CircleAvatar(
+                  backgroundColor: Theme.of(context).buttonColor,
+                  child: IconButton(
+                    icon: Icon(Icons.keyboard_arrow_right, color: Colors.white),
+                    onPressed: () {
+                      if (currentIndex < queries.length - 1) {
+                        setState(() {
+                          currentIndex++;
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         SizedBox(
           height: 25,

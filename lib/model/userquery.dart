@@ -6,10 +6,6 @@ class UserQuery with ChangeNotifier {
   List<String> queries;
   Map<String, Set<Recommendation>> recommendations = Map();
 
-  UserQuery({@required this.queries}){
-    fetchRecommendations();
-  }
-
   void updateQueries(List<String> queries) {
     this.queries = queries;
     fetchRecommendations();
