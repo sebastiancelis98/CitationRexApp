@@ -16,7 +16,6 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
   };
   String body = '{"query": "$query"}';
 
-  print("Sending request to backend server...");
   try {
     Response response = await post(url, headers: headers, body: body);
 
