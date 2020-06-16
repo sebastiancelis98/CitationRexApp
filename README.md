@@ -1,6 +1,6 @@
-# CitationRexWebsite
+# Citation Rex Website
 
-A new Flutter project.
+A web app to recommend scientific papers based on a user given context.
 
 ## Getting Started
 
