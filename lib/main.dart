@@ -130,7 +130,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                   setState(() {
                     
                     //Get the list of current queries or an empty list if null
-                    List<String> queries = queryData.queries ?? List();
+                    List<String> queries = List();
 
                     _query = _textController.text;
                     
