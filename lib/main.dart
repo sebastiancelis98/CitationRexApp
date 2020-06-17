@@ -272,7 +272,10 @@ class RecList extends StatelessWidget {
     if (!queryData.recommendations.containsKey(query)) {
       return Loading();
     }
-    Set recs = queryData.recommendations[query];
+    Set<Recommendation> recs = queryData.recommendations[query];
+    if(recs.isEmpty){
+      return Text('An error has occured, unable to retrieve recommendations!');
+    }
     return Expanded(
       child: Container(
         child: Scrollbar(

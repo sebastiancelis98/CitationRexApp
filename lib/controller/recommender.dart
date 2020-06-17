@@ -28,14 +28,19 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
     }
 
     Map parsedData = json.decode(data);
-
-    for(int i = 0; i < parsedData.length; i++){
+    print(parsedData);
+    
+    int id = 1;
+    for(Map paper in parsedData['papers']){
       Recommendation rec = Recommendation(
-        id: i,
-        title: parsedData.values.elementAt(i),
+        id: id++,
+        authors: paper['authors'].toString().replaceAll('[', '').replaceAll(']', ''),
+        title: paper['title'],
       );
       recs.add(rec);
     }
+
+    
   } catch (e) {
     print(e);
   }
