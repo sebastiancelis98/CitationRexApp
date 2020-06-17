@@ -1,4 +1,3 @@
-import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:CitationRexWebsite/model/userquery.dart';
 import 'package:CitationRexWebsite/utils/color.dart';
 import 'package:CitationRexWebsite/utils/customwidgets.dart';
@@ -6,8 +5,6 @@ import 'package:CitationRexWebsite/utils/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'controller/recommender.dart';
 
 void main() {
   runApp(MyApp());
