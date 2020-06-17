@@ -1,3 +1,4 @@
+import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:CitationRexWebsite/model/userquery.dart';
 import 'package:CitationRexWebsite/utils/color.dart';
 import 'package:CitationRexWebsite/utils/customwidgets.dart';
