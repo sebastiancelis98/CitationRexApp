@@ -30,7 +30,10 @@ class MyApp extends StatelessWidget {
 class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: DynamicBody());
+    return Scaffold(
+      body: DynamicBody(),
+      backgroundColor: HexColor.fromHex('F0F0F0'),
+    );
   }
 }
 
@@ -49,125 +52,145 @@ class _DynamicBodyState extends State<DynamicBody> {
   Widget build(BuildContext context) {
     UserQuery queryData = Provider.of<UserQuery>(context, listen: false);
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Column(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'CitationRex',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 55,
-                    ),
-                  ),
-                  Text(
-                    ' Get useful citation recommendations for your scientific paper.',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 45 / 100,
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                border: Border.all(color: HexColor.fromHex('4A6B8A')),
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
-              child: TextField(
-                maxLines: 20,
-                controller: _textController,
-                style: TextStyle(fontSize: 13, fontFamily: 'Montserrat'),
-                decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent)),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent)),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.transparent),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.transparent),
-                    ),
-                    errorText: _errorText,
-                    hintText: 'Enter the citation context here...'),
-              ),
-            ),
-            SizedBox(height: 25),
-            Center(
-              child: RaisedButton.icon(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
-                color: HexColor.fromHex('54A759'),
-                elevation: 1,
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                onPressed: () {
-                  if (_textController.text.length < 10) {
-                    //Temporary break condition TODO 15 words min.
-                    setState(() {
-                      _errorText =
-                          'Please enter a sentence with 10 or more characters!';
-                    });
-                    return;
-                  }
-                  setState(() {
-                    
-                    //Get the list of current queries or an empty list if null
-                    List<String> queries = List();
-
-                    _query = _textController.text;
-                    
-                    //Splits the input texts where new lines have been started
-                    
-                    queries.addAll(_query.split("\n"));
-                    queryData.updateQueries(queries);
-
-                    /*
-                    queryData.updateQueries([
-                      _query,
-                      'Neural networks are really cool, especially if they are convolutional'
-                    ]);
-                    */
-                  });
-                },
-                label: Text(
-                  'Search ',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: 'Montserrat'),
-                ),
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(top: 25),
+        Container(
+          decoration: BoxDecoration(
             color: Colors.transparent,
-            child: Center(
-              child: QuerySelector(),
+            border: Border.all(color: Colors.transparent),
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(0),
             ),
           ),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Citation Rex',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 40,
+                      ),
+                    ),
+                    Text(
+                      ' Get useful citation recommendations for your scientific paper.',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  width: MediaQuery.of(context).size.width * 46 / 100,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey[700]),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      topRight: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
+                    ),
+                  ),
+                  child: TextField(
+                    maxLines: 22,
+                    controller: _textController,
+                    cursorColor: Theme.of(context).secondaryHeaderColor,
+                    style: TextStyle(fontSize: 14, fontFamily: 'Montserrat'),
+                    decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        errorText: _errorText,
+                        errorStyle: TextStyle(
+                          fontFamily: 'Montserrat'
+                        ),
+                        hintText: 'Paste a section from your paper here...'),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    color: Theme.of(context).primaryColor,
+                    elevation: 1,
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                    onPressed: () {
+                      if (_textController.text.split(" ").length < 10) {
+                        //Temporary break condition TODO 15 words min.
+                        setState(() {
+                          _errorText =
+                              'Please enter a sentence with 15 words or more!';
+                        });
+                        return;
+                      }
+                      _errorText = null;
+                      setState(() {
+                        //Get the list of current queries or an empty list if null
+                        List<String> queries = List();
+
+                        _query = _textController.text;
+
+                        //Splits the input texts where new lines have been started
+
+                        queries.addAll(_query.split("\n"));
+                        queryData.updateQueries(queries);
+
+                      });
+                    },
+                    label: Text(
+                      'Search ',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: 'Montserrat'),
+                    ),
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Center(
+                child: QuerySelector(),
+              ),
+            )
+          ],
         )
       ],
     );
@@ -232,7 +255,7 @@ class _QuerySelectorState extends State<QuerySelector> {
                 ),
               ),
               Opacity(
-                opacity: currentIndex < queries.length -1 ? 1 : 0.5,
+                opacity: currentIndex < queries.length - 1 ? 1 : 0.5,
                 child: CircleAvatar(
                   backgroundColor: Theme.of(context).buttonColor,
                   child: IconButton(
@@ -274,7 +297,7 @@ class RecList extends StatelessWidget {
       return Loading();
     }
     Set<Recommendation> recs = queryData.recommendations[query];
-    if(recs.isEmpty){
+    if (recs.isEmpty) {
       return Text('An error has occured, unable to retrieve recommendations!');
     }
     return Expanded(
