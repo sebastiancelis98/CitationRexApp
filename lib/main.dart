@@ -96,101 +96,100 @@ class _DynamicBodyState extends State<DynamicBody> {
         SizedBox(
           height: 15,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  width: MediaQuery.of(context).size.width * 46 / 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey[700]),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      topRight: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
-                    ),
-                  ),
-                  child: TextField(
-                    maxLines: 22,
-                    controller: _textController,
-                    cursorColor: Theme.of(context).secondaryHeaderColor,
-                    style: TextStyle(fontSize: 14, fontFamily: 'Montserrat'),
-                    decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent)),
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent)),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent)),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        errorText: _errorText,
-                        errorStyle: TextStyle(
-                          fontFamily: 'Montserrat'
-                        ),
-                        hintText: 'Paste a section from your paper here...'),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Center(
-                  child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    color: Theme.of(context).primaryColor,
-                    elevation: 1,
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                    onPressed: () {
-                      if (_textController.text.split(" ").length < 10) {
-                        //Temporary break condition TODO 15 words min.
-                        setState(() {
-                          _errorText =
-                              'Please enter a sentence with 15 words or more!';
-                        });
-                        return;
-                      }
-                      _errorText = null;
-                      setState(() {
-                        //Get the list of current queries or an empty list if null
-                        List<String> queries = List();
-
-                        _query = _textController.text;
-
-                        //Splits the input texts where new lines have been started
-
-                        queries.addAll(_query.split("\n"));
-                        queryData.updateQueries(queries);
-
-                      });
-                    },
-                    label: Text(
-                      'Search ',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: 'Montserrat'),
-                    ),
-                    icon: Icon(
-                      Icons.search,
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(left: 15),
+                    width: MediaQuery.of(context).size.width * 46 / 100,
+                    decoration: BoxDecoration(
                       color: Colors.white,
+                      border: Border.all(color: Colors.grey[600]),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        topRight: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                      ),
+                    ),
+                    child: TextField(
+                      maxLines: 20,
+                      controller: _textController,
+                      cursorColor: Theme.of(context).secondaryHeaderColor,
+                      style: TextStyle(fontSize: 14, fontFamily: 'Montserrat'),
+                      decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          errorText: _errorText,
+                          errorStyle: TextStyle(fontFamily: 'Montserrat'),
+                          hintText: 'Paste a section from your paper here...'),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: Center(
-                child: QuerySelector(),
+                  SizedBox(height: 20),
+                  Center(
+                    child: RaisedButton.icon(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      color: Theme.of(context).primaryColor,
+                      elevation: 1,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                      onPressed: () {
+                        //TODO change to 15 words min when in production mode
+                        if (_textController.text.split(" ").length < 2) {
+                          setState(() {
+                            _errorText =
+                                'Please enter a sentence with 2 words or more!';
+                          });
+                          return;
+                        }
+                        _errorText = null;
+                        setState(() {
+                          //Get the list of current queries or an empty list if null
+                          List<String> queries = List();
+                          _query = _textController.text;
+
+                          //Splits the input texts where new lines have been started
+                          queries.addAll(_query.split("\n"));
+                          queryData.updateQueries(queries);
+                        });
+                      },
+                      label: Text(
+                        'Search ',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: 'Montserrat'),
+                      ),
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            )
-          ],
+              Expanded(
+                child: QuerySelector(),
+              )
+            ],
+          ),
         )
       ],
     );
@@ -220,11 +219,26 @@ class _QuerySelectorState extends State<QuerySelector> {
     List queries = queryData.queries;
 
     if (queries == null) {
+      return Container(
+        margin: EdgeInsets.symmetric(horizontal: 30),
+        child: ListView.builder(
+          itemCount: 3,
+          itemBuilder: (context, i){
+            return RecommendationTile(
+              recommendation: Recommendation(
+                  id: i,
+                  title: 'Error retrieving recommendations, this is a test sample',
+                  authors: 'Isabela, Vinzenz & Sebastian'),
+            );
+          },
+        ),
+      );
       return Container();
     }
     String selectedQuery = queries.elementAt(currentIndex);
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Container(
           margin: EdgeInsets.symmetric(horizontal: 30),
@@ -298,21 +312,23 @@ class RecList extends StatelessWidget {
     }
     Set<Recommendation> recs = queryData.recommendations[query];
     if (recs.isEmpty) {
-      return Text('An error has occured, unable to retrieve recommendations!');
+      recs.add(Recommendation(
+          id: 1,
+          title: 'Error retrieving recommendations, this is a test sample',
+          authors: 'Isabela, Vinzenz & Sebastian'));
     }
+
     return Expanded(
       child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 30),
         child: Scrollbar(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 30),
-            child: ListView.builder(
-              itemCount: recs.length,
-              itemBuilder: (context, i) {
-                return RecommendationTile(
-                  recommendation: recs.elementAt(i),
-                );
-              },
-            ),
+          child: ListView.builder(
+            itemCount: recs.length,
+            itemBuilder: (context, i) {
+              return RecommendationTile(
+                recommendation: recs.elementAt(i),
+              );
+            },
           ),
         ),
       ),

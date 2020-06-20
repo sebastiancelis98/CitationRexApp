@@ -8,6 +8,52 @@ class RecommendationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(15)),
+      child: Row(
+        children: <Widget>[
+          CircleAvatar(
+            child: Text((recommendation.id).toString(),
+                style: TextStyle(color: Colors.black)),
+            backgroundColor: Colors.transparent,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                recommendation.title,
+                style: TextStyle(fontFamily: 'Montserrat', fontSize: 14),
+              ),
+              Text(
+                recommendation.authors,
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 12,
+                  color: Colors.grey[500],
+                ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: Container(),
+          ),
+          IconButton(
+            icon: Icon(Icons.archive),
+            onPressed: () {},
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            
+          ),
+          SizedBox(width: 10)
+        ],
+      ),
+    );
+
     return Card(
       child: ListTile(
           onTap: () {},
