@@ -10,7 +10,7 @@ class RecommendationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
       decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.grey),
@@ -18,8 +18,10 @@ class RecommendationTile extends StatelessWidget {
       child: Row(
         children: <Widget>[
           CircleAvatar(
-            child: Text((recommendation.id).toString(),
-                style: TextStyle(color: Colors.black)),
+            child: Text(
+              "#" + (recommendation.id).toString(),
+              style: TextStyle(color: Colors.black, fontFamily: 'Montserrat', fontSize: 14),
+            ),
             backgroundColor: Colors.transparent,
           ),
           Column(
@@ -27,6 +29,7 @@ class RecommendationTile extends StatelessWidget {
             children: <Widget>[
               Text(
                 recommendation.title,
+                
                 style: TextStyle(fontFamily: 'Montserrat', fontSize: 14),
               ),
               Text(
@@ -47,7 +50,6 @@ class RecommendationTile extends StatelessWidget {
             onPressed: () {},
             hoverColor: Colors.transparent,
             splashColor: Colors.transparent,
-            
           ),
           SizedBox(width: 10)
         ],

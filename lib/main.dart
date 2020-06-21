@@ -94,7 +94,7 @@ class _DynamicBodyState extends State<DynamicBody> {
           ),
         ),
         SizedBox(
-          height: 15,
+          height: 25,
         ),
         Expanded(
           child: Row(
@@ -219,20 +219,6 @@ class _QuerySelectorState extends State<QuerySelector> {
     List queries = queryData.queries;
 
     if (queries == null) {
-      return Container(
-        margin: EdgeInsets.symmetric(horizontal: 30),
-        child: ListView.builder(
-          itemCount: 3,
-          itemBuilder: (context, i){
-            return RecommendationTile(
-              recommendation: Recommendation(
-                  id: i,
-                  title: 'Error retrieving recommendations, this is a test sample',
-                  authors: 'Isabela, Vinzenz & Sebastian'),
-            );
-          },
-        ),
-      );
       return Container();
     }
     String selectedQuery = queries.elementAt(currentIndex);
@@ -246,10 +232,12 @@ class _QuerySelectorState extends State<QuerySelector> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Opacity(
-                opacity: currentIndex != 0 ? 1 : 0.5,
+                opacity: currentIndex != 0 ? 1 : 0.35,
                 child: CircleAvatar(
-                  backgroundColor: Theme.of(context).buttonColor,
+                  backgroundColor: Theme.of(context).primaryColor,
                   child: IconButton(
+                    splashColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
                     icon: Icon(Icons.keyboard_arrow_left, color: Colors.white),
                     onPressed: () {
                       if (currentIndex != 0) {
@@ -265,14 +253,19 @@ class _QuerySelectorState extends State<QuerySelector> {
                 child: Center(
                   child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 25),
-                      child: Text(selectedQuery)),
+                      child: Text(selectedQuery, style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 13
+                      ),)),
                 ),
               ),
               Opacity(
-                opacity: currentIndex < queries.length - 1 ? 1 : 0.5,
+                opacity: currentIndex < queries.length - 1 ? 1 : 0.35,
                 child: CircleAvatar(
-                  backgroundColor: Theme.of(context).buttonColor,
+                  backgroundColor: Theme.of(context).primaryColor,
                   child: IconButton(
+                    splashColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
                     icon: Icon(Icons.keyboard_arrow_right, color: Colors.white),
                     onPressed: () {
                       if (currentIndex < queries.length - 1) {
