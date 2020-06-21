@@ -40,6 +40,27 @@ class RecommendationTile extends StatelessWidget {
                   color: Colors.grey[500],
                 ),
               ),
+              Row(
+                children: <Widget>[
+                Text(
+                "Decisive words: ",
+                 style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 12,
+                  color: Colors.grey[500],
+                  ),
+                ),
+                Text(
+                recommendation.decisivewords,
+                 style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 12,
+                  color: Colors.black,
+                ) 
+                )
+                ]
+              )
+
             ],
           ),
           Expanded(

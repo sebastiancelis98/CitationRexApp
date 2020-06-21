@@ -328,7 +328,9 @@ class RecList extends StatelessWidget {
       recs.add(Recommendation(
           id: 1,
           title: 'Error retrieving recommendations, this is a test sample',
-          authors: 'Isabela, Vinzenz & Sebastian'));
+          authors: 'Isabela, Vinzenz & Sebastian',
+          decisivewords: "recommendation, test, sample"));
+          
     }
 
     return Expanded(
