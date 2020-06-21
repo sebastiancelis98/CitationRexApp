@@ -168,17 +168,24 @@ class _DynamicBodyState extends State<DynamicBody> {
                           //Splits the input texts where new lines have been started
                           List<String> queries = List();
 
-                          String prevSentence = "";
+                          String currentSentence = "";
                           for(String query in _query.split(".")){
+                            print("Query: "+query);
+                            print("Current sentence: "+currentSentence);
+
+                            if(currentSentence != ""){
+                              currentSentence += " "+query+".";
+                            }else{
+                              currentSentence = query+".";
+                            }
                             //If the combined sentence contains less than 15 words, merge it with the next sentence
-                            if(prevSentence.split(" ").length < 15){
-                              prevSentence += query;
+                            if(currentSentence.split(" ").length < 15){
                               continue;
                             }
-                            queries.add(prevSentence.trim()+".");
-                            prevSentence = "";
+                            queries.add(currentSentence.trim());
+                            currentSentence = "";
                           }
-                          if(prevSentence != "") queries.add(prevSentence);
+                          if(currentSentence.trim() != "") queries.add(currentSentence);
 
                           queryData.updateQueries(queries);
                         });
