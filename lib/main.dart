@@ -162,11 +162,24 @@ class _DynamicBodyState extends State<DynamicBody> {
                         _errorText = null;
                         setState(() {
                           //Get the list of current queries or an empty list if null
-                          List<String> queries = List();
+                          
                           _query = _textController.text;
 
                           //Splits the input texts where new lines have been started
-                          queries.addAll(_query.split("\n"));
+                          List<String> queries = List();
+
+                          String prevSentence = "";
+                          for(String query in _query.split(".")){
+                            //If the combined sentence contains less than 15 words, merge it with the next sentence
+                            if(prevSentence.split(" ").length < 15){
+                              prevSentence += query;
+                              continue;
+                            }
+                            queries.add(prevSentence.trim()+".");
+                            prevSentence = "";
+                          }
+                          if(prevSentence != "") queries.add(prevSentence);
+
                           queryData.updateQueries(queries);
                         });
                       },
