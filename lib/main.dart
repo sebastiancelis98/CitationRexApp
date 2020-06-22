@@ -58,6 +58,12 @@ class _DynamicBodyState extends State<DynamicBody> {
         Container(
           decoration: BoxDecoration(
             color: Colors.transparent,
+            gradient: LinearGradient(
+              colors: [Colors.grey[200], Colors.grey[300]],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+
+            ),
             border: Border.all(color: Colors.transparent),
             borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(0),
@@ -78,6 +84,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                         fontFamily: 'Montserrat',
                         color: Theme.of(context).primaryColor,
                         fontSize: 40,
+
                       ),
                     ),
                     Text(
@@ -335,7 +342,7 @@ class RecList extends StatelessWidget {
       recs.addAll(List.generate(
           10,
           (index) => Recommendation(
-              id: index+1,
+              id: index + 1,
               title: 'Error retrieving recommendations, this is a test sample',
               authors: 'Isabela, Vinzenz & Sebastian',
               decisivewords: "recommendation, test, sample")));
