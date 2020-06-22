@@ -13,7 +13,7 @@ class RecommendationTile extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Colors.grey),
+          border: Border.all(color: Colors.grey[400]),
           borderRadius: BorderRadius.circular(15)),
       child: Row(
         children: <Widget>[
@@ -40,6 +40,7 @@ class RecommendationTile extends StatelessWidget {
                   color: Colors.grey[500],
                 ),
               ),
+              SizedBox(height:5),
               Row(
                 children: <Widget>[
                 Text(
@@ -78,6 +79,7 @@ class RecommendationTile extends StatelessWidget {
     );
 
     return Card(
+      
       child: ListTile(
           onTap: () {},
           title: Text(recommendation.title),

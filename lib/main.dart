@@ -162,30 +162,31 @@ class _DynamicBodyState extends State<DynamicBody> {
                         _errorText = null;
                         setState(() {
                           //Get the list of current queries or an empty list if null
-                          
+
                           _query = _textController.text;
 
                           //Splits the input texts where new lines have been started
                           List<String> queries = List();
 
                           String currentSentence = "";
-                          for(String query in _query.split(".")){
-                            print("Query: "+query);
-                            print("Current sentence: "+currentSentence);
+                          for (String query in _query.split(".")) {
+                            print("Query: " + query);
+                            print("Current sentence: " + currentSentence);
 
-                            if(currentSentence != ""){
-                              currentSentence += " "+query+".";
-                            }else{
-                              currentSentence = query+".";
+                            if (currentSentence != "") {
+                              currentSentence += " " + query + ".";
+                            } else {
+                              currentSentence = query + ".";
                             }
                             //If the combined sentence contains less than 15 words, merge it with the next sentence
-                            if(currentSentence.split(" ").length < 15){
+                            if (currentSentence.split(" ").length < 15) {
                               continue;
                             }
                             queries.add(currentSentence.trim());
                             currentSentence = "";
                           }
-                          if(currentSentence.trim() != "") queries.add(currentSentence);
+                          if (currentSentence.trim() != "")
+                            queries.add(currentSentence);
 
                           queryData.updateQueries(queries);
                         });
@@ -273,10 +274,11 @@ class _QuerySelectorState extends State<QuerySelector> {
                 child: Center(
                   child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 25),
-                      child: Text(selectedQuery, style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 13
-                      ),)),
+                      child: Text(
+                        selectedQuery,
+                        style:
+                            TextStyle(fontFamily: 'Montserrat', fontSize: 13),
+                      )),
                 ),
               ),
               Opacity(
@@ -325,18 +327,24 @@ class RecList extends StatelessWidget {
     }
     Set<Recommendation> recs = queryData.recommendations[query];
     if (recs.isEmpty) {
-      recs.add(Recommendation(
+      Recommendation r = Recommendation(
           id: 1,
           title: 'Error retrieving recommendations, this is a test sample',
           authors: 'Isabela, Vinzenz & Sebastian',
-          decisivewords: "recommendation, test, sample"));
-          
+          decisivewords: "recommendation, test, sample");
+      recs.addAll(List.generate(
+          10,
+          (index) => Recommendation(
+              id: index+1,
+              title: 'Error retrieving recommendations, this is a test sample',
+              authors: 'Isabela, Vinzenz & Sebastian',
+              decisivewords: "recommendation, test, sample")));
     }
 
     return Expanded(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 30),
-        child: Scrollbar(
+      child: Scrollbar(
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 30),
           child: ListView.builder(
             itemCount: recs.length,
             itemBuilder: (context, i) {
