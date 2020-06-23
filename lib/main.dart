@@ -45,7 +45,6 @@ class DynamicBody extends StatefulWidget {
 class _DynamicBodyState extends State<DynamicBody> {
   TextEditingController _textController = TextEditingController();
 
-  String _query;
   String _errorText;
 
   @override
@@ -172,11 +171,8 @@ class _DynamicBodyState extends State<DynamicBody> {
                         }
                         _errorText = null;
                         setState(() {
-                          //Get the list of current queries or an empty list if null
-
-                          _query = _textController.text;
-
-                          //Splits the input texts where new lines have been started
+                          String _query = _textController.text.replaceAll('\n', ' ');
+                          
                           List<String> queries = List();
 
                           String currentSentence = "";

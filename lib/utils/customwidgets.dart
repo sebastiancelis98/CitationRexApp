@@ -14,13 +14,14 @@ class RecommendationTile extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.grey[400]),
-          borderRadius: BorderRadius.circular(15)),
+          borderRadius: BorderRadius.circular(16)),
       child: Row(
         children: <Widget>[
           CircleAvatar(
             child: Text(
               "#" + (recommendation.id).toString(),
-              style: TextStyle(color: Colors.black, fontFamily: 'Montserrat', fontSize: 14),
+              style: TextStyle(
+                  color: Colors.black, fontFamily: 'Montserrat', fontSize: 14),
             ),
             backgroundColor: Colors.transparent,
           ),
@@ -29,7 +30,6 @@ class RecommendationTile extends StatelessWidget {
             children: <Widget>[
               Text(
                 recommendation.title,
-                
                 style: TextStyle(fontFamily: 'Montserrat', fontSize: 14),
               ),
               Text(
@@ -40,28 +40,23 @@ class RecommendationTile extends StatelessWidget {
                   color: Colors.grey[500],
                 ),
               ),
-              SizedBox(height:5),
-              Row(
-                children: <Widget>[
+              SizedBox(height: 5),
+              Row(children: <Widget>[
                 Text(
-                "Decisive words: ",
-                 style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 12,
-                  color: Colors.grey[500],
+                  "Decisive words: ",
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 12,
+                    color: Colors.grey[500],
                   ),
                 ),
-                Text(
-                recommendation.decisivewords,
-                 style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 12,
-                  color: Colors.black,
-                ) 
-                )
-                ]
-              )
-
+                Text(recommendation.decisivewords ?? '',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 12,
+                      color: Colors.black,
+                    ))
+              ])
             ],
           ),
           Expanded(
@@ -79,7 +74,6 @@ class RecommendationTile extends StatelessWidget {
     );
 
     return Card(
-      
       child: ListTile(
           onTap: () {},
           title: Text(recommendation.title),

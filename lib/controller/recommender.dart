@@ -35,7 +35,7 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
       Recommendation rec = Recommendation(
         id: id++,
         authors: paper['authors'].toString().replaceAll('[', '').replaceAll(']', ''),
-        title: paper['title'],
+        title: capitalizeWords(paper['title']),
       );
       recs.add(rec);
     }
@@ -45,4 +45,8 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
     print(e);
   }
   return recs;
+}
+
+String capitalizeWords(String input){
+  return input.split(" ").map((e) => e[0].toUpperCase() + e.substring(1)).join(' ');
 }
