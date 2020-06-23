@@ -171,8 +171,9 @@ class _DynamicBodyState extends State<DynamicBody> {
                         }
                         _errorText = null;
                         setState(() {
-                          String _query = _textController.text.replaceAll('\n', ' ');
-                          
+                          String _query =
+                              _textController.text.replaceAll('\n', ' ');
+
                           List<String> queries = List();
 
                           String currentSentence = "";
@@ -256,61 +257,82 @@ class _QuerySelectorState extends State<QuerySelector> {
       children: <Widget>[
         Container(
           margin: EdgeInsets.symmetric(horizontal: 30),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Opacity(
-                opacity: currentIndex != 0 ? 1 : 0.35,
-                child: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  child: IconButton(
-                    splashColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    icon: Icon(Icons.keyboard_arrow_left, color: Colors.white),
-                    onPressed: () {
-                      if (currentIndex != 0) {
-                        setState(() {
-                          currentIndex--;
-                        });
-                      }
-                    },
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Opacity(
+                    opacity: currentIndex != 0 ? 1 : 0.35,
+                    child: CircleAvatar(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: IconButton(
+                        splashColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        icon: Icon(Icons.keyboard_arrow_left,
+                            color: Colors.white),
+                        onPressed: () {
+                          if (currentIndex != 0) {
+                            setState(() {
+                              currentIndex--;
+                            });
+                          }
+                        },
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Center(
-                  child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 25),
-                      child: Text(
-                        selectedQuery,
-                        style:
-                            TextStyle(fontFamily: 'Montserrat', fontSize: 13),
-                      )),
-                ),
-              ),
-              Opacity(
-                opacity: currentIndex < queries.length - 1 ? 1 : 0.35,
-                child: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  child: IconButton(
-                    splashColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    icon: Icon(Icons.keyboard_arrow_right, color: Colors.white),
-                    onPressed: () {
-                      if (currentIndex < queries.length - 1) {
-                        setState(() {
-                          currentIndex++;
-                        });
-                      }
-                    },
+                  Expanded(
+                    child: Center(
+                      child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 25),
+                          child: Text(
+                            selectedQuery,
+                            style: TextStyle(
+                                fontFamily: 'Montserrat', fontSize: 13),
+                          )),
+                    ),
                   ),
-                ),
+                  Opacity(
+                    opacity: currentIndex < queries.length - 1 ? 1 : 0.35,
+                    child: CircleAvatar(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: IconButton(
+                        splashColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        icon: Icon(Icons.keyboard_arrow_right,
+                            color: Colors.white),
+                        onPressed: () {
+                          if (currentIndex < queries.length - 1) {
+                            setState(() {
+                              currentIndex++;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    queries.length > 1
+                        ? '${currentIndex + 1} of ${queries.length}'
+                        : '',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 11,
+                      
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
         ),
         SizedBox(
-          height: 25,
+          height: 15,
         ),
         RecList(query: selectedQuery)
       ],
