@@ -91,10 +91,11 @@ class _DynamicBodyState extends State<DynamicBody> {
                       ),
                     ),
                     Text(
-                      ' Get useful paper recommendations for your scientific paper.',
+                      ' Get useful paper recommendations for your research.',
                       style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 12,
+                        color: Colors.grey[800]
                       ),
                     ),
                   ],
@@ -332,7 +333,7 @@ class _QuerySelectorState extends State<QuerySelector> {
           ),
         ),
         SizedBox(
-          height: 15,
+          height: 20,
         ),
         RecList(query: selectedQuery)
       ],

@@ -34,7 +34,7 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
     for(Map paper in parsedData['papers']){
       Recommendation rec = Recommendation(
         id: id++,
-        authors: paper['authors'].toString().replaceAll('[', '').replaceAll(']', ''),
+        authors: capitalizeWords(paper['authors'].toString().replaceAll('[', '').replaceAll(']', '')),
         title: capitalizeWords(paper['title']),
       );
       recs.add(rec);
