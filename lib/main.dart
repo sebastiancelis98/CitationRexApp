@@ -62,8 +62,13 @@ class _DynamicBodyState extends State<DynamicBody> {
               colors: [Colors.grey[200], Colors.grey[300]],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.transparent, //Change to grey[400] maybe?
+                blurRadius: 4.0,
+              )
+            ],
             border: Border.all(color: Colors.transparent),
             borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(0),
@@ -84,11 +89,10 @@ class _DynamicBodyState extends State<DynamicBody> {
                         fontFamily: 'Montserrat',
                         color: Theme.of(context).primaryColor,
                         fontSize: 40,
-
                       ),
                     ),
                     Text(
-                      ' Get useful citation recommendations for your scientific paper.',
+                      ' Get useful paper recommendations for your scientific paper.',
                       style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 12,
@@ -101,7 +105,7 @@ class _DynamicBodyState extends State<DynamicBody> {
           ),
         ),
         SizedBox(
-          height: 25,
+          height: 20,
         ),
         Expanded(
           child: Row(
@@ -181,9 +185,9 @@ class _DynamicBodyState extends State<DynamicBody> {
                             print("Current sentence: " + currentSentence);
 
                             if (currentSentence != "") {
-                              currentSentence += " " + query + ".";
+                              currentSentence += ". " + query;
                             } else {
-                              currentSentence = query + ".";
+                              currentSentence = query;
                             }
                             //If the combined sentence contains less than 15 words, merge it with the next sentence
                             if (currentSentence.split(" ").length < 15) {
