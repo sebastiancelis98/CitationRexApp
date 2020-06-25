@@ -87,7 +87,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                       style: TextStyle(
                         fontFamily: 'Montserrat',
                         color: Theme.of(context).primaryColor,
-                        fontSize: 40,
+                        fontSize: 35,
                       ),
                     ),
                     Text(
