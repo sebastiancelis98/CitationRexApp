@@ -94,7 +94,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                       ' Get useful paper recommendations for your research.',
                       style: TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 12,
+                        fontSize: 11,
                         color: Colors.grey[800]
                       ),
                     ),
