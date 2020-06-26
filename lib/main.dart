@@ -357,18 +357,14 @@ class RecList extends StatelessWidget {
     }
     Set<Recommendation> recs = queryData.recommendations[query];
     if (recs.isEmpty) {
-      Recommendation r = Recommendation(
-          id: 1,
-          title: 'Error retrieving recommendations, this is a test sample',
-          authors: 'Isabela, Vinzenz & Sebastian',
-          decisivewords: "recommendation, test, sample");
       recs.addAll(List.generate(
           10,
           (index) => Recommendation(
               id: index + 1,
+              paperId: 59225,
               title: 'Error retrieving recommendations, this is a test sample',
               authors: 'Isabela, Vinzenz & Sebastian',
-              decisivewords: "recommendation, test, sample")));
+              decisiveword: "sample")));
     }
 
     return Expanded(

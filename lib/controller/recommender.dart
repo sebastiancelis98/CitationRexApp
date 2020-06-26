@@ -35,13 +35,14 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
       String title = capitalizeWords(paper['title']);
       String authors = paper['authors'].toString().replaceAll('[', '').replaceAll(']', '');
       authors = capitalizeWords(authors);
-      
+      int paperId = paper['paperid'];
       
       Recommendation rec = Recommendation(
         id: id++,
-        authors: capitalizeWords(paper['authors'].toString().replaceAll('[', '').replaceAll(']', '')),
-        title: capitalizeWords(paper['title']),
-        decisivewords: paper['decisive_word']
+        paperId: paperId,
+        authors: authors,
+        title: title,
+        decisiveword: paper['decisive_word']
       );
       recs.add(rec);
     }
