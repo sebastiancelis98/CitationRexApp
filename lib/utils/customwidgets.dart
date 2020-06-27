@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:CitationRexWebsite/model/recommendation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RecommendationTile extends StatefulWidget {
   final Recommendation recommendation;
@@ -85,7 +86,14 @@ class _RecommendationTileState extends State<RecommendationTile> {
             ),
             IconButton(
               icon: Icon(Icons.insert_link),
-              onPressed: () {},
+              onPressed: () async {
+                String url = widget.recommendation.url;
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  throw 'Could not launch $url';
+                }
+              },
               hoverColor: Colors.transparent,
               splashColor: Colors.transparent,
             ),
@@ -113,7 +121,7 @@ class HighlightableText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: text.split(' ').map((String e) {
-        if(!e.toLowerCase().contains(toHighlight.toLowerCase())){
+        if (!e.toLowerCase().contains(toHighlight.toLowerCase())) {
           return Text(
             e + ' ',
             style: TextStyle(
@@ -134,7 +142,7 @@ class HighlightableText extends StatelessWidget {
                       color: Colors.amber,
                       border: Border.all(color: Colors.transparent),
                       borderRadius: BorderRadius.circular(4)),
-                  width: enabled ? e.length*7.5 : 0,
+                  width: enabled ? e.length * 7.5 : 0,
                   height: 17,
                 ),
                 Container(
