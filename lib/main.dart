@@ -18,18 +18,30 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<UserQuery>.value(
       value: UserQuery(),
       child: MaterialApp(
+        initialRoute: '/',
+        routes: {
+          '/': (context) => RootPage(),
+          '/2': (context) => RootPage(designVersion: 2),
+        },
         title: 'Citation Rex',
         debugShowCheckedModeBanner: false,
         theme: Themes().lightTheme(),
-        home: RootPage(),
       ),
     );
   }
 }
 
 class RootPage extends StatelessWidget {
+
+  final int designVersion;
+
+  RootPage({this.designVersion = 1});
+
   @override
   Widget build(BuildContext context) {
+    UserQuery queryData = Provider.of<UserQuery>(context, listen: false);
+    queryData.designVersion = designVersion;
+
     return Scaffold(
       body: DynamicBody(),
       backgroundColor: HexColor.fromHex('F0F0F0'),
@@ -362,9 +374,10 @@ class RecList extends StatelessWidget {
           (index) => Recommendation(
               id: index + 1,
               paperId: 59225,
+              url: 'http:google.com',
               title: 'Error retrieving recommendations, this is a test sample',
               authors: 'Isabela, Vinzenz & Sebastian',
-              decisiveword: "sample")));
+              decisiveword: "recommendations")));
     }
 
     return Expanded(

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:CitationRexWebsite/controller/recommender.dart';
 
 class UserQuery with ChangeNotifier {
+
+  int designVersion;
   List<String> queries;
   Map<String, Set<Recommendation>> recommendations = Map();
 

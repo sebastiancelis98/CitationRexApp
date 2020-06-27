@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:CitationRexWebsite/model/recommendation.dart';
 
-class RecommendationTile extends StatelessWidget {
+class RecommendationTile extends StatefulWidget {
   final Recommendation recommendation;
 
   RecommendationTile({@required this.recommendation});
 
   @override
+  _RecommendationTileState createState() => _RecommendationTileState();
+}
+
+class _RecommendationTileState extends State<RecommendationTile> {
+  bool hovering = false;
+
+  @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (e) {},
-      onExit: (e) {},
+      onEnter: (e) {
+        setState(() {
+          hovering = true;
+        });
+      },
+      onExit: (e) {
+        setState(() {
+          hovering = false;
+        });
+      },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 5),
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
@@ -22,7 +37,7 @@ class RecommendationTile extends StatelessWidget {
           children: <Widget>[
             CircleAvatar(
               child: Text(
-                "#" + (recommendation.id).toString(),
+                "#" + (widget.recommendation.id).toString(),
                 style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'Montserrat',
@@ -34,12 +49,12 @@ class RecommendationTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 HighlightableText(
-                  text: recommendation.title,
-                  toHighlight: recommendation.decisiveword,
-                  enabled: true,
+                  text: widget.recommendation.title,
+                  toHighlight: widget.recommendation.decisiveword,
+                  enabled: hovering,
                 ),
                 Text(
-                  recommendation.authors,
+                  widget.recommendation.authors,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 12,
@@ -49,14 +64,14 @@ class RecommendationTile extends StatelessWidget {
                 SizedBox(height: 5),
                 Row(children: <Widget>[
                   Text(
-                    "Decisive words: ",
+                    "Decisive word: ",
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 12,
                       color: Colors.grey[500],
                     ),
                   ),
-                  Text(recommendation.decisiveword ?? '',
+                  Text(widget.recommendation.decisiveword ?? '',
                       style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 12,
@@ -69,7 +84,7 @@ class RecommendationTile extends StatelessWidget {
               child: Container(),
             ),
             IconButton(
-              icon: Icon(Icons.archive),
+              icon: Icon(Icons.insert_link),
               onPressed: () {},
               hoverColor: Colors.transparent,
               splashColor: Colors.transparent,
@@ -97,38 +112,45 @@ class HighlightableText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: text.split(' ').map((e) {
-        if (e.toLowerCase().contains(toHighlight.toLowerCase())) {
-          return Row(
-            children: [
-              AnimatedContainer(
-                duration: Duration(seconds: 1),
-                child: Text(
-                  e,
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 14,
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 1),
-                decoration: BoxDecoration(
-                    color: Colors.amber,
-                    border: Border.all(color: Colors.transparent),
-                    borderRadius: BorderRadius.circular(5)),
-              ),
-              Text(' ',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 14,
-                  ))
-            ],
-          );
-        } 
-        return Text(e + ' ',
+      children: text.split(' ').map((String e) {
+        if(!e.toLowerCase().contains(toHighlight.toLowerCase())){
+          return Text(
+            e + ' ',
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontSize: 14,
-            ));
+            ),
+          );
+        }
+        return Row(
+          children: [
+            Stack(
+              children: [
+                AnimatedContainer(
+                  duration: Duration(seconds: 1),
+                  curve: Curves.easeOutExpo,
+                  padding: EdgeInsets.symmetric(horizontal: 2),
+                  decoration: BoxDecoration(
+                      color: Colors.amber,
+                      border: Border.all(color: Colors.transparent),
+                      borderRadius: BorderRadius.circular(4)),
+                  width: enabled ? e.length*7.5 : 0,
+                  height: 17,
+                ),
+                Container(
+                  child: Text(
+                    e,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Text(' ')
+          ],
+        );
       }).toList(),
     );
   }

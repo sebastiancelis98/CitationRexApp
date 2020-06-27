@@ -4,7 +4,7 @@ import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:http/http.dart';
 
 Future<Set<Recommendation>> getRecommendations(String query) async {
-  if(query == null || query.isEmpty){
+  if (query == null || query.isEmpty) {
     return null;
   }
   Set<Recommendation> recs = Set();
@@ -29,31 +29,41 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
 
     Map parsedData = json.decode(data);
     print(parsedData);
-    
+
     int id = 1;
-    for(Map paper in parsedData['papers']){
-      String title = capitalizeWords(paper['title']);
-      String authors = paper['authors'].toString().replaceAll('[', '').replaceAll(']', '');
+    for (Map paper in parsedData['papers']) {
+      String title = paper['title'];
+      String authors =
+          paper['authors'].toString().replaceAll('[', '').replaceAll(']', '');
       authors = capitalizeWords(authors);
+      String url = paper['url'];
+
+      int referenceCount = paper['referencecount'];
+      int citationCount = paper['citationCount'];
+      int year = paper['year'];
       int paperId = paper['paperid'];
-      
+
       Recommendation rec = Recommendation(
-        id: id++,
-        paperId: paperId,
-        authors: authors,
-        title: title,
-        decisiveword: paper['decisive_word']
-      );
+          id: id++,
+          paperId: paperId,
+          url: url,
+          authors: authors,
+          title: title,
+          decisiveword: paper['decisive_word'],
+          referenceCount: referenceCount,
+          citationCount: citationCount,
+          publishedYear: year);
       recs.add(rec);
     }
-
-    
   } catch (e) {
     print(e);
   }
   return recs;
 }
 
-String capitalizeWords(String input){
-  return input.split(" ").map((e) => e[0].toUpperCase() + e.substring(1)).join(' ');
+String capitalizeWords(String input) {
+  return input
+      .split(" ")
+      .map((e) => e[0].toUpperCase() + e.substring(1))
+      .join(' ');
 }
