@@ -379,7 +379,7 @@ class RecList extends StatelessWidget {
               url: 'http://google.com',
               title: 'Error retrieving recommendations, this is a test sample',
               authors: 'Isabela, Vinzenz & Sebastian',
-              decisiveword: "recommend")));
+              decisiveword: "retrieving")));
     }
 
     return Expanded(

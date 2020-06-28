@@ -19,6 +19,12 @@ class _RecommendationTileState extends State<RecommendationTile> {
   @override
   Widget build(BuildContext context) {
     UserQuery data = Provider.of<UserQuery>(context, listen: false);
+
+    String authors = widget.recommendation.authors;
+    if (authors.split(',').length > 3) {
+      authors = authors.split(',').getRange(0, 3).join(', ') + "...";
+    }
+
     return MouseRegion(
       onEnter: (e) {
         setState(() {
@@ -54,16 +60,20 @@ class _RecommendationTileState extends State<RecommendationTile> {
               children: <Widget>[
                 Builder(
                   builder: (context) {
+                    String titleAndYear = widget.recommendation.title +
+                        ' (' +
+                        widget.recommendation.publishedYear.toString() +
+                        ')';
                     switch (data.designVersion) {
                       case 1:
                         return HighlightableText(
-                          text: widget.recommendation.title,
+                          text: titleAndYear,
                           toHighlight: widget.recommendation.decisiveword,
                           enabled: hovering,
                         );
                       default:
                         return Text(
-                          widget.recommendation.title,
+                          titleAndYear,
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontSize: 14,
@@ -153,7 +163,8 @@ class HighlightableText extends StatelessWidget {
     String preText = '';
     String highlight;
     for (String s in text.split(' ')) {
-      if (!s.toLowerCase().contains(toHighlight.toLowerCase())) {
+      if (!s.toLowerCase().startsWith(toHighlight.toLowerCase()) &&
+          !s.toLowerCase().contains(toHighlight.toLowerCase())) {
         preText += s + ' ';
       } else {
         highlight = s;
@@ -166,15 +177,26 @@ class HighlightableText extends StatelessWidget {
       children: [
         Positioned(
           left: preSize.width - 2,
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: enabled ? 1000:0),
-            curve: Curves.easeOutExpo,
+          child: Tooltip(
+            message: toHighlight+' was particulary important\n for showing this recommendation',
+            textStyle: style,
+            preferBelow: true,
+            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 3),
             decoration: BoxDecoration(
-                color: Colors.amber,
-                border: Border.all(color: Colors.transparent),
-                borderRadius: BorderRadius.circular(5)),
-            width: enabled ? txtSize.width + 4 : 0,
-            height: txtSize.height,
+              color: Colors.grey[100],
+              border: Border.all(color: Colors.grey[400],),
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: enabled ? 1000 : 0),
+              curve: Curves.easeOutExpo,
+              decoration: BoxDecoration(
+                  color: Colors.green[200],
+                  border: Border.all(color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(5)),
+              width: enabled ? txtSize.width + 3 : 0,
+              height: txtSize.height,
+            ),
           ),
         ),
         Container(
