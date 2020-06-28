@@ -1,3 +1,4 @@
+import 'package:CitationRexWebsite/controller/recommender.dart';
 import 'package:CitationRexWebsite/model/userquery.dart';
 import 'package:CitationRexWebsite/utils/themes.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                       case 1:
                         return HighlightableText(
                           text: titleAndYear,
-                          toHighlight: widget.recommendation.decisiveWords.first,
+                          toHighlight: widget.recommendation.decisiveWords,
                           enabled: hovering,
                         );
                       default:
@@ -122,8 +123,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 12,
-                          
-                          color: Colors.grey[500],
+                          color: Colors.grey[600],
                         ),
                       ),
                     ]),
@@ -162,7 +162,7 @@ class HighlightableText extends StatelessWidget {
   }) : super(key: key);
 
   final String text;
-  final String toHighlight;
+  final List<String> toHighlight;
   final bool enabled;
 
   Size _textSize(String text, TextStyle style) {
@@ -180,53 +180,56 @@ class HighlightableText extends StatelessWidget {
       fontFamily: 'Montserrat',
       fontSize: 14,
     );
-    String preText = '';
-    String highlight;
-    for (String s in text.split(' ')) {
-      if (!s.toLowerCase().startsWith(toHighlight.toLowerCase()) &&
-          !s.toLowerCase().contains(toHighlight.toLowerCase())) {
-        preText += s + ' ';
-      } else {
-        highlight = s;
-        break;
+
+    List<Widget> widgets = [];
+
+    widgets.addAll(toHighlight.map((h) {
+      String preText = '';
+      String highlight = '';
+      for (String s in text.split(' ')) {
+        bool isDecisive = s.toLowerCase().startsWith(h.toLowerCase());
+        if (isDecisive) {
+          highlight = s;
+          break;
+        } else {
+          preText += s + ' ';
+        }
       }
-    }
-    Size preSize = _textSize(preText, style);
-    final Size txtSize = _textSize(highlight ?? '', style);
-    return Stack(
-      children: [
-        Positioned(
-          left: preSize.width - 2,
-          child: Tooltip(
-            message: toHighlight[0].toUpperCase() +
-                toHighlight.substring(1) +
-                ' was particulary important\nfor showing this recommendation',
-            textStyle: style,
-            preferBelow: true,
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+      Size preSize = _textSize(preText, style);
+      final Size txtSize = _textSize(highlight ?? '', style);
+
+      return Positioned(
+        left: preSize.width - 2,
+        child: Tooltip(
+          message: '"'+capitalizeWords(h)+'"'
+              ' was particulary important\nfor showing this recommendation.',
+          textStyle: style,
+          preferBelow: true,
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+          decoration: BoxDecoration(
+              color: Colors.grey[100],
+              border: Border.all(
+                color: Colors.grey[400],
+              ),
+              borderRadius: BorderRadius.circular(10)),
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: enabled ? 800 : 0),
+            curve: Curves.easeOutExpo,
             decoration: BoxDecoration(
-                color: Colors.grey[100],
-                border: Border.all(
-                  color: Colors.grey[400],
-                ),
-                borderRadius: BorderRadius.circular(10)),
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: enabled ? 800 : 0),
-              curve: Curves.easeOutExpo,
-              decoration: BoxDecoration(
-                  color: Colors.green[200],
-                  border: Border.all(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(5)),
-              width: enabled ? txtSize.width + 3 : 0,
-              height: txtSize.height,
-            ),
+                color: Colors.green[200],
+                border: Border.all(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(5)),
+            width: enabled ? txtSize.width + 3 : 0,
+            height: txtSize.height,
           ),
         ),
-        Container(
-            padding: EdgeInsets.only(right: 2),
-            child: Text(text, style: style)),
-      ],
-    );
+      );
+    }).toList());
+
+    widgets.add(Container(
+        padding: EdgeInsets.only(right: 2), child: Text(text, style: style)));
+
+    return Stack(children: widgets);
   }
 }
 

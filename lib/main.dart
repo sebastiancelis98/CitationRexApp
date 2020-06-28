@@ -175,10 +175,10 @@ class _DynamicBodyState extends State<DynamicBody> {
                           EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                       onPressed: () {
                         //TODO change to 15 words min when in production mode
-                        if (_textController.text.split(" ").length < 5) {
+                        if (_textController.text.split(" ").length < 1) {
                           setState(() {
                             _errorText =
-                                'Please enter a sentence with 5 words or more!';
+                                'Please enter a sentence with 1 word or more!';
                           });
                           return;
                         }
@@ -388,7 +388,7 @@ class RecList extends StatelessWidget {
               title: 'Error retrieving recommendations, this is a test sample',
               authors: 'Isabela, Vinzenz & Sebastian',
               citationCount: 69,
-              decisiveWords: ["retrieving"])));
+              decisiveWords: ["retrieving", "is"])));
     }
 
     return Expanded(

@@ -13,7 +13,7 @@ class Recommendation {
       @required this.url,
       this.authors,
       this.decisiveWords,
-      this.publishedYear,
+      this.publishedYear = 2020,
       this.citationCount = 0,
       this.referenceCount = 0});
 }
