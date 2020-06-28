@@ -1,4 +1,5 @@
 import 'package:CitationRexWebsite/model/userquery.dart';
+import 'package:CitationRexWebsite/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:provider/provider.dart';
@@ -91,22 +92,41 @@ class _RecommendationTileState extends State<RecommendationTile> {
                   ),
                 ),
                 SizedBox(height: 5),
-                Row(children: <Widget>[
-                  Text(
-                    "Decisive word: ",
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 12,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                  Text(widget.recommendation.decisiveword ?? '',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 12,
-                        color: Colors.black,
-                      ))
-                ]),
+                Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "This was cited by ",
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: data.designVersion == 1 ? Themes.secondaryColor:Colors.green[200],
+                            borderRadius: BorderRadius.circular(8)),
+                        padding: EdgeInsets.symmetric(horizontal: 6),
+                        child: Text(
+                          widget.recommendation.citationCount.toString(),
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 12,
+                            color: data.designVersion == 1 ? Colors.white:Colors.black,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        " other papers.",
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 12,
+                          
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ]),
               ],
             ),
             Expanded(
@@ -178,15 +198,18 @@ class HighlightableText extends StatelessWidget {
         Positioned(
           left: preSize.width - 2,
           child: Tooltip(
-            message: toHighlight+' was particulary important\n for showing this recommendation',
+            message: toHighlight[0].toUpperCase() +
+                toHighlight.substring(1) +
+                ' was particulary important\nfor showing this recommendation',
             textStyle: style,
             preferBelow: true,
-            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 3),
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 6),
             decoration: BoxDecoration(
-              color: Colors.grey[100],
-              border: Border.all(color: Colors.grey[400],),
-              borderRadius: BorderRadius.circular(10)
-            ),
+                color: Colors.grey[100],
+                border: Border.all(
+                  color: Colors.grey[400],
+                ),
+                borderRadius: BorderRadius.circular(10)),
             child: AnimatedContainer(
               duration: Duration(milliseconds: enabled ? 1000 : 0),
               curve: Curves.easeOutExpo,

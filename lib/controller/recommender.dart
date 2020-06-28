@@ -37,7 +37,7 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
       String url = paper['url'];
 
       int referenceCount = paper['referencecount'];
-      int citationCount = paper['citationCount'];
+      int citationCount = paper['citationcount'];
       int year = paper['year'];
       int paperId = paper['paperid'];
 
