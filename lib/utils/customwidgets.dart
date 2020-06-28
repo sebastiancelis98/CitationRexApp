@@ -1,5 +1,7 @@
+import 'package:CitationRexWebsite/model/userquery.dart';
 import 'package:flutter/material.dart';
 import 'package:CitationRexWebsite/model/recommendation.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RecommendationTile extends StatefulWidget {
@@ -16,6 +18,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
 
   @override
   Widget build(BuildContext context) {
+    UserQuery data = Provider.of<UserQuery>(context, listen: false);
     return MouseRegion(
       onEnter: (e) {
         setState(() {
@@ -49,10 +52,25 @@ class _RecommendationTileState extends State<RecommendationTile> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                HighlightableText(
-                  text: widget.recommendation.title,
-                  toHighlight: widget.recommendation.decisiveword,
-                  enabled: hovering,
+                Builder(
+                  builder: (context) {
+                    switch (data.designVersion) {
+                      case 1:
+                        return HighlightableText(
+                          text: widget.recommendation.title,
+                          toHighlight: widget.recommendation.decisiveword,
+                          enabled: hovering,
+                        );
+                      default:
+                        return Text(
+                          widget.recommendation.title,
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 14,
+                          ),
+                        );
+                    }
+                  },
                 ),
                 Text(
                   widget.recommendation.authors,
