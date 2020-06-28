@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 class Recommendation {
   int id, paperId, publishedYear, citationCount, referenceCount;
-  String title, authors, decisiveword, url;
+  String title, authors, url;
+  
+  List<String> decisiveWords;
 
   Recommendation(
       {@required this.id,
@@ -10,8 +12,8 @@ class Recommendation {
       @required this.title,
       @required this.url,
       this.authors,
-      this.decisiveword,
+      this.decisiveWords,
       this.publishedYear,
-      this.citationCount,
-      this.referenceCount});
+      this.citationCount = 0,
+      this.referenceCount = 0});
 }

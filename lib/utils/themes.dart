@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class Themes {
   
   static final Color primaryColor = HexColor.fromHex('D46A6A');
-  static final Color secondaryColor = HexColor.fromHex('417C81');
+  static final Color secondaryColor = HexColor.fromHex('5F9095');
   static final Color tertiaryColor = HexColor.fromHex('A2C562');
 
   ThemeData lightTheme() {

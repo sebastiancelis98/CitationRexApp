@@ -40,6 +40,7 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
       int citationCount = paper['citationcount'];
       int year = paper['year'];
       int paperId = paper['paperid'];
+      List<String> decisiveWords = paper['decisive_words'];
 
       Recommendation rec = Recommendation(
           id: id++,
@@ -47,7 +48,7 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
           url: url,
           authors: authors,
           title: title,
-          decisiveword: paper['decisive_word'],
+          decisiveWords: decisiveWords,
           referenceCount: referenceCount,
           citationCount: citationCount,
           publishedYear: year);

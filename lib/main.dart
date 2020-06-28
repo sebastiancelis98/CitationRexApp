@@ -175,14 +175,22 @@ class _DynamicBodyState extends State<DynamicBody> {
                           EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                       onPressed: () {
                         //TODO change to 15 words min when in production mode
-                        if (_textController.text.split(" ").length < 2) {
+                        if (_textController.text.split(" ").length < 5) {
                           setState(() {
                             _errorText =
-                                'Please enter a sentence with 2 words or more!';
+                                'Please enter a sentence with 5 words or more!';
                           });
                           return;
                         }
-                        _errorText = null;
+                        if (_textController.text.split(" ").length < 15) {
+                          setState(() {
+                            _errorText =
+                                'Warning! Sentences with less than 15 words yield less accurate results...';
+                          });
+                        }else{
+                          _errorText = null;
+                        }
+
                         setState(() {
                           String _query =
                               _textController.text.replaceAll('\n', ' ');
@@ -379,7 +387,8 @@ class RecList extends StatelessWidget {
               url: 'http://google.com',
               title: 'Error retrieving recommendations, this is a test sample',
               authors: 'Isabela, Vinzenz & Sebastian',
-              decisiveword: "retrieving")));
+              citationCount: 69,
+              decisiveWords: ["retrieving"])));
     }
 
     return Expanded(

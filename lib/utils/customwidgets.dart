@@ -69,7 +69,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                       case 1:
                         return HighlightableText(
                           text: titleAndYear,
-                          toHighlight: widget.recommendation.decisiveword,
+                          toHighlight: widget.recommendation.decisiveWords.first,
                           enabled: hovering,
                         );
                       default:
@@ -91,7 +91,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     color: Colors.grey[500],
                   ),
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: 10),
                 Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -105,7 +105,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            color: data.designVersion == 1 ? Themes.secondaryColor:Colors.green[200],
+                            color: Colors.green[100],
                             borderRadius: BorderRadius.circular(8)),
                         padding: EdgeInsets.symmetric(horizontal: 6),
                         child: Text(
@@ -113,7 +113,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontSize: 12,
-                            color: data.designVersion == 1 ? Colors.white:Colors.black,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -123,7 +123,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                           fontFamily: 'Montserrat',
                           fontSize: 12,
                           
-                          color: Colors.grey[600],
+                          color: Colors.grey[500],
                         ),
                       ),
                     ]),
@@ -211,7 +211,7 @@ class HighlightableText extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(10)),
             child: AnimatedContainer(
-              duration: Duration(milliseconds: enabled ? 1000 : 0),
+              duration: Duration(milliseconds: enabled ? 800 : 0),
               curve: Curves.easeOutExpo,
               decoration: BoxDecoration(
                   color: Colors.green[200],
