@@ -146,49 +146,41 @@ class HighlightableText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: text.split(' ').map((String e) {
-        final TextStyle style = TextStyle(
-          fontFamily: 'Montserrat',
-          fontSize: 14,
-        );
-        final Size txtSize = _textSize(e, style);
-        if (!e.toLowerCase().contains(toHighlight.toLowerCase())) {
-          return Text(
-            e + ' ',
-            style: style,
-          );
-        }
-        return Row(
-          children: [
-            Stack(
-              children: [
-                AnimatedContainer(
-                  duration: Duration(seconds: 1),
-                  curve: Curves.easeOutExpo,
-                  padding: EdgeInsets.symmetric(horizontal: 2),
-                  decoration: BoxDecoration(
-                      color: Colors.amber,
-                      border: Border.all(color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(4)),
-                  width: enabled ? txtSize.width : 0,
-                  height: txtSize.height,
-                ),
-                Container(
-                  child: Text(
-                    e,
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 14,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Text(' ')
-          ],
-        );
-      }).toList(),
+    final TextStyle style = TextStyle(
+      fontFamily: 'Montserrat',
+      fontSize: 14,
+    );
+    String preText = '';
+    String highlight;
+    for (String s in text.split(' ')) {
+      if (!s.toLowerCase().contains(toHighlight.toLowerCase())) {
+        preText += s + ' ';
+      } else {
+        highlight = s;
+        break;
+      }
+    }
+    Size preSize = _textSize(preText, style);
+    final Size txtSize = _textSize(highlight ?? '', style);
+    return Stack(
+      children: [
+        Positioned(
+          left: preSize.width - 2,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: enabled ? 1000:0),
+            curve: Curves.easeOutExpo,
+            decoration: BoxDecoration(
+                color: Colors.amber,
+                border: Border.all(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(5)),
+            width: enabled ? txtSize.width + 4 : 0,
+            height: txtSize.height,
+          ),
+        ),
+        Container(
+            padding: EdgeInsets.only(right: 2),
+            child: Text(text, style: style)),
+      ],
     );
   }
 }

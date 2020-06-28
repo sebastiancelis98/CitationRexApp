@@ -347,7 +347,8 @@ class _QuerySelectorState extends State<QuerySelector> {
         SizedBox(
           height: 20,
         ),
-        RecList(query: selectedQuery)
+        RecList(query: selectedQuery),
+        SizedBox(height: 15,)
       ],
     );
   }
@@ -355,6 +356,7 @@ class _QuerySelectorState extends State<QuerySelector> {
 
 class RecList extends StatelessWidget {
   final String query;
+  final ScrollController _scrollController = ScrollController();
 
   RecList({this.query});
 
@@ -374,14 +376,16 @@ class RecList extends StatelessWidget {
           (index) => Recommendation(
               id: index + 1,
               paperId: 59225,
-              url: 'http:google.com',
+              url: 'http://google.com',
               title: 'Error retrieving recommendations, this is a test sample',
               authors: 'Isabela, Vinzenz & Sebastian',
-              decisiveword: "retrieving")));
+              decisiveword: "recommend")));
     }
 
     return Expanded(
       child: Scrollbar(
+        isAlwaysShown: true,
+        controller: _scrollController,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 30),
           child: ListView.builder(
