@@ -78,7 +78,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                         fontSize: 12,
                         color: Colors.black,
                       ))
-                ])
+                ]),
               ],
             ),
             Expanded(
@@ -117,17 +117,28 @@ class HighlightableText extends StatelessWidget {
   final String toHighlight;
   final bool enabled;
 
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: text.split(' ').map((String e) {
+        final TextStyle style = TextStyle(
+          fontFamily: 'Montserrat',
+          fontSize: 14,
+        );
+        final Size txtSize = _textSize(e, style);
         if (!e.toLowerCase().contains(toHighlight.toLowerCase())) {
           return Text(
             e + ' ',
-            style: TextStyle(
-              fontFamily: 'Montserrat',
-              fontSize: 14,
-            ),
+            style: style,
           );
         }
         return Row(
@@ -142,8 +153,8 @@ class HighlightableText extends StatelessWidget {
                       color: Colors.amber,
                       border: Border.all(color: Colors.transparent),
                       borderRadius: BorderRadius.circular(4)),
-                  width: enabled ? e.length * 7.5 : 0,
-                  height: 17,
+                  width: enabled ? txtSize.width : 0,
+                  height: txtSize.height,
                 ),
                 Container(
                   child: Text(
@@ -167,6 +178,8 @@ class HighlightableText extends StatelessWidget {
 class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CircularProgressIndicator();
+    return CircularProgressIndicator(
+      strokeWidth: 1.5,
+    );
   }
 }

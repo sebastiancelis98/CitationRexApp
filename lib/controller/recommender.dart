@@ -22,9 +22,7 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
     int statusCode = response.statusCode;
     String data = response.body;
     if (statusCode != 200) {
-      //To test in case backend doesn't currently work
-      //String data =            "{ \"papers\" : [ {\"id\": 1,\"title\": \"Image Classification with CNN\",   \"description\": \"Celis et al 2021 - ACM\" },  {\"id\": 2,  \"title\": \"Neural Citation Recommendation\", \"description\": \"Need to find a good Python tutorial on the web\" }]}";
-      return null;
+       return null;
     }
 
     Map parsedData = json.decode(data);
@@ -54,6 +52,9 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
           citationCount: citationCount,
           publishedYear: year);
       recs.add(rec);
+      if(recs.length >= 15){
+        break;
+      }
     }
   } catch (e) {
     print(e);
