@@ -7,6 +7,7 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
   if (query == null || query.isEmpty) {
     return null;
   }
+
   Set<Recommendation> recs = Set();
 
   String url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
@@ -40,7 +41,7 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
       int citationCount = paper['citationcount'];
       int year = paper['year'];
       int paperId = paper['paperid'];
-      List<String> decisiveWords = paper['decisive_words'];
+      List<dynamic> decisiveWords = paper['decisive_words'];
 
       Recommendation rec = Recommendation(
           id: id++,
@@ -48,7 +49,7 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
           url: url,
           authors: authors,
           title: title,
-          decisiveWords: decisiveWords,
+          decisiveWords: decisiveWords.map((e) => e.toString()).toList(),
           referenceCount: referenceCount,
           citationCount: citationCount,
           publishedYear: year);

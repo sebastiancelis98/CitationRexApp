@@ -24,7 +24,10 @@ class _RecommendationTileState extends State<RecommendationTile> {
 
     String authors = widget.recommendation.authors;
     if (authors.split(',').length > 3) {
-      authors = authors.split(',').getRange(0, 3).join(', ') + "...";
+      authors = authors.split(',').getRange(0, 3).join(', ') +
+          "... (+" +
+          (authors.split(',').length - 3).toString() +
+          ')';
     }
 
     return MouseRegion(
@@ -66,6 +69,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                         ' (' +
                         widget.recommendation.publishedYear.toString() +
                         ')';
+                    print(widget.recommendation.decisiveWords);
                     switch (data.designVersion) {
                       case 1:
                         return HighlightableText(
@@ -85,10 +89,10 @@ class _RecommendationTileState extends State<RecommendationTile> {
                   },
                 ),
                 Text(
-                  widget.recommendation.authors,
+                  authors,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
-                    fontSize: 12,
+                    fontSize: 11,
                     color: Colors.grey[500],
                   ),
                 ),
@@ -132,8 +136,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
             Expanded(
               child: Container(),
             ),
-            IconButton(
-              icon: Icon(Icons.insert_link),
+            MaterialButton(
               onPressed: () async {
                 String url = widget.recommendation.url;
                 if (await canLaunch(url)) {
@@ -142,10 +145,18 @@ class _RecommendationTileState extends State<RecommendationTile> {
                   throw 'Could not launch $url';
                 }
               },
-              hoverColor: Colors.transparent,
-              splashColor: Colors.transparent,
+              elevation: 1.0,
+              hoverElevation: 2,
+              color: Themes.primaryColor,
+              child: Icon(
+                Icons.picture_as_pdf,
+                color: Colors.white,
+                size: 24.0,
+              ),
+              padding: EdgeInsets.all(10.0),
+              shape: CircleBorder(),
             ),
-            SizedBox(width: 10)
+            SizedBox(width: 3)
           ],
         ),
       ),
@@ -195,14 +206,19 @@ class HighlightableText extends StatelessWidget {
           preText += s + ' ';
         }
       }
+      if (highlight == '') {
+        return Container();
+      }
       Size preSize = _textSize(preText, style);
       final Size txtSize = _textSize(highlight ?? '', style);
 
       return Positioned(
         left: preSize.width - 2,
         child: Tooltip(
-          message: '"'+capitalizeWords(h)+'"'
-              ' was particulary important\nfor showing this recommendation.',
+          message: '"' +
+              capitalizeWords(highlight) +
+              '"'
+                  ' was particulary important\nfor showing this recommendation.',
           textStyle: style,
           preferBelow: true,
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 6),
@@ -213,7 +229,7 @@ class HighlightableText extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(10)),
           child: AnimatedContainer(
-            duration: Duration(milliseconds: enabled ? 800 : 0),
+            duration: Duration(milliseconds: enabled ? 900 : 0),
             curve: Curves.easeOutExpo,
             decoration: BoxDecoration(
                 color: Colors.green[200],
@@ -226,8 +242,8 @@ class HighlightableText extends StatelessWidget {
       );
     }).toList());
 
-    widgets.add(Container(
-        padding: EdgeInsets.only(right: 2), child: Text(text, style: style)));
+    print('test');
+    widgets.add(Container(child: Text(text, style: style)));
 
     return Stack(children: widgets);
   }

@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
 }
 
 class RootPage extends StatelessWidget {
-
   final int designVersion;
 
   RootPage({this.designVersion = 1});
@@ -105,10 +104,9 @@ class _DynamicBodyState extends State<DynamicBody> {
                     Text(
                       ' Get useful paper recommendations for your research.',
                       style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 11,
-                        color: Colors.grey[800]
-                      ),
+                          fontFamily: 'Montserrat',
+                          fontSize: 11,
+                          color: Colors.grey[800]),
                     ),
                   ],
                 ),
@@ -139,7 +137,8 @@ class _DynamicBodyState extends State<DynamicBody> {
                       ),
                     ),
                     child: TextField(
-                      maxLines: 20,
+                      maxLines:
+                          (MediaQuery.of(context).size.height ~/ 28).toInt(),
                       controller: _textController,
                       cursorColor: Theme.of(context).secondaryHeaderColor,
                       style: TextStyle(fontSize: 14, fontFamily: 'Montserrat'),
@@ -187,7 +186,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                             _errorText =
                                 'Warning! Sentences with less than 15 words yield less accurate results...';
                           });
-                        }else{
+                        } else {
                           _errorText = null;
                         }
 
@@ -199,9 +198,6 @@ class _DynamicBodyState extends State<DynamicBody> {
 
                           String currentSentence = "";
                           for (String query in _query.split(".")) {
-                            print("Query: " + query);
-                            print("Current sentence: " + currentSentence);
-
                             if (currentSentence != "") {
                               currentSentence += ". " + query;
                             } else {
@@ -217,6 +213,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                           if (currentSentence.trim() != "")
                             queries.add(currentSentence);
 
+                          print("Query: " + queries.toString());
                           queryData.updateQueries(queries);
                         });
                       },
@@ -344,10 +341,52 @@ class _QuerySelectorState extends State<QuerySelector> {
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 11,
-                      
                     ),
                   ),
                 ],
+              ),
+              Builder(
+                builder: (context) {
+                  if (!queryData.recommendations.containsKey(selectedQuery)) {
+                    return Container();
+                  }
+                  int totalOccurences = 0;
+
+                  Map<String, int> decisiveMapping = {};
+
+                  for (Recommendation r
+                      in queryData.recommendations[selectedQuery]) {
+                    for (String s in r.decisiveWords) {
+                      if (decisiveMapping.containsKey(s)) {
+                        decisiveMapping[s]++;
+                      } else {
+                        decisiveMapping.putIfAbsent(s, () => 1);
+                      }
+                      totalOccurences++;
+                    }
+                  }
+                  List<Widget> widgets = [];
+
+                  decisiveMapping.forEach((key, value) {
+                    if (value > 1) {
+                      widgets.add(Container(
+                          margin: EdgeInsets.symmetric(horizontal: 2),
+                          child: Text(
+                            key +
+                                ' ' +
+                                (value / totalOccurences)
+                                    .toString()
+                                    .substring(2, 4) +
+                                '%',
+                            style: TextStyle(fontFamily: 'Montserrat'),
+                          )));
+                    }
+                  });
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: widgets,
+                  );
+                },
               ),
             ],
           ),
@@ -356,7 +395,9 @@ class _QuerySelectorState extends State<QuerySelector> {
           height: 20,
         ),
         RecList(query: selectedQuery),
-        SizedBox(height: 15,)
+        SizedBox(
+          height: 15,
+        )
       ],
     );
   }
@@ -364,7 +405,8 @@ class _QuerySelectorState extends State<QuerySelector> {
 
 class RecList extends StatelessWidget {
   final String query;
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController =
+      ScrollController(initialScrollOffset: 0.0);
 
   RecList({this.query});
 
@@ -388,13 +430,11 @@ class RecList extends StatelessWidget {
               title: 'Error retrieving recommendations, this is a test sample',
               authors: 'Isabela, Vinzenz & Sebastian',
               citationCount: 69,
-              decisiveWords: ["retrieving", "is"])));
+              decisiveWords: ["retrieving", "is", "sample"])));
     }
 
     return Expanded(
       child: Scrollbar(
-        isAlwaysShown: true,
-        controller: _scrollController,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 30),
           child: ListView.builder(
