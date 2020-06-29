@@ -105,8 +105,8 @@ class _RecommendationTileState extends State<RecommendationTile> {
 
                     children.add(
                       Tooltip(
-                        message: 'Published by: '+widget.recommendation.publisher ??
-                            'Unknown publisher',
+                        message: 'Published by: '+(widget.recommendation.publisher ??
+                            'Unknown publisher'),
                         textStyle: TextStyle(fontFamily: 'Montserrat'),
                         preferBelow: false,
                         verticalOffset: 8,
