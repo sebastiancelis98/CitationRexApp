@@ -23,7 +23,7 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
     int statusCode = response.statusCode;
     String data = response.body;
     if (statusCode != 200) {
-       return null;
+      return null;
     }
 
     Map parsedData = json.decode(data);
@@ -41,6 +41,8 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
       int citationCount = paper['citationcount'];
       int year = paper['year'];
       int paperId = paper['paperid'];
+      String venue = paper['venue'];
+      String publisher = paper['publisher'];
       List<dynamic> decisiveWords = paper['decisive_words'];
 
       Recommendation rec = Recommendation(
@@ -52,9 +54,12 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
           decisiveWords: decisiveWords.map((e) => e.toString()).toList(),
           referenceCount: referenceCount,
           citationCount: citationCount,
-          publishedYear: year);
+          publishedYear: year,
+          venue: venue,
+          publisher: publisher);
+
       recs.add(rec);
-      if(recs.length >= 15){
+      if (recs.length >= 15) {
         break;
       }
     }
