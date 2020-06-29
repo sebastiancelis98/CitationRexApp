@@ -485,6 +485,7 @@ class RecList extends StatelessWidget {
               authors: 'Isabela, Vinzenz & Sebastian',
               citationCount: 69,
               venue: "papers that can be used as examples",
+              publisher: "Springer",
               decisiveWords: ["retrieving", "is", "sample"])));
     }
 

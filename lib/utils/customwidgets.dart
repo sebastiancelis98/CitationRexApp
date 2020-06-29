@@ -79,14 +79,40 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     color: Colors.grey[500],
                   ),
                 ),
-                Text(
-                  "In: " + widget.recommendation.venue,
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 11,
-                    color: Colors.grey[500],
+                Row(children: <Widget>[
+                  Text(
+                    "In: ",
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 11,
+                      color: Colors.grey[500],
+                    ),
                   ),
-                ),
+                  Text(
+                    widget.recommendation.venue,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 11,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  Text(
+                    " - published by: ",
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 11,
+                      color: Colors.grey[500],
+                    ),
+                  ),
+                  Text(
+                    widget.recommendation.publisher,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 11,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ]),
                 SizedBox(height: 10),
                 Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
