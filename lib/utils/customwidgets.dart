@@ -209,9 +209,9 @@ class HighlightableText extends StatelessWidget {
       fontSize: 14,
     );
 
-    List<Widget> widgets = [];
+    List<Widget> rowChildren = [];
 
-    widgets.addAll(toHighlight.map((h) {
+    rowChildren.addAll(toHighlight.map((h) {
       String preText = '';
       String highlight = '';
       for (String s in text.split(' ')) {
@@ -259,9 +259,9 @@ class HighlightableText extends StatelessWidget {
       );
     }).toList());
 
-    widgets.add(Container(child: Text(text, style: style)));
+    rowChildren.add(Container(child: Text(text, style: style)));
 
-    return Stack(children: widgets);
+    return Stack(children: rowChildren);
   }
 }
 

@@ -190,10 +190,10 @@ class _DynamicBodyState extends State<DynamicBody> {
                           EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                       onPressed: () {
                         //TODO change to 15 words min when in production mode
-                        if (_textController.text.split(" ").length < 1) {
+                        if (_textController.text.split(" ").length < (kReleaseMode ? 5:1)) {
                           setState(() {
                             _errorText =
-                                'Please enter a sentence with 1 word or more!';
+                                'Please enter a sentence with 5 words or more!';
                           });
                           return;
                         }
