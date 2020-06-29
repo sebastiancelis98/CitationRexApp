@@ -495,6 +495,8 @@ class RecList extends StatelessWidget {
               title: 'Error retrieving recommendations, this is a test sample',
               authors: 'Isabela, Vinzenz & Sebastian',
               citationCount: 69,
+              venue: "papers that can be used as examples",
+              publisher: "Springer",
               decisiveWords: ["retrieving", "is", "sample"])));
     }
 
