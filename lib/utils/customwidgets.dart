@@ -18,12 +18,23 @@ class RecommendationTile extends StatefulWidget {
 class _RecommendationTileState extends State<RecommendationTile> {
   bool hovering = false;
 
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
+
   @override
   Widget build(BuildContext context) {
     UserQuery data = Provider.of<UserQuery>(context, listen: false);
 
     String authors = widget.recommendation.authors;
+    String otherAuthors;
     if (authors.split(',').length > 3) {
+      otherAuthors = authors.split(', ').skip(3).join(', ');
       authors = authors.split(',').getRange(0, 3).join(', ') +
           ", ...(+" +
           (authors.split(',').length - 3).toString() +
@@ -79,41 +90,51 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     color: Colors.grey[500],
                   ),
                 ),
-                SizedBox(height: 15),
-                Row(children: <Widget>[
-                  Text(
-                    "In: ",
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 12,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                  Text(
-                    widget.recommendation.venue ?? 'Unknown',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  Text(
-                    " - published by: ",
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 12,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                  Text(
-                    widget.recommendation.publisher ?? 'Unknown',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ]),
+                SizedBox(height: 10),
+                Builder(builder: (context) {
+                  List<Widget> children = [];
+                  if (widget.recommendation.venue != null) {
+                    children.add(Text(
+                      "In ",
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 12,
+                        color: Colors.grey[500],
+                      ),
+                    ));
+
+                    children.add(
+                      Tooltip(
+                        message: 'Published by: '+widget.recommendation.publisher ??
+                            'Unknown publisher',
+                        textStyle: TextStyle(fontFamily: 'Montserrat'),
+                        preferBelow: false,
+                        verticalOffset: 8,
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.grey[300],
+                            ),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Container(
+                          child: Text(
+                            '"' +
+                                capitalizeWords(
+                                    widget.recommendation.venue ?? 'Unknown') +
+                                '"',
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return Row(children: children);
+                }),
                 Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -129,7 +150,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                         decoration: BoxDecoration(
                             color: Colors.blue[100],
                             borderRadius: BorderRadius.circular(8)),
-                        padding: EdgeInsets.symmetric(horizontal: 6),
+                        padding: EdgeInsets.symmetric(horizontal: 5),
                         child: Text(
                           widget.recommendation.citationCount.toString(),
                           style: TextStyle(
@@ -230,12 +251,12 @@ class HighlightableText extends StatelessWidget {
       final Size txtSize = _textSize(highlight ?? '', style);
 
       return Positioned(
-        left: preText == '' ? -1:preSize.width - 2,
+        left: preText == '' ? -1 : preSize.width - 2,
         child: Tooltip(
           message: '"' +
               capitalizeWords(highlight) +
               '"'
-                  ' was particulary important\nfor showing this recommendation.',
+                  ' was particularly relevant for\nshowing this recommendation.',
           textStyle: style,
           preferBelow: true,
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 6),
@@ -252,7 +273,7 @@ class HighlightableText extends StatelessWidget {
                 color: Colors.green[200],
                 border: Border.all(color: Colors.transparent),
                 borderRadius: BorderRadius.circular(5)),
-            width: enabled ? txtSize.width + (preText == '' ? 1.5:3) : 0,
+            width: enabled ? txtSize.width + (preText == '' ? 1.5 : 3) : 0,
             height: txtSize.height,
           ),
         ),

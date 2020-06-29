@@ -55,8 +55,6 @@ class RootPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserQuery queryData = Provider.of<UserQuery>(context, listen: false);
-
     return Scaffold(
       body: DynamicBody(),
       backgroundColor: HexColor.fromHex('F0F0F0'),
@@ -399,11 +397,11 @@ class _QuerySelectorState extends State<QuerySelector> {
                         waitDuration: Duration(seconds: 1),
                         verticalOffset: 25,
                         message:
-                            'From all the decisive words extracted\nfrom the recommendations, "' +
+                            'Amongst all the decisive words extracted\nfrom the recommendations, "' +
                                 key +
-                                '"\nwas present in ' +
+                                '"\nwas relevant in ' +
                                 percentage +
-                                ' of the cases.',
+                                ' of the papers.',
                         preferBelow: false,
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 10),
