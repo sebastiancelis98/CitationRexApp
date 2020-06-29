@@ -4,6 +4,7 @@ import 'package:CitationRexWebsite/utils/color.dart';
 import 'package:CitationRexWebsite/utils/customwidgets.dart';
 import 'package:CitationRexWebsite/utils/themes.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -390,11 +391,15 @@ class _QuerySelectorState extends State<QuerySelector> {
                         (value / totalOccurences).toString().substring(2, 4) +
                             '%';
                     if (value > 1) {
-                      widgets.add(Tooltip( 
+                      widgets.add(Tooltip(
                         waitDuration: Duration(seconds: 1),
                         verticalOffset: 25,
                         message:
-                            'From all the decisive words extracted\nfrom the recommendations, "'+key+'"\nwas present in '+percentage+' of the cases.',
+                            'From all the decisive words extracted\nfrom the recommendations, "' +
+                                key +
+                                '"\nwas present in ' +
+                                percentage +
+                                ' of the cases.',
                         preferBelow: false,
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -486,6 +491,13 @@ class RecList extends StatelessWidget {
     }
     Set<Recommendation> recs = queryData.recommendations[query];
     if (recs.isEmpty) {
+      if (kReleaseMode) {
+        return Text(
+          'There has been an error retrieving the recommendations, please try again later!',
+          style: TextStyle(
+              color: Colors.red, fontSize: 12, fontFamily: 'Montserrat'),
+        );
+      }
       recs.addAll(List.generate(
           10,
           (index) => Recommendation(
