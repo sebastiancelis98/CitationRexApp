@@ -208,11 +208,13 @@ class HighlightableText extends StatelessWidget {
     this.text,
     this.toHighlight,
     this.enabled,
+    this.fontSize = 14
   }) : super(key: key);
 
   final String text;
   final List<String> toHighlight;
   final bool enabled;
+  final double fontSize;
 
   Size _textSize(String text, TextStyle style) {
     final TextPainter textPainter = TextPainter(
@@ -227,7 +229,7 @@ class HighlightableText extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle style = TextStyle(
       fontFamily: 'Montserrat',
-      fontSize: 14,
+      fontSize: fontSize,
     );
 
     List<Widget> rowChildren = [];

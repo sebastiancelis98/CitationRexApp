@@ -445,7 +445,7 @@ class _QuerySelectorState extends State<QuerySelector> {
                                         fontSize: 12)),
                                 Icon(showDecisive
                                     ? Icons.keyboard_arrow_up
-                                    : Icons.keyboard_arrow_down)
+                                    : Icons.keyboard_arrow_down, size: 18,)
                               ],
                             ),
                           ),
