@@ -79,13 +79,13 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     color: Colors.grey[500],
                   ),
                 ),
-                SizedBox(height: 3),
+                SizedBox(height: 8),
                 Row(children: <Widget>[
                   Text(
                     "In: ",
                     style: TextStyle(
                       fontFamily: 'Montserrat',
-                      fontSize: 11,
+                      fontSize: 12,
                       color: Colors.grey[500],
                     ),
                   ),
@@ -93,7 +93,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     widget.recommendation.venue,
                     style: TextStyle(
                       fontFamily: 'Montserrat',
-                      fontSize: 11,
+                      fontSize: 12,
                       color: Colors.grey[600],
                     ),
                   ),
@@ -101,7 +101,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     " - published by: ",
                     style: TextStyle(
                       fontFamily: 'Montserrat',
-                      fontSize: 11,
+                      fontSize: 12,
                       color: Colors.grey[500],
                     ),
                   ),
@@ -109,12 +109,11 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     widget.recommendation.publisher,
                     style: TextStyle(
                       fontFamily: 'Montserrat',
-                      fontSize: 11,
+                      fontSize: 12,
                       color: Colors.grey[600],
                     ),
                   ),
                 ]),
-                SizedBox(height: 10),
                 Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[

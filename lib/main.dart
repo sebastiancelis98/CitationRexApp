@@ -200,7 +200,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                         if (_textController.text.split(" ").length < 15) {
                           setState(() {
                             _errorText =
-                                'Warning! Sentences with less than 15 words yield less accurate results...';
+                                'Warning: Sentences with less than 15 words yield less accurate results...';
                           });
                         } else {
                           _errorText = null;
