@@ -79,7 +79,15 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     color: Colors.grey[500],
                   ),
                 ),
-                SizedBox(height: 13),
+                Text(
+                  "In: " + widget.recommendation.venue,
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 11,
+                    color: Colors.grey[500],
+                  ),
+                ),
+                SizedBox(height: 10),
                 Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -139,6 +147,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
               padding: EdgeInsets.all(10.0),
               shape: CircleBorder(),
             ),
+            SizedBox(width: 3)
           ],
         ),
       ),
