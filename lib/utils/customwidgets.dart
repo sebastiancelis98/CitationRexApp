@@ -75,7 +75,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                   authors,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
-                    fontSize: 11,
+                    fontSize: 12,
                     color: Colors.grey[500],
                   ),
                 ),
@@ -88,7 +88,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 12,
-                          color: Colors.grey[600],
+                          color: Colors.grey[500],
                         ),
                       ),
                       Container(
@@ -110,7 +110,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 12,
-                          color: Colors.grey[600],
+                          color: Colors.grey[500],
                         ),
                       ),
                     ]),
@@ -205,7 +205,7 @@ class HighlightableText extends StatelessWidget {
           preferBelow: true,
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 6),
           decoration: BoxDecoration(
-              color: Colors.grey[100],
+              color: Colors.white,
               border: Border.all(
                 color: Colors.grey[400],
               ),

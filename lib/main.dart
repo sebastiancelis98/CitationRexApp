@@ -365,7 +365,7 @@ class _QuerySelectorState extends State<QuerySelector> {
                 builder: (context) {
                   int totalOccurences = 0;
 
-                  Map<String, int> decisiveMapping = {'sample': 4, 'is': 3};
+                  Map<String, int> decisiveMapping = {};
 
                   if (queryData.recommendations.containsKey(selectedQuery)) {
                     for (Recommendation r
@@ -386,25 +386,36 @@ class _QuerySelectorState extends State<QuerySelector> {
                   List<Widget> widgets = [];
 
                   decisiveMapping.forEach((key, value) {
+                    String percentage =
+                        (value / totalOccurences).toString().substring(2, 4) +
+                            '%';
                     if (value > 1) {
-                      widgets.add(Container(
-                          decoration: BoxDecoration(
-                              color: Colors.green[200],
-                              borderRadius: BorderRadius.circular(10)),
-                          margin: EdgeInsets.symmetric(horizontal: 5),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                          child: Text(
-                            '"' +
-                                key +
-                                '" ' +
-                                (value / totalOccurences)
-                                    .toString()
-                                    .substring(2, 4) +
-                                '%',
-                            style: TextStyle(
-                                fontFamily: 'Montserrat', fontSize: 12),
-                          )));
+                      widgets.add(Tooltip( 
+                        waitDuration: Duration(seconds: 1),
+                        verticalOffset: 25,
+                        message:
+                            'From all the decisive words extracted\nfrom the recommendations, "'+key+'"\nwas present in '+percentage+' of the cases.',
+                        preferBelow: false,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey[400]),
+                            borderRadius: BorderRadius.circular(10)),
+                        textStyle: TextStyle(fontFamily: 'Montserrat'),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.green[200],
+                                borderRadius: BorderRadius.circular(10)),
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 3),
+                            child: Text(
+                              '"' + key + '" ' + percentage,
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat', fontSize: 12),
+                            )),
+                      ));
                     }
                   });
                   return Column(
