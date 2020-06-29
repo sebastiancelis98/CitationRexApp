@@ -79,7 +79,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     color: Colors.grey[500],
                   ),
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 15),
                 Row(children: <Widget>[
                   Text(
                     "In: ",
