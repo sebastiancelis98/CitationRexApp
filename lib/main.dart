@@ -190,7 +190,8 @@ class _DynamicBodyState extends State<DynamicBody> {
                           EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                       onPressed: () {
                         //TODO change to 15 words min when in production mode
-                        if (_textController.text.split(" ").length < (kReleaseMode ? 5:1)) {
+                        if (_textController.text.split(" ").length <
+                            (kReleaseMode ? 5 : 1)) {
                           setState(() {
                             _errorText =
                                 'Please enter a sentence with 5 words or more!';
@@ -229,7 +230,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                           if (currentSentence.trim() != "")
                             queries.add(currentSentence);
 
-                          print("Query: " + queries.toString());
+                          print("Queries: " + queries.toString());
                           queryData.updateQueries(queries);
                         });
                       },
@@ -362,6 +363,9 @@ class _QuerySelectorState extends State<QuerySelector> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 5,
+              ),
               Builder(
                 builder: (context) {
                   int totalOccurences = 0;
@@ -388,7 +392,7 @@ class _QuerySelectorState extends State<QuerySelector> {
 
                   decisiveMapping.forEach((key, value) {
                     String percentage =
-                        (value / totalOccurences).toString().substring(2, 4) +
+                        ((value * 100 ~/ totalOccurences)).toString() +
                             '%';
                     if (value > 1) {
                       widgets.add(Tooltip(
@@ -416,7 +420,7 @@ class _QuerySelectorState extends State<QuerySelector> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 6, vertical: 3),
                             child: Text(
-                              '"' + key + '" ' + percentage,
+                              key + ' ('+percentage+')',
                               style: TextStyle(
                                   fontFamily: 'Montserrat', fontSize: 12),
                             )),
@@ -462,7 +466,7 @@ class _QuerySelectorState extends State<QuerySelector> {
           ),
         ),
         SizedBox(
-          height: 15,
+          height: 10,
         ),
         RecList(query: selectedQuery),
         SizedBox(

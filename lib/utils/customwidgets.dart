@@ -90,7 +90,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     ),
                   ),
                   Text(
-                    widget.recommendation.venue,
+                    widget.recommendation.venue ?? 'Unknown',
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 12,
@@ -106,7 +106,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     ),
                   ),
                   Text(
-                    widget.recommendation.publisher,
+                    widget.recommendation.publisher ?? 'Unknown',
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 12,
@@ -230,7 +230,7 @@ class HighlightableText extends StatelessWidget {
       final Size txtSize = _textSize(highlight ?? '', style);
 
       return Positioned(
-        left: preSize.width - 2,
+        left: preText == '' ? -1:preSize.width - 2,
         child: Tooltip(
           message: '"' +
               capitalizeWords(highlight) +
@@ -252,7 +252,7 @@ class HighlightableText extends StatelessWidget {
                 color: Colors.green[200],
                 border: Border.all(color: Colors.transparent),
                 borderRadius: BorderRadius.circular(5)),
-            width: enabled ? txtSize.width + 3 : 0,
+            width: enabled ? txtSize.width + (preText == '' ? 1.5:3) : 0,
             height: txtSize.height,
           ),
         ),
