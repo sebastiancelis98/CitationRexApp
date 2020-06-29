@@ -37,7 +37,6 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
       authors = capitalizeWords(authors);
       String url = paper['url'];
 
-      int referenceCount = paper['referencecount'];
       int citationCount = paper['citationcount'];
       int year = paper['year'];
       int paperId = paper['paperid'];
@@ -52,7 +51,6 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
           authors: authors,
           title: title,
           decisiveWords: decisiveWords.map((e) => e.toString()).toList(),
-          referenceCount: referenceCount,
           citationCount: citationCount,
           publishedYear: year,
           venue: venue,
