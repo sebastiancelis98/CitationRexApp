@@ -11,6 +11,23 @@ void main() {
   runApp(MyApp());
 }
 
+/*
+Base version:
+ - Title
+ - Authors
+ - Link
+
+Version 2:
+ - Cited by
+ - Venue
+ - Year
+
+Version 3:
+ - Highlight decisive words (currently 2)
+ - Summary of all decisive words
+ - 
+*/
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -21,7 +38,6 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => RootPage(),
-          '/2': (context) => RootPage(designVersion: 2),
         },
         title: 'Citation Rex',
         debugShowCheckedModeBanner: false,
@@ -39,7 +55,6 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserQuery queryData = Provider.of<UserQuery>(context, listen: false);
-    queryData.designVersion = designVersion;
 
     return Scaffold(
       body: DynamicBody(),

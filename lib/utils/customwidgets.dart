@@ -25,9 +25,9 @@ class _RecommendationTileState extends State<RecommendationTile> {
     String authors = widget.recommendation.authors;
     if (authors.split(',').length > 3) {
       authors = authors.split(',').getRange(0, 3).join(', ') +
-          "... (+" +
+          ", ...(+" +
           (authors.split(',').length - 3).toString() +
-          ')';
+          ' more)';
     }
 
     return MouseRegion(
@@ -63,30 +63,13 @@ class _RecommendationTileState extends State<RecommendationTile> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Builder(
-                  builder: (context) {
-                    String titleAndYear = widget.recommendation.title +
-                        ' (' +
-                        widget.recommendation.publishedYear.toString() +
-                        ')';
-                    print(widget.recommendation.decisiveWords);
-                    switch (data.designVersion) {
-                      case 1:
-                        return HighlightableText(
-                          text: titleAndYear,
-                          toHighlight: widget.recommendation.decisiveWords,
-                          enabled: hovering,
-                        );
-                      default:
-                        return Text(
-                          titleAndYear,
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 14,
-                          ),
-                        );
-                    }
-                  },
+                HighlightableText(
+                  text: widget.recommendation.title +
+                      ' (' +
+                      widget.recommendation.publishedYear.toString() +
+                      ')',
+                  toHighlight: widget.recommendation.decisiveWords,
+                  enabled: hovering,
                 ),
                 Text(
                   authors,
@@ -242,7 +225,6 @@ class HighlightableText extends StatelessWidget {
       );
     }).toList());
 
-    print('test');
     widgets.add(Container(child: Text(text, style: style)));
 
     return Stack(children: widgets);
