@@ -79,7 +79,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     color: Colors.grey[500],
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 13),
                 Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -93,7 +93,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            color: Colors.green[100],
+                            color: Colors.blue[100],
                             borderRadius: BorderRadius.circular(8)),
                         padding: EdgeInsets.symmetric(horizontal: 6),
                         child: Text(
@@ -139,7 +139,6 @@ class _RecommendationTileState extends State<RecommendationTile> {
               padding: EdgeInsets.all(10.0),
               shape: CircleBorder(),
             ),
-            SizedBox(width: 3)
           ],
         ),
       ),

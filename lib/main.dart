@@ -266,6 +266,7 @@ class QuerySelector extends StatefulWidget {
 class _QuerySelectorState extends State<QuerySelector> {
   String selectedQuery;
   int currentIndex = 0;
+  bool showDecisive = false;
 
   @mustCallSuper
   void initState() {
@@ -362,44 +363,82 @@ class _QuerySelectorState extends State<QuerySelector> {
               ),
               Builder(
                 builder: (context) {
-                  if (!queryData.recommendations.containsKey(selectedQuery)) {
-                    return Container();
-                  }
                   int totalOccurences = 0;
 
-                  Map<String, int> decisiveMapping = {};
+                  Map<String, int> decisiveMapping = {'sample': 4, 'is': 3};
 
-                  for (Recommendation r
-                      in queryData.recommendations[selectedQuery]) {
-                    for (String s in r.decisiveWords) {
-                      if (decisiveMapping.containsKey(s)) {
-                        decisiveMapping[s]++;
-                      } else {
-                        decisiveMapping.putIfAbsent(s, () => 1);
+                  if (queryData.recommendations.containsKey(selectedQuery)) {
+                    for (Recommendation r
+                        in queryData.recommendations[selectedQuery]) {
+                      for (String s in r.decisiveWords) {
+                        if (decisiveMapping.containsKey(s)) {
+                          decisiveMapping[s]++;
+                        } else {
+                          decisiveMapping.putIfAbsent(s, () => 1);
+                        }
+                        totalOccurences++;
                       }
-                      totalOccurences++;
                     }
+                  } else {
+                    return Container();
                   }
+
                   List<Widget> widgets = [];
 
                   decisiveMapping.forEach((key, value) {
                     if (value > 1) {
                       widgets.add(Container(
-                          margin: EdgeInsets.symmetric(horizontal: 2),
+                          decoration: BoxDecoration(
+                              color: Colors.green[200],
+                              borderRadius: BorderRadius.circular(10)),
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                           child: Text(
-                            key +
-                                ' ' +
+                            '"' +
+                                key +
+                                '" ' +
                                 (value / totalOccurences)
                                     .toString()
                                     .substring(2, 4) +
                                 '%',
-                            style: TextStyle(fontFamily: 'Montserrat'),
+                            style: TextStyle(
+                                fontFamily: 'Montserrat', fontSize: 12),
                           )));
                     }
                   });
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: widgets,
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      if (widgets.length > 0)
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              showDecisive = !showDecisive;
+                            });
+                          },
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Most relevant words ',
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12)),
+                                Icon(showDecisive
+                                    ? Icons.keyboard_arrow_up
+                                    : Icons.keyboard_arrow_down)
+                              ],
+                            ),
+                          ),
+                        )
+                      else
+                        Container(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: showDecisive ? widgets : [],
+                      ),
+                    ],
                   );
                 },
               ),
@@ -407,7 +446,7 @@ class _QuerySelectorState extends State<QuerySelector> {
           ),
         ),
         SizedBox(
-          height: 20,
+          height: 15,
         ),
         RecList(query: selectedQuery),
         SizedBox(
