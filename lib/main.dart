@@ -49,9 +49,8 @@ class MyApp extends StatelessWidget {
 }
 
 class RootPage extends StatelessWidget {
-  final int designVersion;
 
-  RootPage({this.designVersion = 1});
+  RootPage();
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +68,13 @@ class DynamicBody extends StatefulWidget {
 
 class _DynamicBodyState extends State<DynamicBody> {
   TextEditingController _textController = TextEditingController();
-
+  
   String _errorText;
 
   @override
   Widget build(BuildContext context) {
     UserQuery queryData = Provider.of<UserQuery>(context, listen: false);
+    bool expandedInput = queryData.queries == null || queryData.queries.isEmpty;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -137,9 +137,11 @@ class _DynamicBodyState extends State<DynamicBody> {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Container(
+                  AnimatedContainer(
+                    duration: Duration(seconds: 1),
+                    curve: Curves.easeOutExpo,
                     margin: EdgeInsets.only(left: 15),
-                    width: MediaQuery.of(context).size.width * 46 / 100,
+                    width: MediaQuery.of(context).size.width * (expandedInput ? 60:44) / 100,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(color: Colors.grey[600]),
@@ -389,41 +391,41 @@ class _QuerySelectorState extends State<QuerySelector> {
                   List<Widget> widgets = [];
 
                   decisiveMapping.forEach((key, value) {
-                    String percentage =
-                        ((value * 100 ~/ totalOccurences)).toString() +
-                            '%';
-                    if (value > 1) {
-                      widgets.add(Tooltip(
-                        waitDuration: Duration(milliseconds: 800),
-                        verticalOffset: 25,
-                        message:
-                            'Amongst all the decisive words extracted\nfrom the recommendations, "' +
-                                key +
-                                '"\nwas relevant in ' +
-                                percentage +
-                                ' of the papers.',
-                        preferBelow: false,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.grey[400]),
-                            borderRadius: BorderRadius.circular(10)),
-                        textStyle: TextStyle(fontFamily: 'Montserrat'),
-                        child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.green[200],
-                                borderRadius: BorderRadius.circular(10)),
-                            margin: EdgeInsets.symmetric(horizontal: 5),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 3),
-                            child: Text(
-                              key + ' ('+percentage+')',
-                              style: TextStyle(
-                                  fontFamily: 'Montserrat', fontSize: 12),
-                            )),
-                      ));
+                    if (value < 2) {
+                      return;
                     }
+                    String percentage =
+                        ((value * 200 ~/ totalOccurences)).toString() + '%';
+
+                    widgets.add(Tooltip(
+                      waitDuration: Duration(milliseconds: 800),
+                      verticalOffset: 30,
+                      message: '"' +
+                          key +
+                          '" was relevant in ' +
+                          percentage +
+                          '\nof the recommended papers.',
+                      preferBelow: false,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey[400]),
+                          borderRadius: BorderRadius.circular(10)),
+                      textStyle: TextStyle(fontFamily: 'Montserrat'),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.green[200],
+                              borderRadius: BorderRadius.circular(10)),
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                          child: Text(
+                            key + ' (' + percentage + ')',
+                            style: TextStyle(
+                                fontFamily: 'Montserrat', fontSize: 12),
+                          )),
+                    ));
                   });
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -443,9 +445,12 @@ class _QuerySelectorState extends State<QuerySelector> {
                                     style: TextStyle(
                                         fontFamily: 'Montserrat',
                                         fontSize: 12)),
-                                Icon(showDecisive
-                                    ? Icons.keyboard_arrow_up
-                                    : Icons.keyboard_arrow_down, size: 18,)
+                                Icon(
+                                  showDecisive
+                                      ? Icons.keyboard_arrow_up
+                                      : Icons.keyboard_arrow_down,
+                                  size: 18,
+                                )
                               ],
                             ),
                           ),
