@@ -110,6 +110,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                         textStyle: TextStyle(fontFamily: 'Montserrat'),
                         preferBelow: false,
                         verticalOffset: 8,
+                        waitDuration: Duration(milliseconds: 500),
                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -262,6 +263,7 @@ class HighlightableText extends StatelessWidget {
           textStyle: style,
           preferBelow: true,
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+          waitDuration: Duration(milliseconds: 800),
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(

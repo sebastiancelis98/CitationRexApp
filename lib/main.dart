@@ -394,7 +394,7 @@ class _QuerySelectorState extends State<QuerySelector> {
                             '%';
                     if (value > 1) {
                       widgets.add(Tooltip(
-                        waitDuration: Duration(seconds: 1),
+                        waitDuration: Duration(milliseconds: 800),
                         verticalOffset: 25,
                         message:
                             'Amongst all the decisive words extracted\nfrom the recommendations, "' +
