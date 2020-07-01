@@ -22,11 +22,14 @@ Future<Set<Recommendation>> getRecommendations(String query,
     Response response = await post(url, headers: headers, body: body);
 
     int statusCode = response.statusCode;
-    String data;
+    print('Response:' +statusCode.toString());
+    String data = response.body;
+    
     if (statusCode != 200) {
       if (!fallback) {
         return null;
       }
+      print('Trying fallback server...');
       String fallbackUrl =
           'http://aifb-ls3-vm1.aifb.kit.edu:5001/api/recommendation';
       Response response = await post(fallbackUrl, headers: headers, body: body);
@@ -35,8 +38,6 @@ Future<Set<Recommendation>> getRecommendations(String query,
       if (statusCode != 200) {
         return null;
       }
-      data = response.body;
-    } else {
       data = response.body;
     }
 
@@ -58,10 +59,14 @@ Future<Set<Recommendation>> getRecommendations(String query,
       } else {
         url = 'https://scholar.google.com/scholar?q=' + title.split(' ').join("+");
       }
+      
+      if(paper['paperid'] != null){
+        //TODO add other attributes
+      }
+      int paperId = paper['paperid'];
 
       int citationCount = paper['citationcount'];
       int year = paper['year'];
-      int paperId = paper['paperid'];
       String venue = paper['venue'];
       String publisher = paper['publisher'];
       List<dynamic> decisiveWords = paper['decisive_words'];
