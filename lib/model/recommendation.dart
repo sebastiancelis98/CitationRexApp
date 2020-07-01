@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 class Recommendation {
   int id, paperId, publishedYear, citationCount;
   String title, authors, url, venue, publisher;
+  bool hasUrl;
 
   List<String> decisiveWords;
 
@@ -16,5 +17,6 @@ class Recommendation {
       this.publishedYear = 2020,
       this.citationCount = 0,
       this.venue = "",
-      this.publisher = ""});
+      this.publisher = "", 
+      this.hasUrl});
 }

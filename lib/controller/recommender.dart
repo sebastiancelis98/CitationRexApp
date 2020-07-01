@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:http/http.dart';
 
-Future<Set<Recommendation>> getRecommendations(String query, {bool fallback = true}) async {
+Future<Set<Recommendation>> getRecommendations(String query,
+    {bool fallback = true}) async {
   if (query == null || query.isEmpty) {
     return null;
   }
@@ -23,7 +24,7 @@ Future<Set<Recommendation>> getRecommendations(String query, {bool fallback = tr
     int statusCode = response.statusCode;
     String data;
     if (statusCode != 200) {
-      if(!fallback){
+      if (!fallback) {
         return null;
       }
       String fallbackUrl =
@@ -31,11 +32,11 @@ Future<Set<Recommendation>> getRecommendations(String query, {bool fallback = tr
       Response response = await post(fallbackUrl, headers: headers, body: body);
 
       statusCode = response.statusCode;
-      if(statusCode != 200){
+      if (statusCode != 200) {
         return null;
       }
       data = response.body;
-    }else{
+    } else {
       data = response.body;
     }
 
@@ -48,7 +49,15 @@ Future<Set<Recommendation>> getRecommendations(String query, {bool fallback = tr
       String authors =
           paper['authors'].toString().replaceAll('[', '').replaceAll(']', '');
       authors = capitalizeWords(authors);
-      String url = paper['url'];
+
+      String url;
+      bool hasUrl = false;
+      if (paper['url'] != null) {
+        url = paper['url'];
+        hasUrl = true;
+      } else {
+        url = 'https://scholar.google.com/scholar?q=' + title.split(' ').join("+");
+      }
 
       int citationCount = paper['citationcount'];
       int year = paper['year'];
@@ -67,7 +76,8 @@ Future<Set<Recommendation>> getRecommendations(String query, {bool fallback = tr
           citationCount: citationCount,
           publishedYear: year,
           venue: venue,
-          publisher: publisher);
+          publisher: publisher,
+          hasUrl: hasUrl);
 
       recs.add(rec);
       if (recs.length >= 15) {
