@@ -49,7 +49,6 @@ class MyApp extends StatelessWidget {
 }
 
 class RootPage extends StatelessWidget {
-
   RootPage();
 
   @override
@@ -68,7 +67,7 @@ class DynamicBody extends StatefulWidget {
 
 class _DynamicBodyState extends State<DynamicBody> {
   TextEditingController _textController = TextEditingController();
-  
+
   String _errorText;
 
   @override
@@ -138,10 +137,12 @@ class _DynamicBodyState extends State<DynamicBody> {
               Column(
                 children: <Widget>[
                   AnimatedContainer(
-                    duration: Duration(seconds: 1),
+                    duration: Duration(milliseconds: 750),
                     curve: Curves.easeOutExpo,
                     margin: EdgeInsets.only(left: 15),
-                    width: MediaQuery.of(context).size.width * (expandedInput ? 60:44) / 100,
+                    width: MediaQuery.of(context).size.width *
+                        (expandedInput ? 58 : 44) /
+                        100,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(color: Colors.grey[600]),
@@ -156,7 +157,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                       maxLines:
                           (MediaQuery.of(context).size.height ~/ 28).toInt(),
                       controller: _textController,
-                      cursorColor: Theme.of(context).secondaryHeaderColor,
+                      cursorColor: Colors.grey[850],
                       style: TextStyle(fontSize: 14, fontFamily: 'Montserrat'),
                       decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
@@ -179,7 +180,9 @@ class _DynamicBodyState extends State<DynamicBody> {
                           hintText: 'Paste a section from your paper here...'),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  Expanded(
+                    child: Container(),
+                  ),
                   Center(
                     child: RaisedButton.icon(
                       shape: RoundedRectangleBorder(
@@ -190,18 +193,18 @@ class _DynamicBodyState extends State<DynamicBody> {
                           EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                       onPressed: () {
                         //TODO change to 15 words min when in production mode
-                        if (_textController.text.split(" ").length <
-                            (kReleaseMode ? 5 : 1)) {
+                        if (_textController.text.split(" ").length < 8 &&
+                            kReleaseMode) {
                           setState(() {
                             _errorText =
-                                'Please enter a sentence with 5 words or more!';
+                                'Please enter a sentence with 8 words or more!';
                           });
                           return;
                         }
                         if (_textController.text.split(" ").length < 15) {
                           setState(() {
                             _errorText =
-                                'Warning: Sentences with less than 15 words yield less accurate results...';
+                                'Warning: Sentences with less than 15 words provide less accurate results...';
                           });
                         } else {
                           _errorText = null;
@@ -246,6 +249,9 @@ class _DynamicBodyState extends State<DynamicBody> {
                         color: Colors.white,
                       ),
                     ),
+                  ),
+                  Expanded(
+                    child: Container(),
                   ),
                 ],
               ),
@@ -320,12 +326,13 @@ class _QuerySelectorState extends State<QuerySelector> {
                   Expanded(
                     child: Center(
                       child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 25),
-                          child: Text(
-                            selectedQuery,
-                            style: TextStyle(
-                                fontFamily: 'Montserrat', fontSize: 13),
-                          )),
+                        margin: EdgeInsets.symmetric(horizontal: 25),
+                        child: Text(
+                          selectedQuery,
+                          style:
+                              TextStyle(fontFamily: 'Montserrat', fontSize: 13),
+                        ),
+                      ),
                     ),
                   ),
                   Opacity(
@@ -469,7 +476,7 @@ class _QuerySelectorState extends State<QuerySelector> {
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 5,
         ),
         RecList(query: selectedQuery),
         SizedBox(
@@ -494,7 +501,24 @@ class RecList extends StatelessWidget {
       return Container();
     }
     if (!queryData.recommendations.containsKey(query)) {
-      return Loading();
+      return Column(
+        children: [
+          SizedBox(
+            height: 15,
+          ),
+          Loading(),
+          SizedBox(
+            height: 15,
+          ),
+          queryData.queries.length > 4
+              ? Text('Multiple queries might take longer to load...',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 12,
+                  ))
+              : Container(),
+        ],
+      );
     }
     Set<Recommendation> recs = queryData.recommendations[query];
     if (recs.isEmpty) {
