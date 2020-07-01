@@ -32,9 +32,9 @@ class _RecommendationTileState extends State<RecommendationTile> {
     UserQuery data = Provider.of<UserQuery>(context, listen: false);
 
     String authors = widget.recommendation.authors;
-    String otherAuthors;
+    String allauthors = authors;
+
     if (authors.split(',').length > 3) {
-      otherAuthors = authors.split(', ').skip(3).join(', ');
       authors = authors.split(',').getRange(0, 3).join(', ') +
           ", ...(+" +
           (authors.split(',').length - 3).toString() +
@@ -82,12 +82,16 @@ class _RecommendationTileState extends State<RecommendationTile> {
                   toHighlight: widget.recommendation.decisiveWords,
                   enabled: hovering,
                 ),
-                Text(
-                  authors,
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 12,
-                    color: Colors.grey[500],
+                Tooltip(
+                  message: allauthors,
+                  waitDuration: Duration(milliseconds: 800),
+                  child: Text(
+                    authors,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 12,
+                      color: Colors.grey[500],
+                    ),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -105,13 +109,15 @@ class _RecommendationTileState extends State<RecommendationTile> {
 
                     children.add(
                       Tooltip(
-                        message: 'Published by: '+(widget.recommendation.publisher ??
-                            'Unknown publisher'),
+                        message: 'Published by: ' +
+                            (widget.recommendation.publisher ??
+                                'Unknown publisher'),
                         textStyle: TextStyle(fontFamily: 'Montserrat'),
                         preferBelow: false,
                         verticalOffset: 8,
                         waitDuration: Duration(milliseconds: 500),
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(
@@ -204,13 +210,9 @@ class _RecommendationTileState extends State<RecommendationTile> {
 }
 
 class HighlightableText extends StatelessWidget {
-  const HighlightableText({
-    Key key,
-    this.text,
-    this.toHighlight,
-    this.enabled,
-    this.fontSize = 14
-  }) : super(key: key);
+  const HighlightableText(
+      {Key key, this.text, this.toHighlight, this.enabled, this.fontSize = 14})
+      : super(key: key);
 
   final String text;
   final List<String> toHighlight;
