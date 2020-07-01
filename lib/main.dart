@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:CitationRexWebsite/model/userquery.dart';
 import 'package:CitationRexWebsite/utils/color.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:file_picker_web/file_picker_web.dart';
 
 void main() {
   runApp(MyApp());
@@ -265,7 +268,18 @@ class _DynamicBodyState extends State<DynamicBody> {
                                 fontSize: 20,
                                 fontFamily: 'Montserrat'),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            File file = await FilePicker.getFile();
+                            FileReader reader = new FileReader();
+                            reader.onLoad.listen((e) {
+                              String text = reader.result;
+                              _textController.text = text;
+                            });
+                            reader.readAsText(file);
+                            //reader.abort();
+
+                            setState(() {});
+                          },
                         ),
                       ]),
                   Expanded(
