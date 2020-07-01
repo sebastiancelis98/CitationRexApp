@@ -510,7 +510,7 @@ class RecList extends StatelessWidget {
           SizedBox(
             height: 15,
           ),
-          queryData.queries.length > 4
+          queryData.queries.length > 2
               ? Text('Multiple queries might take longer to load...',
                   style: TextStyle(
                     fontFamily: 'Montserrat',

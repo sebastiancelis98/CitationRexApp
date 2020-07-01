@@ -12,16 +12,16 @@ class UserQuery with ChangeNotifier {
     notifyListeners();
   }
 
-  void fetchRecommendations() {
+  void fetchRecommendations() async {
     print('Fetching recommendations...');
     for (String query in queries) {
       if (recommendations.containsKey(query)) {
         continue;
       }
-      getRecommendations(query).then((value) {
-        recommendations.putIfAbsent(query, () => value);
-        notifyListeners();
-      });
+
+      Set<Recommendation> recs = await getRecommendations(query);
+      recommendations.putIfAbsent(query, () => recs);
+      notifyListeners();
     }
   }
 }

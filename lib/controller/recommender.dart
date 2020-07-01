@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:http/http.dart';
 
-Future<Set<Recommendation>> getRecommendations(String query) async {
+Future<Set<Recommendation>> getRecommendations(String query, {bool fallback = true}) async {
   if (query == null || query.isEmpty) {
     return null;
   }
@@ -21,9 +21,22 @@ Future<Set<Recommendation>> getRecommendations(String query) async {
     Response response = await post(url, headers: headers, body: body);
 
     int statusCode = response.statusCode;
-    String data = response.body;
+    String data;
     if (statusCode != 200) {
-      return null;
+      if(!fallback){
+        return null;
+      }
+      String fallbackUrl =
+          'http://aifb-ls3-vm1.aifb.kit.edu:5001/api/recommendation';
+      Response response = await post(fallbackUrl, headers: headers, body: body);
+
+      statusCode = response.statusCode;
+      if(statusCode != 200){
+        return null;
+      }
+      data = response.body;
+    }else{
+      data = response.body;
     }
 
     Map parsedData = json.decode(data);
