@@ -76,10 +76,10 @@ class _RecommendationTileState extends State<RecommendationTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 HighlightableText(
-                  text: widget.recommendation.title +
+                  text: widget.recommendation.title + (widget.recommendation.publishedYear != -1 ? (
                       ' (' +
                       widget.recommendation.publishedYear.toString() +
-                      ')',
+                      ')'):''),
                   toHighlight: widget.recommendation.decisiveWords,
                   enabled: hovering,
                 ),
@@ -155,7 +155,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                   }
                   return Row(children: children);
                 }),
-                Row(
+                widget.recommendation.citationCount != -1 ? Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
@@ -188,7 +188,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                           color: Colors.grey[500],
                         ),
                       ),
-                    ]),
+                    ]):Container(),
               ],
             ),
             Expanded(
@@ -207,7 +207,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
               hoverElevation: 2,
               color: Themes.primaryColor,
               child: Icon(
-                Icons.picture_as_pdf,
+                widget.recommendation.hasUrl ? Icons.picture_as_pdf:Icons.search,
                 color: Colors.white,
                 size: 24.0,
               ),

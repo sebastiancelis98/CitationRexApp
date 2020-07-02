@@ -471,7 +471,8 @@ class _QuerySelectorState extends State<QuerySelector> {
                       waitDuration: Duration(milliseconds: 800),
                       verticalOffset: 30,
                       message: '"' +
-                          key +
+                          key[0].toUpperCase() +
+                          key.substring(1) +
                           '" was relevant in ' +
                           percentage +
                           '\nof the recommended papers.',
@@ -497,41 +498,54 @@ class _QuerySelectorState extends State<QuerySelector> {
                           )),
                     ));
                   });
+
+                  int rows = widgets.length ~/ 3;
+
+                  List<Widget> columnChildren = [];
+
+                  if (widgets.length > 0) {
+                    columnChildren.add(GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showDecisive = !showDecisive;
+                        });
+                      },
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Most relevant words ',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat', fontSize: 12)),
+                            Icon(
+                              showDecisive
+                                  ? Icons.keyboard_arrow_up
+                                  : Icons.keyboard_arrow_down,
+                              size: 18,
+                            )
+                          ],
+                        ),
+                      ),
+                    ));
+                  }
+
+                  if (showDecisive) {
+                    for (int i = 0; i < rows; i++) {
+                      columnChildren.add(SizedBox(
+                        height: 4,
+                      ));
+                      int end =
+                          (i == rows - 1 ? widgets.length : (i + 1) * 3 + 1);
+                      columnChildren.add(Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: widgets.sublist(i * 3, end),
+                      ));
+                    }
+                  }
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      if (widgets.length > 0)
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              showDecisive = !showDecisive;
-                            });
-                          },
-                          child: Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('Most relevant words ',
-                                    style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12)),
-                                Icon(
-                                  showDecisive
-                                      ? Icons.keyboard_arrow_up
-                                      : Icons.keyboard_arrow_down,
-                                  size: 18,
-                                )
-                              ],
-                            ),
-                          ),
-                        )
-                      else
-                        Container(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: showDecisive ? widgets : [],
-                      ),
-                    ],
+                    children: columnChildren,
                   );
                 },
               ),
@@ -567,13 +581,18 @@ class RecList extends StatelessWidget {
       return Column(
         children: [
           SizedBox(
-            height: 15,
+            height: 25,
           ),
           Loading(),
-          SizedBox(
-            height: 15,
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 20),
+            child: Text('Loading...',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 12,
+                )),
           ),
-          queryData.queries.length > 2
+          queryData.queries.length > 10
               ? Text('Multiple queries might take longer to load...',
                   style: TextStyle(
                     fontFamily: 'Montserrat',

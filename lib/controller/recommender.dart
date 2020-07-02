@@ -40,6 +40,10 @@ Future<Set<Recommendation>> getRecommendations(String query,
     int id = 1;
     for (Map paper in parsedData['papers']) {
       String title = paper['title'];
+      if(title[0] != title[0].toUpperCase()){
+        title = capitalizeWords(title);
+      }
+
       String authors =
           paper['authors'].toString().replaceAll('[', '').replaceAll(']', '');
       authors = capitalizeWords(authors);
@@ -50,16 +54,13 @@ Future<Set<Recommendation>> getRecommendations(String query,
         url = paper['url'];
         hasUrl = true;
       } else {
-        url = 'https://scholar.google.com/scholar?q=' + title.split(' ').join("+");
+        url = 'https://scholar.google.com/scholar?q=' + title.split(' ').join("+")+'+'+authors.split(",").map((e) => e.split(" ").join("+")).join("+");
       }
-      
-      if(paper['paperid'] != null){
-        //TODO add other attributes
-      }
-      int paperId = paper['paperid'];
 
-      int citationCount = paper['citationcount'];
-      int year = paper['year'];
+      int paperId = paper['paperid'] ?? -1;
+
+      int citationCount = paper['citationcount'] ?? -1;
+      int year = paper['year'] ?? -1;
       String venue = paper['venue'];
       String publisher = paper['publisher'];
       List<dynamic> decisiveWords = paper['decisive_words'];
