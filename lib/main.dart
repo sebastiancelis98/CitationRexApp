@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker_web/file_picker_web.dart';
+import 'package:file_picker_platform_interface/file_picker_platform_interface.dart';
 
 void main() {
   runApp(MyApp());
@@ -72,6 +73,46 @@ class _DynamicBodyState extends State<DynamicBody> {
   TextEditingController _textController = TextEditingController();
 
   String _errorText;
+
+  bool _validateInput(String input) {
+    //TODO change to 15 words min when in production mode
+    if (_textController.text.split(" ").length < 8 && kReleaseMode) {
+      setState(() {
+        _errorText = 'Please enter a sentence with 8 words or more!';
+      });
+      return false;
+    }
+    if (_textController.text.split(" ").length < 15) {
+      setState(() {
+        _errorText =
+            'Warning: Sentences with less than 15 words provide less accurate results...';
+      });
+    } else {
+      _errorText = null;
+    }
+    return true;
+  }
+
+  List<String> _splitInput(String input) {
+    List<String> queries = List();
+
+    String currentSentence = "";
+    for (String query in input.split(".")) {
+      if (currentSentence != "") {
+        currentSentence += ". " + query;
+      } else {
+        currentSentence = query;
+      }
+      //If the combined sentence contains less than 15 words, merge it with the next sentence
+      if (currentSentence.split(" ").length < 15) {
+        continue;
+      }
+      queries.add(currentSentence.trim());
+      currentSentence = "";
+    }
+    if (currentSentence.trim() != "") queries.add(currentSentence);
+    return queries;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,88 +230,55 @@ class _DynamicBodyState extends State<DynamicBody> {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                          color: Theme.of(context).primaryColor,
-                          elevation: 1,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                        MaterialButton(
                           onPressed: () {
-                            //TODO change to 15 words min when in production mode
-                            if (_textController.text.split(" ").length < 8 &&
-                                kReleaseMode) {
-                              setState(() {
-                                _errorText =
-                                    'Please enter a sentence with 8 words or more!';
-                              });
+                            String _query =
+                                _textController.text.replaceAll('\n', ' ');
+
+                            if (!_validateInput(_query)) {
                               return;
-                            }
-                            if (_textController.text.split(" ").length < 15) {
-                              setState(() {
-                                _errorText =
-                                    'Warning: Sentences with less than 15 words provide less accurate results...';
-                              });
-                            } else {
-                              _errorText = null;
                             }
 
                             setState(() {
-                              String _query =
-                                  _textController.text.replaceAll('\n', ' ');
-
-                              List<String> queries = List();
-
-                              String currentSentence = "";
-                              for (String query in _query.split(".")) {
-                                if (currentSentence != "") {
-                                  currentSentence += ". " + query;
-                                } else {
-                                  currentSentence = query;
-                                }
-                                //If the combined sentence contains less than 15 words, merge it with the next sentence
-                                if (currentSentence.split(" ").length < 15) {
-                                  continue;
-                                }
-                                queries.add(currentSentence.trim());
-                                currentSentence = "";
-                              }
-                              if (currentSentence.trim() != "")
-                                queries.add(currentSentence);
+                              List<String> queries = _splitInput(_query);
 
                               print("Queries: " + queries.toString());
                               queryData.updateQueries(queries);
                             });
                           },
-                          label: Text(
-                            'Search ',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: 'Montserrat'),
-                          ),
-                          icon: Icon(
-                            Icons.search,
-                            color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          color: Theme.of(context).primaryColor,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Search ',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontFamily: 'Montserrat'),
+                              ),
+                              Icon(Icons.search, color: Colors.white, size: 21),
+                            ],
                           ),
                         ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 25),
+                          child: Text('or',
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.grey[600])),
+                        ),
                         MaterialButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                          color: Theme.of(context).primaryColor,
-                          elevation: 1,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                          child: Text(
-                            'Import',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: 'Montserrat'),
-                          ),
                           onPressed: () async {
-                            File file = await FilePicker.getFile();
+                            File file = await FilePicker.getFile(
+                                allowedExtensions: ['.txt'],
+                                type: FileType.custom);
                             FileReader reader = new FileReader();
+
                             reader.onLoad.listen((e) {
                               String text = reader.result;
                               _textController.text = text;
@@ -280,6 +288,29 @@ class _DynamicBodyState extends State<DynamicBody> {
 
                             setState(() {});
                           },
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Import ',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Icon(
+                                Icons.insert_drive_file,
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                            ],
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          color: Colors.grey[300],
                         ),
                       ]),
                   Expanded(

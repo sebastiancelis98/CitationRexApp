@@ -6,6 +6,7 @@ import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 class RecommendationTile extends StatefulWidget {
   final Recommendation recommendation;
 
@@ -32,7 +33,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
     UserQuery data = Provider.of<UserQuery>(context, listen: false);
 
     String authors = widget.recommendation.authors;
-    String allauthors = authors;
+    String allAuthors = authors;
 
     if (authors.split(',').length > 3) {
       authors = authors.split(',').getRange(0, 3).join(', ') +
@@ -83,8 +84,20 @@ class _RecommendationTileState extends State<RecommendationTile> {
                   enabled: hovering,
                 ),
                 Tooltip(
-                  message: allauthors,
-                  waitDuration: Duration(milliseconds: 800),
+                  message: allAuthors,
+                  waitDuration: Duration(milliseconds: 1000),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.grey[300],
+                    ),
+                  ),
+                  verticalOffset: 8,
+                  textStyle: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 12,
+                  ),
                   child: Text(
                     authors,
                     style: TextStyle(

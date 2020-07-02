@@ -4,7 +4,7 @@ import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:http/http.dart';
 
 Future<Set<Recommendation>> getRecommendations(String query,
-    {bool fallback = true}) async {
+    {bool fallback = false}) async {
   if (query == null || query.isEmpty) {
     return null;
   }
@@ -12,6 +12,11 @@ Future<Set<Recommendation>> getRecommendations(String query,
   Set<Recommendation> recs = Set();
 
   String url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
+
+  if(fallback){
+    print('Attempting with fallback server...');
+    url = 'http://aifb-ls3-vm1.aifb.kit.edu:5001/api/recommendation_fallback';
+  }
 
   Map<String, String> headers = {
     "Content-type": "application/json",
@@ -26,19 +31,7 @@ Future<Set<Recommendation>> getRecommendations(String query,
     String data = response.body;
     
     if (statusCode != 200) {
-      if (!fallback) {
-        return null;
-      }
-      print('Trying fallback server...');
-      String fallbackUrl =
-          'http://aifb-ls3-vm1.aifb.kit.edu:5001/api/recommendation';
-      Response response = await post(fallbackUrl, headers: headers, body: body);
-
-      statusCode = response.statusCode;
-      if (statusCode != 200) {
-        return null;
-      }
-      data = response.body;
+      return null;
     }
 
     Map parsedData = json.decode(data);
@@ -90,6 +83,9 @@ Future<Set<Recommendation>> getRecommendations(String query,
       }
     }
   } catch (e) {
+    if(!fallback){
+      return getRecommendations(query, fallback: true);
+    }
     print(e);
   }
   return recs;
