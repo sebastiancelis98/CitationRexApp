@@ -6,7 +6,6 @@ import 'package:CitationRexWebsite/model/recommendation.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class RecommendationTile extends StatefulWidget {
   final Recommendation recommendation;
 
@@ -76,10 +75,12 @@ class _RecommendationTileState extends State<RecommendationTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 HighlightableText(
-                  text: widget.recommendation.title + (widget.recommendation.publishedYear != -1 ? (
-                      ' (' +
-                      widget.recommendation.publishedYear.toString() +
-                      ')'):''),
+                  text: widget.recommendation.title +
+                      (widget.recommendation.publishedYear != -1
+                          ? (' (' +
+                              widget.recommendation.publishedYear.toString() +
+                              ')')
+                          : ''),
                   toHighlight: widget.recommendation.decisiveWords,
                   enabled: hovering,
                 ),
@@ -155,40 +156,42 @@ class _RecommendationTileState extends State<RecommendationTile> {
                   }
                   return Row(children: children);
                 }),
-                widget.recommendation.citationCount != -1 ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "This was cited by ",
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 12,
-                          color: Colors.grey[500],
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.blue[100],
-                            borderRadius: BorderRadius.circular(8)),
-                        padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: Text(
-                          widget.recommendation.citationCount.toString(),
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        " other papers.",
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 12,
-                          color: Colors.grey[500],
-                        ),
-                      ),
-                    ]):Container(),
+                widget.recommendation.citationCount != -1
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                            Text(
+                              "This was cited by ",
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.blue[100],
+                                  borderRadius: BorderRadius.circular(8)),
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Text(
+                                widget.recommendation.citationCount.toString(),
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              " other papers.",
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                          ])
+                    : Container(),
               ],
             ),
             Expanded(
@@ -205,12 +208,21 @@ class _RecommendationTileState extends State<RecommendationTile> {
               },
               elevation: 1.0,
               hoverElevation: 2,
-              color: Themes.primaryColor,
-              child: Icon(
-                widget.recommendation.hasUrl ? Icons.picture_as_pdf:Icons.search,
-                color: Colors.white,
-                size: 24.0,
-              ),
+              color: widget.recommendation.hasUrl ? Themes.primaryColor:Themes.primaryColor,
+              child: widget.recommendation.hasUrl
+                  ? Icon(
+                      widget.recommendation.hasUrl
+                          ? Icons.picture_as_pdf
+                          : Icon,
+                      color: Colors.white,
+                      size: 24.0,
+                    )
+                  : Image(
+                      image: AssetImage('assets/images/google_scholar.png'),
+                      color: Colors.white,
+                      height: 24,
+                      width: 24,
+                    ),
               padding: EdgeInsets.all(10.0),
               shape: CircleBorder(),
             ),

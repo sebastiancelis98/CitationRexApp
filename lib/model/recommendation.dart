@@ -18,5 +18,5 @@ class Recommendation {
       this.citationCount = 0,
       this.venue = "",
       this.publisher = "", 
-      this.hasUrl});
+      this.hasUrl = false});
 }
