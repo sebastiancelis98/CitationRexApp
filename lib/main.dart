@@ -8,6 +8,7 @@ import 'package:CitationRexWebsite/utils/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker_web/file_picker_web.dart';
 import 'package:file_picker_platform_interface/file_picker_platform_interface.dart';
@@ -114,10 +115,35 @@ class _DynamicBodyState extends State<DynamicBody> {
     return queries;
   }
 
+  bool designTest = false;
+
   @override
   Widget build(BuildContext context) {
     UserQuery queryData = Provider.of<UserQuery>(context, listen: false);
     bool expandedInput = queryData.queries == null || queryData.queries.isEmpty;
+
+    if (designTest) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 350, vertical: 50),
+            child: RecommendationTile(
+              recommendation: Recommendation(
+                  id: 1,
+                  paperId: -1,
+                  url: 'http://google.com',
+                  title: 'This is a test sample for design',
+                  authors: 'Isabela, Vinzenz & Sebastian',
+                  citationCount: 69,
+                  venue: "papers that can be used as examples",
+                  publisher: "Springer",
+                  decisiveWords: ["test", "design"]),
+            ),
+          ),
+        ],
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -198,8 +224,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                       ),
                     ),
                     child: TextField(
-                      maxLines:
-                          (MediaQuery.of(context).size.height ~/ 28).toInt(),
+                      maxLines: (MediaQuery.of(context).size.height ~/ 28),
                       controller: _textController,
                       cursorColor: Colors.grey[850],
                       style: TextStyle(fontSize: 14, fontFamily: 'Montserrat'),
@@ -225,7 +250,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                     ),
                   ),
                   Expanded(
-                    child: Container(),
+                    child: Container()
                   ),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -355,6 +380,9 @@ class _QuerySelectorState extends State<QuerySelector> {
     if (queries == null) {
       return Container();
     }
+
+    if (currentIndex > queries.length - 1) currentIndex = queries.length - 1;
+
     String selectedQuery = queries.elementAt(currentIndex);
 
     return Column(
@@ -500,6 +528,7 @@ class _QuerySelectorState extends State<QuerySelector> {
                   });
 
                   int rows = widgets.length ~/ 3;
+                  if (rows == 0) rows = 1;
 
                   List<Widget> columnChildren = [];
 
@@ -534,11 +563,11 @@ class _QuerySelectorState extends State<QuerySelector> {
                       columnChildren.add(SizedBox(
                         height: 4,
                       ));
-                      int end =
-                          (i == rows - 1 ? widgets.length : (i + 1) * 3 + 1);
+                      int end = (i + 1) * 4;
+                      if (end > widgets.length) end = widgets.length;
                       columnChildren.add(Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: widgets.sublist(i * 3, end),
+                        children: widgets.sublist(i * 4, end),
                       ));
                     }
                   }
@@ -622,7 +651,7 @@ class RecList extends StatelessWidget {
               citationCount: 69,
               venue: "papers that can be used as examples",
               publisher: "Springer",
-              decisiveWords: ["retrieving", "is", "sample"])));
+              decisiveWords: ["retrieving", "sample"])));
     }
 
     return Expanded(

@@ -3,6 +3,7 @@ import 'package:CitationRexWebsite/model/userquery.dart';
 import 'package:CitationRexWebsite/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:CitationRexWebsite/model/recommendation.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -29,9 +30,9 @@ class _RecommendationTileState extends State<RecommendationTile> {
 
   @override
   Widget build(BuildContext context) {
-    UserQuery data = Provider.of<UserQuery>(context, listen: false);
+    Recommendation rec = widget.recommendation;
 
-    String authors = widget.recommendation.authors;
+    String authors = rec.authors;
     String allAuthors = authors;
 
     if (authors.split(',').length > 3) {
@@ -54,179 +55,287 @@ class _RecommendationTileState extends State<RecommendationTile> {
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 5),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(color: Colors.grey[400]),
-            borderRadius: BorderRadius.circular(16)),
-        child: Row(
-          children: <Widget>[
-            CircleAvatar(
+            borderRadius: BorderRadius.circular(10)),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(10),
+                      topLeft: Radius.circular(10))),
+              padding: EdgeInsets.all(8),
               child: Text(
-                "#" + (widget.recommendation.id).toString(),
+                '#' + (rec.id).toString(),
                 style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'Montserrat',
-                    fontSize: 14),
+                    fontSize: 13),
               ),
-              backgroundColor: Colors.transparent,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                HighlightableText(
-                  text: widget.recommendation.title +
-                      (widget.recommendation.publishedYear != -1
-                          ? (' (' +
-                              widget.recommendation.publishedYear.toString() +
-                              ')')
-                          : ''),
-                  toHighlight: widget.recommendation.decisiveWords,
-                  enabled: hovering,
-                ),
-                Tooltip(
-                  message: allAuthors,
-                  waitDuration: Duration(milliseconds: 1000),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.grey[300],
-                    ),
-                  ),
-                  verticalOffset: 8,
-                  textStyle: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 12,
-                  ),
-                  child: Text(
-                    authors,
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 12,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Builder(builder: (context) {
-                  List<Widget> children = [];
-                  if (widget.recommendation.venue != null) {
-                    children.add(Text(
-                      "In ",
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 12,
-                        color: Colors.grey[500],
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(width: 35),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      //SizedBox(height: 2),
+                      HighlightableText(
+                        text: rec.title +
+                            (rec.publishedYear != -1
+                                ? (' (' + rec.publishedYear.toString() + ')')
+                                : ''),
+                        toHighlight: rec.decisiveWords,
+                        enabled: hovering,
                       ),
-                    ));
-
-                    children.add(
                       Tooltip(
-                        message: 'Published by: ' +
-                            (widget.recommendation.publisher ??
-                                'Unknown publisher'),
-                        textStyle: TextStyle(fontFamily: 'Montserrat'),
-                        preferBelow: false,
-                        verticalOffset: 8,
-                        waitDuration: Duration(milliseconds: 500),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        message: allAuthors,
+                        waitDuration: Duration(milliseconds: 1000),
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey[300],
-                            ),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Container(
-                          child: Text(
-                            '"' +
-                                capitalizeWords(
-                                    widget.recommendation.venue ?? 'Unknown') +
-                                '"',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.grey[300],
+                          ),
+                        ),
+                        verticalOffset: 8,
+                        textStyle: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 12,
+                        ),
+                        child: Text(
+                          authors,
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 12,
+                            color: Colors.grey[500],
                           ),
                         ),
                       ),
-                    );
-                  }
-                  return Row(children: children);
-                }),
-                widget.recommendation.citationCount != -1
-                    ? Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                            Text(
-                              "This was cited by ",
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 12,
-                                color: Colors.grey[500],
-                              ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Builder(builder: (context) {
+                        List<Widget> children = [];
+                        if (rec.venue != null) {
+                          children.add(Text(
+                            "Published in ",
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 12,
+                              color: Colors.grey[500],
                             ),
-                            Container(
+                          ));
+
+                          children.add(
+                            Tooltip(
+                              message: 'Published by: ' +
+                                  (rec.publisher ?? 'Unknown publisher'),
+                              textStyle: TextStyle(fontFamily: 'Montserrat'),
+                              preferBelow: false,
+                              verticalOffset: 8,
+                              waitDuration: Duration(milliseconds: 500),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 6),
                               decoration: BoxDecoration(
-                                  color: Colors.blue[100],
-                                  borderRadius: BorderRadius.circular(8)),
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Text(
-                                widget.recommendation.citationCount.toString(),
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 12,
-                                  color: Colors.black,
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.grey[300],
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Container(
+                                child: Text(
+                                  '"' +
+                                      capitalizeWords(rec.venue ?? 'Unknown') +
+                                      '"',
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 12,
+                                    color: Colors.grey[600],
+                                  ),
                                 ),
                               ),
                             ),
-                            Text(
-                              " other papers.",
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 12,
-                                color: Colors.grey[500],
-                              ),
+                          );
+
+                          return Row(children: children);
+                        }
+                        return Container();
+                      }),
+                      rec.citationCount != -1
+                          ? Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                  Text(
+                                    "This was cited by ",
+                                    style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 12,
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.blue[100],
+                                        borderRadius: BorderRadius.circular(8)),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 5),
+                                    child: Text(
+                                      rec.citationCount.toString(),
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    " other papers.",
+                                    style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 12,
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                ])
+                          : Container(),
+                    ],
+                  ),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 0, right: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Tooltip(
+                          message:
+                              'Copy bibliography citation to your clipboard',
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.grey[300],
                             ),
-                          ])
-                    : Container(),
-              ],
-            ),
-            Expanded(
-              child: Container(),
-            ),
-            MaterialButton(
-              onPressed: () async {
-                String url = widget.recommendation.url;
-                if (await canLaunch(url)) {
-                  await launch(url);
-                } else {
-                  throw 'Could not launch $url';
-                }
-              },
-              elevation: 1.0,
-              hoverElevation: 2,
-              color: widget.recommendation.hasUrl ? Themes.primaryColor:Themes.primaryColor,
-              child: widget.recommendation.hasUrl
-                  ? Icon(
-                      widget.recommendation.hasUrl
-                          ? Icons.picture_as_pdf
-                          : Icon,
-                      color: Colors.white,
-                      size: 24.0,
-                    )
-                  : Image(
-                      image: AssetImage('assets/images/google_scholar.png'),
-                      color: Colors.white,
-                      height: 24,
-                      width: 24,
+                          ),
+                          verticalOffset: 20,
+                          textStyle: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 12,
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              String bibTex = '@article{';
+
+                              List<String> attributes = [
+                                rec.title.split(' ').join('_'),
+                                'title={' + rec.title + '}',
+                                'author={' + rec.authors + '}',
+                              ];
+                              if (rec.paperId != -1) {
+                                attributes.addAll([
+                                  'url={' + rec.url + '}',
+                                  'venue={' + rec.venue + '}',
+                                  'publisher={' + rec.publisher + '}',
+                                  'year={' + rec.publishedYear.toString() + '}',
+                                ]);
+                              }
+                              bibTex += attributes.join(', ');
+                              bibTex += '}';
+
+                              SnackBar bar = SnackBar(
+                                content: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Copied citation to clipboard!',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 14)),
+                                  ],
+                                ),
+                                backgroundColor: Colors.white,
+                                behavior: SnackBarBehavior.fixed,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(color: Colors.grey[400]),
+                                    borderRadius: BorderRadius.circular(15)),
+                              );
+
+                              Clipboard.setData(ClipboardData(text: bibTex));
+                              Scaffold.of(context).showSnackBar(bar);
+
+                              print(bibTex);
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.grey[300]),
+                                padding: EdgeInsets.all(7),
+                                child: Icon(Icons.content_copy, size: 22)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                          width: 8,
+                        ),
+                        Tooltip(
+                          message: 'Go to paper',
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.grey[300],
+                            ),
+                          ),
+                          verticalOffset: 20,
+                          textStyle: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 12,
+                          ),
+                          child: InkWell(
+                            onTap: () async {
+                              String url = rec.url;
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                throw 'Could not launch $url';
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.grey.shade300),
+                              padding: EdgeInsets.all(7),
+                              child: true
+                                  ? Icon(
+                                      Icons.picture_as_pdf,
+                                      color: Colors.black,
+                                      size: 22.0,
+                                    )
+                                  : Image(
+                                      image: AssetImage(
+                                          'assets/images/google_scholar.png'),
+                                      color: Colors.black,
+                                      height: 24,
+                                      width: 24,
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-              padding: EdgeInsets.all(10.0),
-              shape: CircleBorder(),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(width: 3)
           ],
         ),
       ),
