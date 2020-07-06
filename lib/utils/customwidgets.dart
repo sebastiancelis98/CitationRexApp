@@ -86,13 +86,15 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       //SizedBox(height: 2),
-                      HighlightableText(
-                        text: rec.title +
+                      Text(
+                        rec.title +
                             (rec.publishedYear != -1
                                 ? (' (' + rec.publishedYear.toString() + ')')
                                 : ''),
-                        toHighlight: rec.decisiveWords,
-                        enabled: hovering,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Montserrat'
+                        )
                       ),
                       Tooltip(
                         message: allAuthors,
