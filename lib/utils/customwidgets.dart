@@ -87,10 +87,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     children: <Widget>[
                       //SizedBox(height: 2),
                       Text(
-                        rec.title +
-                            (rec.publishedYear != -1
-                                ? (' (' + rec.publishedYear.toString() + ')')
-                                : ''),
+                        rec.title,
                         style: TextStyle(fontFamily: 'Montserrat', fontSize: 14)
                       ),
                       Tooltip(
