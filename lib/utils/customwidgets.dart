@@ -86,13 +86,12 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       //SizedBox(height: 2),
-                      HighlightableText(
-                        text: rec.title +
+                      Text(
+                        rec.title +
                             (rec.publishedYear != -1
                                 ? (' (' + rec.publishedYear.toString() + ')')
                                 : ''),
-                        toHighlight: rec.decisiveWords,
-                        enabled: hovering,
+                        style: TextStyle(fontFamily: 'Montserrat', fontSize: 14)
                       ),
                       Tooltip(
                         message: allAuthors,
@@ -118,93 +117,6 @@ class _RecommendationTileState extends State<RecommendationTile> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Builder(builder: (context) {
-                        List<Widget> children = [];
-                        if (rec.venue != null) {
-                          children.add(Text(
-                            "Published in ",
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 12,
-                              color: Colors.grey[500],
-                            ),
-                          ));
-
-                          children.add(
-                            Tooltip(
-                              message: 'Published by: ' +
-                                  (rec.publisher ?? 'Unknown publisher'),
-                              textStyle: TextStyle(fontFamily: 'Montserrat'),
-                              preferBelow: false,
-                              verticalOffset: 8,
-                              waitDuration: Duration(milliseconds: 500),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 6),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: Colors.grey[300],
-                                  ),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Container(
-                                child: Text(
-                                  '"' +
-                                      capitalizeWords(rec.venue ?? 'Unknown') +
-                                      '"',
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 12,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-
-                          return Row(children: children);
-                        }
-                        return Container();
-                      }),
-                      rec.citationCount != -1
-                          ? Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                  Text(
-                                    "This was cited by ",
-                                    style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                      color: Colors.grey[500],
-                                    ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.blue[100],
-                                        borderRadius: BorderRadius.circular(8)),
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5),
-                                    child: Text(
-                                      rec.citationCount.toString(),
-                                      style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    " other papers.",
-                                    style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                      color: Colors.grey[500],
-                                    ),
-                                  ),
-                                ])
-                          : Container(),
                     ],
                   ),
                   Expanded(
