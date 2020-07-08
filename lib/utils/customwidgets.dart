@@ -34,12 +34,17 @@ class _RecommendationTileState extends State<RecommendationTile> {
 
     String authors = rec.authors;
     String allAuthors = authors;
+    String title = rec.title;
+    String fullTitle = rec.title;
 
     if (authors.split(',').length > 3) {
       authors = authors.split(',').getRange(0, 3).join(', ') +
           ", ...(+" +
           (authors.split(',').length - 3).toString() +
           ' more)';
+    }
+    if (title.split(" ").length > 6) {
+      title = title.split(' ').getRange(0, 6).join(' ') + "...";
     }
 
     return MouseRegion(
@@ -86,10 +91,29 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       //SizedBox(height: 2),
-                      Text(
-                        rec.title,
-                        style: TextStyle(fontFamily: 'Montserrat', fontSize: 14)
-                      ),
+                      title == fullTitle
+                          ? Text(title,
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat', fontSize: 14))
+                          : Tooltip(
+                              message: fullTitle,
+                              waitDuration: Duration(milliseconds: 800),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Colors.grey[300],
+                                ),
+                              ),
+                              verticalOffset: 8,
+                              textStyle: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 14,
+                              ),
+                              child: Text(title,
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat', fontSize: 14)),
+                            ),
                       Tooltip(
                         message: allAuthors,
                         waitDuration: Duration(milliseconds: 1000),
@@ -168,8 +192,14 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                             color: Colors.black,
                                             fontFamily: 'Montserrat',
                                             fontSize: 14)),
-                                    SizedBox(width: 5,),
-                                    Icon(Icons.check_circle, color: Colors.green, size: 18,)
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green,
+                                      size: 18,
+                                    )
                                   ],
                                 ),
                                 backgroundColor: Colors.white,
