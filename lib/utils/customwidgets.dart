@@ -271,10 +271,17 @@ class _RecommendationTileState extends State<RecommendationTile> {
                               if (rec.paperId != -1) {
                                 attributes.addAll([
                                   'url={' + rec.url + '}',
-                                  'venue={' + rec.venue + '}',
-                                  'publisher={' + rec.publisher + '}',
                                   'year={' + rec.publishedYear.toString() + '}',
                                 ]);
+                                if (rec.venue != null) {
+                                  attributes.add(
+                                    'venue={' + rec.venue + '}',
+                                  );
+                                }
+                                if (rec.publisher != null) {
+                                  attributes
+                                      .add('publisher={' + rec.publisher + '}');
+                                }
                               }
                               bibTex += attributes.join(', ');
                               bibTex += '}';
