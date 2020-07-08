@@ -35,13 +35,16 @@ class _RecommendationTileState extends State<RecommendationTile> {
     String authors = rec.authors;
     String allAuthors = authors;
     String title = rec.title;
-    String fullTitle = title;
+    String fullTitle = rec.title;
 
     if (authors.split(',').length > 3) {
       authors = authors.split(',').getRange(0, 3).join(', ') +
           ", ...(+" +
           (authors.split(',').length - 3).toString() +
           ' more)';
+    }
+    if (title.split(" ").length > 6) {
+      title = title.split(' ').getRange(0, 6).join(' ') + "...";
     }
 
     return MouseRegion(
@@ -111,30 +114,39 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                   style: TextStyle(
                                       fontFamily: 'Montserrat', fontSize: 14)),
                             ),
-                      Tooltip(
-                        message: allAuthors,
-                        waitDuration: Duration(milliseconds: 1000),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.grey[300],
-                          ),
-                        ),
-                        verticalOffset: 8,
-                        textStyle: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 12,
-                        ),
-                        child: Text(
-                          authors,
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12,
-                            color: Colors.grey[500],
-                          ),
-                        ),
-                      ),
+                      authors == allAuthors
+                          ? Text(
+                              authors,
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                                color: Colors.grey[500],
+                              ),
+                            )
+                          : Tooltip(
+                              message: allAuthors,
+                              waitDuration: Duration(milliseconds: 1000),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Colors.grey[300],
+                                ),
+                              ),
+                              verticalOffset: 8,
+                              textStyle: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                              ),
+                              child: Text(
+                                authors,
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 12,
+                                  color: Colors.grey[500],
+                                ),
+                              ),
+                            ),
                       SizedBox(
                         height: 5,
                       ),
@@ -145,7 +157,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                             "Published in ",
                             style: TextStyle(
                               fontFamily: 'Montserrat',
-                              fontSize: 12,
+                              fontSize: 11.5,
                               color: Colors.grey[500],
                             ),
                           ));
@@ -173,7 +185,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                       '"',
                                   style: TextStyle(
                                     fontFamily: 'Montserrat',
-                                    fontSize: 12,
+                                    fontSize: 11.5,
                                     color: Colors.grey[600],
                                   ),
                                 ),
@@ -193,7 +205,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                     "This was cited by ",
                                     style: TextStyle(
                                       fontFamily: 'Montserrat',
-                                      fontSize: 12,
+                                      fontSize: 11.5,
                                       color: Colors.grey[500],
                                     ),
                                   ),
@@ -207,7 +219,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                       rec.citationCount.toString(),
                                       style: TextStyle(
                                         fontFamily: 'Montserrat',
-                                        fontSize: 12,
+                                        fontSize: 11.5,
                                         color: Colors.black,
                                       ),
                                     ),
@@ -216,7 +228,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                     " other papers.",
                                     style: TextStyle(
                                       fontFamily: 'Montserrat',
-                                      fontSize: 12,
+                                      fontSize: 11.5,
                                       color: Colors.grey[500],
                                     ),
                                   ),
@@ -312,7 +324,9 @@ class _RecommendationTileState extends State<RecommendationTile> {
                           width: 8,
                         ),
                         Tooltip(
-                          message: 'Go to paper',
+                          message: rec.hasUrl
+                              ? 'Go to paper'
+                              : 'Search on Google Scholar',
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -339,7 +353,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                   shape: BoxShape.circle,
                                   color: Colors.grey.shade300),
                               padding: EdgeInsets.all(7),
-                              child: true
+                              child: rec.hasUrl
                                   ? Icon(
                                       Icons.picture_as_pdf,
                                       color: Colors.black,
