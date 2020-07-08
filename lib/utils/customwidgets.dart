@@ -114,30 +114,39 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                   style: TextStyle(
                                       fontFamily: 'Montserrat', fontSize: 14)),
                             ),
-                      Tooltip(
-                        message: allAuthors,
-                        waitDuration: Duration(milliseconds: 1000),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.grey[300],
-                          ),
-                        ),
-                        verticalOffset: 8,
-                        textStyle: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 12,
-                        ),
-                        child: Text(
-                          authors,
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12,
-                            color: Colors.grey[500],
-                          ),
-                        ),
-                      ),
+                      authors == allAuthors
+                          ? Text(
+                              authors,
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                                color: Colors.grey[500],
+                              ),
+                            )
+                          : Tooltip(
+                              message: allAuthors,
+                              waitDuration: Duration(milliseconds: 1000),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Colors.grey[300],
+                                ),
+                              ),
+                              verticalOffset: 8,
+                              textStyle: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                              ),
+                              child: Text(
+                                authors,
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 12,
+                                  color: Colors.grey[500],
+                                ),
+                              ),
+                            ),
                     ],
                   ),
                   Expanded(
@@ -175,10 +184,17 @@ class _RecommendationTileState extends State<RecommendationTile> {
                               if (rec.paperId != -1) {
                                 attributes.addAll([
                                   'url={' + rec.url + '}',
-                                  'venue={' + rec.venue + '}',
-                                  'publisher={' + rec.publisher + '}',
                                   'year={' + rec.publishedYear.toString() + '}',
                                 ]);
+                                if (rec.venue != null) {
+                                  attributes.add(
+                                    'venue={' + rec.venue + '}',
+                                  );
+                                }
+                                if (rec.publisher != null) {
+                                  attributes
+                                      .add('publisher={' + rec.publisher + '}');
+                                }
                               }
                               bibTex += attributes.join(', ');
                               bibTex += '}';
@@ -228,7 +244,9 @@ class _RecommendationTileState extends State<RecommendationTile> {
                           width: 8,
                         ),
                         Tooltip(
-                          message: 'Go to paper',
+                          message: rec.hasUrl
+                              ? 'Go to paper'
+                              : 'Search on Google Scholar',
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -255,7 +273,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                   shape: BoxShape.circle,
                                   color: Colors.grey.shade300),
                               padding: EdgeInsets.all(7),
-                              child: true
+                              child: rec.hasUrl
                                   ? Icon(
                                       Icons.picture_as_pdf,
                                       color: Colors.black,
