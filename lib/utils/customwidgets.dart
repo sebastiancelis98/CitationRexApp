@@ -242,10 +242,17 @@ class _RecommendationTileState extends State<RecommendationTile> {
                               if (rec.paperId != -1) {
                                 attributes.addAll([
                                   'url={' + rec.url + '}',
-                                  'venue={' + rec.venue + '}',
-                                  'publisher={' + rec.publisher + '}',
                                   'year={' + rec.publishedYear.toString() + '}',
                                 ]);
+                                if (rec.venue != null) {
+                                  attributes.add(
+                                    'venue={' + rec.venue + '}',
+                                  );
+                                }
+                                if (rec.publisher != null) {
+                                  attributes
+                                      .add('publisher={' + rec.publisher + '}');
+                                }
                               }
                               bibTex += attributes.join(', ');
                               bibTex += '}';
@@ -289,7 +296,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                           width: 8,
                         ),
                         Tooltip(
-                          message: 'Go to paper',
+                          message: rec.hasUrl ? 'Go to paper':'Search on Google Scholar',
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -316,7 +323,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                   shape: BoxShape.circle,
                                   color: Colors.grey.shade300),
                               padding: EdgeInsets.all(7),
-                              child: true
+                              child: rec.hasUrl
                                   ? Icon(
                                       Icons.picture_as_pdf,
                                       color: Colors.black,
