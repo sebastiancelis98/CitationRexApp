@@ -34,6 +34,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
 
     String authors = rec.authors;
     String allAuthors = authors;
+    String title = rec.title;
 
     if (authors.split(',').length > 3) {
       authors = authors.split(',').getRange(0, 3).join(', ') +
@@ -87,37 +88,43 @@ class _RecommendationTileState extends State<RecommendationTile> {
                     children: <Widget>[
                       //SizedBox(height: 2),
                       HighlightableText(
-                        text: rec.title +
-                            (rec.publishedYear != -1
-                                ? (' (' + rec.publishedYear.toString() + ')')
-                                : ''),
+                        text: title,
                         toHighlight: rec.decisiveWords,
                         enabled: hovering,
                       ),
-                      Tooltip(
-                        message: allAuthors,
-                        waitDuration: Duration(milliseconds: 1000),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.grey[300],
-                          ),
-                        ),
-                        verticalOffset: 8,
-                        textStyle: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 12,
-                        ),
-                        child: Text(
-                          authors,
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12,
-                            color: Colors.grey[500],
-                          ),
-                        ),
-                      ),
+                      authors == allAuthors
+                          ? Text(
+                              authors,
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                                color: Colors.grey[500],
+                              ),
+                            )
+                          : Tooltip(
+                              message: allAuthors,
+                              waitDuration: Duration(milliseconds: 1000),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Colors.grey[300],
+                                ),
+                              ),
+                              verticalOffset: 8,
+                              textStyle: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                              ),
+                              child: Text(
+                                authors,
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 12,
+                                  color: Colors.grey[500],
+                                ),
+                              ),
+                            ),
                       SizedBox(
                         height: 5,
                       ),
@@ -128,7 +135,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                             "Published in ",
                             style: TextStyle(
                               fontFamily: 'Montserrat',
-                              fontSize: 12,
+                              fontSize: 11.5,
                               color: Colors.grey[500],
                             ),
                           ));
@@ -156,7 +163,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                       '"',
                                   style: TextStyle(
                                     fontFamily: 'Montserrat',
-                                    fontSize: 12,
+                                    fontSize: 11.5,
                                     color: Colors.grey[600],
                                   ),
                                 ),
@@ -176,7 +183,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                     "This was cited by ",
                                     style: TextStyle(
                                       fontFamily: 'Montserrat',
-                                      fontSize: 12,
+                                      fontSize: 11.5,
                                       color: Colors.grey[500],
                                     ),
                                   ),
@@ -190,7 +197,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                       rec.citationCount.toString(),
                                       style: TextStyle(
                                         fontFamily: 'Montserrat',
-                                        fontSize: 12,
+                                        fontSize: 11.5,
                                         color: Colors.black,
                                       ),
                                     ),
@@ -199,7 +206,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                     " other papers.",
                                     style: TextStyle(
                                       fontFamily: 'Montserrat',
-                                      fontSize: 12,
+                                      fontSize: 11.5,
                                       color: Colors.grey[500],
                                     ),
                                   ),
@@ -266,8 +273,14 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                             color: Colors.black,
                                             fontFamily: 'Montserrat',
                                             fontSize: 14)),
-                                    SizedBox(width: 5,),
-                                    Icon(Icons.check_circle, color: Colors.green, size: 18,)
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green,
+                                      size: 18,
+                                    )
                                   ],
                                 ),
                                 backgroundColor: Colors.white,
@@ -296,7 +309,9 @@ class _RecommendationTileState extends State<RecommendationTile> {
                           width: 8,
                         ),
                         Tooltip(
-                          message: rec.hasUrl ? 'Go to paper':'Search on Google Scholar',
+                          message: rec.hasUrl
+                              ? 'Go to paper'
+                              : 'Search on Google Scholar',
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -373,10 +388,18 @@ class HighlightableText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle style = TextStyle(
+    TextStyle style = TextStyle(
       fontFamily: 'Montserrat',
       fontSize: fontSize,
     );
+
+    Size size = _textSize(text, style);
+    if (size.width > 400) {
+      style = TextStyle(
+        fontFamily: 'Montserrat',
+        fontSize: (fontSize - ((size.width - 400) / 52)),
+      );
+    }
 
     List<Widget> rowChildren = [];
 

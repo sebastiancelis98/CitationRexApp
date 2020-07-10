@@ -133,7 +133,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                   id: 1,
                   paperId: -1,
                   url: 'http://google.com',
-                  title: 'This is a test sample for design',
+                  title: 'This is a test sample for design, that could be very verry very long',
                   authors: 'Isabela, Vinzenz & Sebastian',
                   citationCount: 69,
                   venue: "papers that can be used as examples",
@@ -211,7 +211,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                     curve: Curves.easeOutExpo,
                     margin: EdgeInsets.only(left: 15),
                     width: MediaQuery.of(context).size.width *
-                        (expandedInput ? 58 : 44) /
+                        (expandedInput ? 58 : 42) /
                         100,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -646,7 +646,7 @@ class RecList extends StatelessWidget {
               id: index + 1,
               paperId: 59225,
               url: 'http://google.com',
-              title: 'Error retrieving recommendations, this is a test sample',
+              title: 'Error retrieving recommendations, this is a test sample, that is really really long',
               authors: 'Isabela, Vinzenz & Sebastian',
               citationCount: 69,
               venue: "papers that can be used as examples",
