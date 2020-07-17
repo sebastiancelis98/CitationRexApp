@@ -127,13 +127,13 @@ class _DynamicBodyState extends State<DynamicBody> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 350, vertical: 50),
+            margin: EdgeInsets.symmetric(horizontal: 370, vertical: 50),
             child: RecommendationTile(
               recommendation: Recommendation(
                   id: 1,
                   paperId: -1,
                   url: 'http://google.com',
-                  title: 'This is a test sample for design, that could be very verry very long',
+                  title: 'This is a test sample for design, that could be very very very very very long...',
                   authors: 'Isabela, Vinzenz & Sebastian',
                   citationCount: 69,
                   venue: "papers that can be used as examples",

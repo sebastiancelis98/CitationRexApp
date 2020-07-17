@@ -1,10 +1,7 @@
 import 'package:CitationRexWebsite/controller/recommender.dart';
-import 'package:CitationRexWebsite/model/userquery.dart';
-import 'package:CitationRexWebsite/utils/themes.dart';
-import 'package:flutter/material.dart';
 import 'package:CitationRexWebsite/model/recommendation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RecommendationTile extends StatefulWidget {
@@ -41,6 +38,10 @@ class _RecommendationTileState extends State<RecommendationTile> {
           ", ...(+" +
           (authors.split(',').length - 3).toString() +
           ' more)';
+    }
+
+    if (rec.publishedYear != -1) {
+      title += ' (' + rec.publishedYear.toString() + ')';
     }
 
     return MouseRegion(
@@ -394,11 +395,15 @@ class HighlightableText extends StatelessWidget {
     );
 
     Size size = _textSize(text, style);
-    if (size.width > 400) {
+    print(size.width);
+    double fSize = fontSize;
+    while (size.width > 550) {
+      fSize -= 0.5;
       style = TextStyle(
         fontFamily: 'Montserrat',
-        fontSize: (fontSize - ((size.width - 400) / 52)),
+        fontSize: fSize,
       );
+      size = _textSize(text, style);
     }
 
     List<Widget> rowChildren = [];
