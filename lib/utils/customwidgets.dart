@@ -35,7 +35,11 @@ class _RecommendationTileState extends State<RecommendationTile> {
     String authors = rec.authors;
     String allAuthors = authors;
     String title = rec.title;
-    String fullTitle = rec.title;
+
+    if(rec.publishedYear != -1){
+      title += ' ('+rec.publishedYear.toString()+')';
+    }
+    String fullTitle = title;
 
     if (authors.split(',').length > 3) {
       authors = authors.split(',').getRange(0, 3).join(', ') +
