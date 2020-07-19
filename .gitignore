@@ -29,6 +29,8 @@
 .pub-cache/
 .pub/
 /build/
+/ios/
+/android/
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -47,5 +49,4 @@ app.*.map.json
 #flaskserver
 flaskserver.py
 
-/ios/
-/android/
+
