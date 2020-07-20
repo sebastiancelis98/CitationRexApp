@@ -395,7 +395,6 @@ class HighlightableText extends StatelessWidget {
     );
 
     Size size = _textSize(text, style);
-    print(size.width);
     double fSize = fontSize;
     while (size.width > 530) {
       fSize -= 0.5;

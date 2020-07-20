@@ -108,7 +108,10 @@ class _DynamicBodyState extends State<DynamicBody> {
       if (currentSentence.split(" ").length < 15) {
         continue;
       }
-      queries.add(currentSentence.trim());
+      //Clean up the sentence
+      currentSentence = currentSentence.trim().replaceAll('"', '').replaceAll("'", "");
+
+      queries.add(currentSentence);
       currentSentence = "";
     }
     if (currentSentence.trim() != "") queries.add(currentSentence);
