@@ -11,11 +11,11 @@ Future<Set<Recommendation>> getRecommendations(String query,
 
   Set<Recommendation> recs = Set();
 
-  String url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
+  String url = 'http://aifb-ls3-maia.aifb.kit.edu:5000/api/recommendation';
 
   if(fallback){
     print('Attempting with fallback server...');
-    url = 'http://aifb-ls3-vm1.aifb.kit.edu:5001/api/recommendation_fallback';
+    url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
   }
 
   Map<String, String> headers = {
