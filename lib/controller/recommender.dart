@@ -11,7 +11,7 @@ Future<Set<Recommendation>> getRecommendations(String query,
 
   Set<Recommendation> recs = Set();
 
-  String url = 'http://aifb-ls3-maia.aifb.kit.edu:5000/api/recommendation';
+  String url = 'http://81.169.168.47:5000/api/recommendation';
 
   if(fallback){
     print('Attempting with fallback server...');
