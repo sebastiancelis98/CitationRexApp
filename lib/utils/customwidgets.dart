@@ -225,7 +225,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                       children: [
                         Tooltip(
                           message:
-                              'Copy bibliography citation to your clipboard',
+                              'Copy bibliography citation',
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -269,7 +269,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                 content: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Copied citation to clipboard!',
+                                    Text('Copied citation to clipboard! (Ctrl+V to paste)',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontFamily: 'Montserrat',
