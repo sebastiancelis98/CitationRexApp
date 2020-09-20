@@ -109,7 +109,8 @@ class _DynamicBodyState extends State<DynamicBody> {
         continue;
       }
       //Clean up the sentence
-      currentSentence = currentSentence.trim().replaceAll('"', '').replaceAll("'", "");
+      currentSentence =
+          currentSentence.trim().replaceAll('"', '').replaceAll("'", "");
 
       queries.add(currentSentence);
       currentSentence = "";
@@ -136,7 +137,8 @@ class _DynamicBodyState extends State<DynamicBody> {
                   id: 1,
                   paperId: -1,
                   url: 'http://google.com',
-                  title: 'This is a test sample for design, that could be very very very very very long...',
+                  title:
+                      'This is a test sample for design, that could be very very very very very long...',
                   authors: 'Isabela, Vinzenz & Sebastian',
                   citationCount: 69,
                   venue: "papers that can be used as examples",
@@ -252,9 +254,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                           hintText: 'Paste a section from your paper here...'),
                     ),
                   ),
-                  Expanded(
-                    child: Container()
-                  ),
+                  Expanded(child: Container()),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -616,21 +616,19 @@ class RecList extends StatelessWidget {
             height: 25,
           ),
           Loading(),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 20),
-            child: Text('Loading...',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 12,
-                )),
-          ),
-          queryData.queries.length > 10
-              ? Text('Multiple queries might take longer to load...',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 12,
-                  ))
-              : Container(),
+          SizedBox(height: 20,),
+          Text('Loading...',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 12,
+              )),
+          SizedBox(height: 2),
+          Text('(Processing the recommendations could take about 10s)',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 12,
+              )),
+          
         ],
       );
     }
@@ -649,7 +647,8 @@ class RecList extends StatelessWidget {
               id: index + 1,
               paperId: 59225,
               url: 'http://google.com',
-              title: 'Error retrieving recommendations, this is a test sample, that is really really long',
+              title:
+                  'Error retrieving recommendations, this is a test sample, that is really really long',
               authors: 'Isabela, Vinzenz & Sebastian',
               citationCount: 69,
               venue: "papers that can be used as examples",
