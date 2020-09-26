@@ -165,7 +165,7 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                   style: TextStyle(
                                     fontFamily: 'Montserrat',
                                     fontSize: 11.5,
-                                    color: Colors.grey[600],
+                                    color: Colors.grey[500],
                                   ),
                                 ),
                               ),

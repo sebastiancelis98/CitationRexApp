@@ -622,11 +622,12 @@ class RecList extends StatelessWidget {
                 fontFamily: 'Montserrat',
                 fontSize: 12,
               )),
-          SizedBox(height: 2),
-          Text('(Processing the recommendations could take about 10s)',
+          SizedBox(height: 5),
+          Text('(Warning: processing the recommendations could take about 15s)',
               style: TextStyle(
                 fontFamily: 'Montserrat',
-                fontSize: 12,
+                fontSize: 11.5,
+                color: Colors.grey[700]
               )),
           
         ],

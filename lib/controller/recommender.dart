@@ -11,12 +11,7 @@ Future<Set<Recommendation>> getRecommendations(String query,
 
   Set<Recommendation> recs = Set();
 
-  String url = 'http://81.169.168.47:5000/api/recommendation';
-
-  if(fallback){
-    print('Attempting with fallback server...');
-    url = 'http://aifb-ls3-vm1.aifb.kit.edu:5000/api/recommendation';
-  }
+  String url = 'https://km.aifb.kit.edu/services/api/citerex';
 
   Map<String, String> headers = {
     "Content-type": "application/json",
@@ -63,7 +58,7 @@ Future<Set<Recommendation>> getRecommendations(String query,
       int year = paper['year'] ?? -1;
       String venue = paper['venue'];
       String publisher = paper['publisher'];
-      List<dynamic> decisiveWords = paper['decisive_words'];
+      List<dynamic> decisiveWords = paper['decisive_words'] ?? List();
 
       Recommendation rec = Recommendation(
           id: id++,
