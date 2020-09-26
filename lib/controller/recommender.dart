@@ -11,7 +11,7 @@ Future<Set<Recommendation>> getRecommendations(String query,
 
   Set<Recommendation> recs = Set();
 
-  String url = 'http://81.169.168.47:5000/api/recommendation';
+  String url = 'https://km.aifb.kit.edu/services/api/citerex';
 
   if(fallback){
     print('Attempting with fallback server...');
