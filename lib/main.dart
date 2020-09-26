@@ -249,9 +249,7 @@ class _DynamicBodyState extends State<DynamicBody> {
                           hintText: 'Paste a section from your paper here...'),
                     ),
                   ),
-                  Expanded(
-                    child: Container()
-                  ),
+                  Expanded(child: Container()),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -461,7 +459,6 @@ class _QuerySelectorState extends State<QuerySelector> {
                   ),
                 ],
               ),
-              
             ],
           ),
         ),
@@ -497,21 +494,20 @@ class RecList extends StatelessWidget {
             height: 25,
           ),
           Loading(),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 20),
-            child: Text('Loading...',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 12,
-                )),
+          SizedBox(
+            height: 20,
           ),
-          queryData.queries.length > 10
-              ? Text('Multiple queries might take longer to load...',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 12,
-                  ))
-              : Container(),
+          Text('Loading...',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 12,
+              )),
+          SizedBox(height: 5),
+          Text('(Warning: processing the recommendations could take about 15s)',
+              style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 11.5,
+                  color: Colors.grey[700])),
         ],
       );
     }
