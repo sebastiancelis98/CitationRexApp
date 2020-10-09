@@ -9,6 +9,7 @@ Current link to the master version of the website is: http://km.aifb.kit.edu/ser
 # Requirements
 
 - Flutter
+- Web browser (ideally Chrome for development)
 
 The whole system is built using flutter. In order to build the system locally, you need to have a full installation of the Flutter SDK and it's requirements. Full instructions on the installation can be found on their website: https://flutter.dev/docs/get-started/install
 
@@ -28,3 +29,7 @@ In order to build the release version with flutter use the following command fro
 ```
 flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true
 ```
+
+# Running the flask server
+
+TODO
