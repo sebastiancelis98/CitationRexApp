@@ -34,4 +34,19 @@ flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true
 
 # Running the flask server
 
-TODO
+First, it is recommended you setup a virtual python3 environment. Then run through the following steps:
+
+- source env/bin/activate (or the absolute path to where you put your env/bin)
+- sudo apt-get install python3-pip (if not yet installed)
+- pip3 install -r requirements.txt (from ./backend/requirements.txt)
+- !python -m spacy download en_core_web_lg
+
+Then either run this code in the terminal or by creating a .py script:
+
+```
+import nltk
+nltk.download('stopwords')
+```
+
+- Last but not least run the flaskserver.py ensuring the paths in the script lead to the correct datasets
+
