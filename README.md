@@ -1,6 +1,8 @@
 # Citation Rex Website
 
-A web app to recommend scientific papers based on a user given context. Depending on branch, the recommendations are displayed with different levels of explainability.
+Citataion Rex is a web-based live demonstration system for context aware citation recommendation based on the Neural Citation Network and using 127 million papers from the MAG. The concept is that users give their sentence(s) for which they require a citation, and the system recommends a list of papers which may fit as a citation to the given context. The model is trained using historical context-citation pairs.
+
+Depending on branch, the recommendations are displayed with different levels of explainability.
 
 Current link to the master version of the website is: http://km.aifb.kit.edu/services/citerex/#/
 
