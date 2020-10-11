@@ -1,6 +1,6 @@
 # Citation Rex Website
 
-Citataion Rex is a web-based live demonstration system for context aware citation recommendation based on the Neural Citation Network and using 127 million papers from the MAG. The concept is that users give their sentence(s) for which they require a citation, and the system recommends a list of papers which may fit as a citation to the given context. The model is trained using historical context-citation pairs. Follow the link to the training: https://github.com/michaelfaerber/NCN4MAG
+Citataion Rex is a web-based live demonstration system for context aware citation recommendation based on the Neural Citation Network and using 127 million papers from the MAG. The concept is that users give their sentence(s) for which they require a citation, and the system recommends a list of papers which may fit as a citation to the given context. The model is trained using historical context-citation pairs. Here's a link to the project to train the network: https://github.com/michaelfaerber/NCN4MAG
 
 Depending on branch, the recommendations are displayed with different levels of explainability.
 
@@ -39,7 +39,7 @@ First, it is recommended you setup a virtual python3 environment. Then run throu
 - source env/bin/activate (or the absolute path to where you put your env/bin)
 - sudo apt-get install python3-pip (if not yet installed)
 - pip3 install -r requirements.txt (from ./backend/requirements.txt)
-- !python -m spacy download en_core_web_lg
+- python -m spacy download en_core_web_lg 
 
 Then either run this code in the terminal or by creating a .py script:
 
