@@ -32,9 +32,9 @@ In order to build the release version with flutter use the following command fro
 flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true
 ```
 
-The necessary documents in order to run the web server are then found in ./build/web (index.html and javascript files). An example way to run a test HTTP Server can be done by using the python module SimpleHTTPServer (Install using pip if not available). Run the following command from the root of the built web folder:
+The necessary documents used to run the web server are then found in ./build/web (index.html and javascript files). An example way to run a test HTTP Server can be done by using the python module SimpleHTTPServer (Install using pip if not available). Run the following command from the root of the built web folder:
 
-```bash
+```
 python -m SimpleHTTPServer <port>
 ```
 
