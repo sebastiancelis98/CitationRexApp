@@ -32,6 +32,12 @@ In order to build the release version with flutter use the following command fro
 flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true
 ```
 
+The necessary documents in order to run the web server are then found in ./build/web (index.html and javascript files). An example way to run a test HTTP Server can be done by using the python module SimpleHTTPServer (Install using pip if not available). Run the following command from the root of the built web folder:
+
+```bash
+python -m SimpleHTTPServer <port>
+```
+
 # Running the flask server
 
 First, it is recommended you setup a virtual python3 environment. Then run through the following steps:
@@ -48,5 +54,17 @@ import nltk
 nltk.download('stopwords')
 ```
 
-- Last but not least run the flaskserver.py ensuring the paths in the script lead to the correct datasets
+- Last but not least execute the flaskserver.py file, ensuring the paths in the script lead to the correct datasets. Here are the specific files to keep an eye on:
+
+```
+path_to_weights = "./dataset/NCN_5_27_11_embed_128_hid_256_1_GRU.pt"
+path_to_data = "./ncn/input/mag_data.csv"
+...
+with open("assets/title_tokenized_to_full.pkl", "rb") as fp:
+    title_to_full = pickle.load(fp)
+with open("assets/title_to_aut_cited.pkl", "rb") as fp:
+    title_to_aut = pickle.load(fp)
+with open("assets/title_tokenized_to_paper_id.pkl", "rb") as fp:
+    title_to_paperid = pickle.load(fp)
+```
 
