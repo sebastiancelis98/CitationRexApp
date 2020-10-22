@@ -53,9 +53,7 @@ Then either run this code in the terminal or by creating a .py script:
 import nltk
 nltk.download('stopwords')
 ```
-
-- Last but not least execute the flaskserver.py file, ensuring the paths in the script lead to the correct datasets. Here are the specific files to keep an eye on:
-
+Last but not least execute the ./backend/flaskserver.py file, ensuring the paths in the script lead to the correct datasets. Here are the specific files to keep an eye on in flaskserver.py:
 ```
 path_to_weights = "./dataset/NCN_5_27_11_embed_128_hid_256_1_GRU.pt"
 path_to_data = "./ncn/input/mag_data.csv"
