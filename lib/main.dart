@@ -365,7 +365,7 @@ class QuerySelector extends StatefulWidget {
 class _QuerySelectorState extends State<QuerySelector> {
   String selectedQuery;
   int currentIndex = 0;
-  bool showDecisive = false;
+  bool showDecisive = true;
 
   @mustCallSuper
   void initState() {
