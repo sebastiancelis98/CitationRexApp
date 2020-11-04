@@ -211,6 +211,10 @@ class _DynamicBodyState extends State<DynamicBody> {
             children: <Widget>[
               Column(
                 children: <Widget>[
+                  SizedBox(
+                    height: 10,
+                  ),
+                  
                   AnimatedContainer(
                     duration: Duration(milliseconds: 750),
                     curve: Curves.easeOutExpo,
@@ -253,6 +257,73 @@ class _DynamicBodyState extends State<DynamicBody> {
                           errorStyle: TextStyle(fontFamily: 'Montserrat'),
                           hintText: 'Paste a section from your paper here...'),
                     ),
+                  ),
+                  SizedBox(height: 15,),
+                  !expandedInput ? Container():Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Example: Deep convolutional neural networks have led to a large amount of breakthroughs for image classification.',
+                        style: TextStyle(
+                            fontSize: 13, fontFamily: 'Montserrat'),
+                        
+                      ),
+                      SizedBox(width: 15),
+                      MaterialButton(
+                        onPressed: () {
+                          SnackBar bar = SnackBar(
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                    'Copied example to clipboard! (Ctrl+V to paste)',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 14)),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                  size: 18,
+                                )
+                              ],
+                            ),
+                            backgroundColor: Colors.white,
+                            behavior: SnackBarBehavior.fixed,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(color: Colors.grey[400]),
+                                borderRadius: BorderRadius.circular(15)),
+                          );
+
+                          Clipboard.setData(ClipboardData(
+                              text:
+                                  'Deep convolutional neural networks have led to a large amount of breakthroughs for image classification.'));
+                          Scaffold.of(context).showSnackBar(bar);
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        color: Colors.grey[300],
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Copy ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 13,
+                                  fontFamily: 'Montserrat'),
+                            ),
+                            Icon(Icons.copy, color: Colors.black, size: 14),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                   Expanded(child: Container()),
                   Row(
@@ -616,7 +687,9 @@ class RecList extends StatelessWidget {
             height: 25,
           ),
           Loading(),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Text('Loading...',
               style: TextStyle(
                 fontFamily: 'Montserrat',
@@ -625,11 +698,9 @@ class RecList extends StatelessWidget {
           SizedBox(height: 5),
           Text('(Warning: processing the recommendations could take about 15s)',
               style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 11.5,
-                color: Colors.grey[700]
-              )),
-          
+                  fontFamily: 'Montserrat',
+                  fontSize: 11.5,
+                  color: Colors.grey[700])),
         ],
       );
     }
