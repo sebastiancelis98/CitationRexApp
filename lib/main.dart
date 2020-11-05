@@ -547,8 +547,8 @@ class _QuerySelectorState extends State<QuerySelector> {
                   Map<String, int> decisiveMapping = {};
 
                   if (queryData.recommendations.containsKey(selectedQuery)) {
-                    for (Recommendation r
-                        in queryData.recommendations[selectedQuery]) {
+                    Set<Recommendation> recs = queryData.recommendations[selectedQuery] ?? Set();
+                    for (Recommendation r in recs) {
                       for (String s in r.decisiveWords) {
                         if (decisiveMapping.containsKey(s)) {
                           decisiveMapping[s]++;
@@ -707,27 +707,12 @@ class RecList extends StatelessWidget {
       );
     }
     Set<Recommendation> recs = queryData.recommendations[query];
-    if (recs.isEmpty) {
-      if (kReleaseMode) {
-        return Text(
-          'There has been an error retrieving the recommendations, please try again later!',
+    if (recs == null || recs.isEmpty) {
+      return Text(
+          'There has been an error retrieving the recommendations, please try again with a different sentence!',
           style: TextStyle(
               color: Colors.red, fontSize: 12, fontFamily: 'Montserrat'),
         );
-      }
-      recs.addAll(List.generate(
-          10,
-          (index) => Recommendation(
-              id: index + 1,
-              paperId: 59225,
-              url: 'http://google.com',
-              title:
-                  'Error retrieving recommendations, this is a test sample, that is really really long',
-              authors: 'Isabela, Vinzenz & Sebastian',
-              citationCount: 69,
-              venue: "papers that can be used as examples",
-              publisher: "Springer",
-              decisiveWords: ["retrieving", "sample"])));
     }
 
     return Expanded(
