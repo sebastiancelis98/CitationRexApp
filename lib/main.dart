@@ -97,6 +97,8 @@ class _DynamicBodyState extends State<DynamicBody> {
     List<String> queries = List();
 
     String currentSentence = "";
+    input = input.replaceAll("\\", "");
+    
     for (String query in input.split(".")) {
       if (currentSentence != "") {
         currentSentence += ". " + query;
