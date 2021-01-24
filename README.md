@@ -54,7 +54,7 @@ import nltk
 nltk.download('stopwords')
 ```
 
-After that, you need to get the papers' data and train a neural network (assuming you don't already have a model and data that fits). Instructions on how to do that can be found in the following repository: https://github.com/michaelfaerber/NCN4MAG. The backend server also relies on some python libraries found in that repo, so clone it in current workspace.
+After that, you need to get the papers' data and train a neural network (assuming you don't already have a model and data that fits). Instructions on how to do that can be found in the following repository: https://github.com/michaelfaerber/NCN4MAG. The backend server also relies on some python libraries found in that repo, so clone it in the current workspace.
 
 Once complete, you should have a .pt file (the neural network) and the paper data (either as csv, tsv or txt). Our backend implementation relies on python dictionaries generated from the paper data. You can generate them by running the generate_dictionaries.py script located in the ./backend folder. Just edit the script so that file paths match the location where you saved the paper data.
 
@@ -75,6 +75,6 @@ with open("assets/title_to_aut_cited.pkl", "rb") as fp:
 with open("assets/title_tokenized_to_paper_id.pkl", "rb") as fp:
     title_to_paperid = pickle.load(fp)
 ```
-By default the flask server runs on the port 0.0.0.0:5000, but this can also be changed in the flaskserver.py script. 
+By default the flask server runs on the port 0.0.0.0:5000, but this can also be changed in the ```recommender.py``` script. 
 
 
