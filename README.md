@@ -54,7 +54,7 @@ import nltk
 nltk.download('stopwords')
 ```
 
-After that, you need to get the papers' data and train a neural network (assuming you don't already have a model and data that fits). Instructions on how to do that can be found in the following repository: https://github.com/michaelfaerber/NCN4MAG
+After that, you need to get the papers' data and train a neural network (assuming you don't already have a model and data that fits). Instructions on how to do that can be found in the following repository: https://github.com/michaelfaerber/NCN4MAG. The backend server also relies on some python libraries found in that repo, so clone it in current workspace.
 
 Once complete, you should have a .pt file (the neural network) and the paper data (either as csv, tsv or txt). Our backend implementation relies on python dictionaries generated from the paper data. You can generate them by running the generate_dictionaries.py script located in the ./backend folder. Just edit the script so that file paths match the location where you saved the paper data.
 
@@ -62,9 +62,9 @@ Once complete, you should have a .pt file (the neural network) and the paper dat
 python3 ./backend/generate_dictionaries.py
 ```
 
-Last but not least execute the ./backend/flaskserver.py file, ensuring the paths in the script lead to the correct file paths. These files are the ones you should have generated in the previous steps:
+This next step is optional, but I recommend running the server in a seperate session (for example with tmux), in order to keep the server running even when you leave the command line. Last but not least run ```python3 ./backend/recommender.py```, ensuring the paths in the script lead to the correct file paths. These files are the ones you should have generated in the previous steps:
 ```
-#flaskserver.py
+## recommender.py
 path_to_weights = "./dataset/NCN_5_27_11_embed_128_hid_256_1_GRU.pt"
 path_to_data = "./ncn/input/mag_data.csv"
 ...
